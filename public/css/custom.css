@@ -1,0 +1,94 @@
+:root {
+    --primary: #321fdb;
+    --secondary: #ced2d8;
+    --success: #2eb85c;
+    --info: #39f;
+    --warning: #f9b115;
+    --danger: #e55353;
+    --light: #ebedef;
+    --dark: #636f83;
+    --breakpoint-xs: 0;
+    --breakpoint-sm: 576px;
+    --breakpoint-md: 768px;
+    --breakpoint-lg: 992px;
+    --breakpoint-xl: 1200px;
+    --breakpoint-xxl: 1400px;
+    --font-family-sans-serif: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji";
+    --font-family-monospace: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  }
+
+  a {
+    text-decoration: none;
+    background-color: transparent;
+    color: #321fdb;
+}
+
+.btn-info[data-action]{
+    background-color: #3ec9d6 !important;
+    border-color: #3ec9d6 !important;
+}
+
+.btn-group-toggle > .btn input[type="radio"],
+.btn-group-toggle > .btn input[type="checkbox"],
+.btn-group-toggle > .btn-group > .btn input[type="radio"],
+.btn-group-toggle > .btn-group > .btn input[type="checkbox"] {
+  position: absolute;
+  clip: rect(0, 0, 0, 0);
+  pointer-events: none;
+}
+
+.chartbtn
+{
+    height:300px;margin-top:40px;
+}
+
+.foreign
+{
+    display: none;
+}
+
+/*  */
+
+div.dataTables_wrapper div.dataTables_filter {
+    text-align: right;
+    display: inline;
+    float: right;
+}
+
+.dataTables_scrollBody
+{
+ overflow: unset !important;
+}
+
+.dash-footer {
+    margin-left: 13% !important;
+}
+
+.cust-margin{
+    margin-top:10%;
+}
+
+.cust-margin1{
+    margin-top:15%;
+}
+
+.table-responsive {
+    overflow-x: unset !important;
+}
+
+.logo_img{
+    width: 1000px !important;
+    height: 200px !important;
+}
+
+.cust_logo{
+    width:40%;
+}
+
+.app_logo {
+    width: auto;
+    height: auto;
+    max-width: 50%;
+    max-height: 100%;
+}
+

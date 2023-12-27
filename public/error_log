@@ -1,0 +1,1 @@
+[07-Nov-2023 09:44:06 UTC] PHP Fatal error:  Cannot use App\Http\Controllers\SettingController as SettingController because the name is already in use in /home/vglobal/public_html/atsnewproject/routes/web.php on line 18
