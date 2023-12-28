@@ -1,234 +1,369 @@
 @extends('layouts.admin')
-@section('title', __('Profile'))
-@section('breadcrumb')
-    <ul class="breadcrumb">
-        <li class="breadcrumb-item"><a href="{{ route('home') }}">{{ __('Dashboard') }}</a></li>
-        <li class="breadcrumb-item">{{ __('Profile') }}
-        </li>
-    </ul>
-@endsection
-
-@php
-use App\Facades\UtilityFacades;
-$profile = asset(Storage::url('uploads/avatar/'));
-$setting = UtilityFacades::settings();
-@endphp
-
 
 @section('content')
-    <!-- [ Main Content ] start -->
-    <div class="row">
-        <!-- [ sample-page ] start -->
-        <div class="col-sm-12">
-            <div class="row">
-                <div class="col-xl-3">
-                    <div class="card sticky-top">
-                        <div class="list-group list-group-flush" id="useradd-sidenav">
-                            <a href="profile#useradd-1"
-                                class="list-group-item list-group-item-action useradd-1 active">{{ __('Profile') }}
-                                <div class="float-end"></div>
-                            </a>
-                            <a href="profile#useradd-2"
-                                class="list-group-item list-group-item-action useradd-2">{{ __('Basic Info') }}
-                                <div class="float-end"></div>
-                            </a>
-                            @if ($setting['authentication'] == 'activate')
-                                <a href="profile#useradd-3"
-                                    class="list-group-item list-group-item-action useradd-3">{{ __('2FA') }}
-                                    <div class="float-end"></div>
-                                </a>
-                            @endif
-                            {{-- <a href="#useradd-3" class="list-group-item list-group-item-action">{{ __('Login Details') }}
-                                <div class="float-end"></div>
-                            </a> --}}
-                            {{-- <a href="#useradd-7" class="list-group-item list-group-item-action">{{ __('Delete Account') }}
-                                <div class="float-end"></div>
-                            </a> --}}
-                        </div>
+
+<!-- [ breadcrumb ] end -->
+<!-- [ Main Content ] start -->
+<style>
+.errors {
+    color: red;
+}
+</style>
+<div class="row">
+    <div class="section-body">
+        <div class="col-md-10 m-auto">
+            <div class="card ">
+                <div class="card-header">
+                    <h5>{{ __('Update Candidate Details') }}</h5>
+
+                </div>
+                <!-- {!! Form::open(['route' => 'candidates.update.save', 'method' => 'POST']) !!} -->
+                {!! Form::open(['id' => 'updateForm', 'method' => 'POST']) !!}
+                <div class="card-body col-md-12">
+
+                    <!-- <input type="text" class="form-control" id="candidate_id" value="{{$candidatesDetails[0]->candidate_id}}"> -->
+                    {!! Form::hidden('candidate_id', $candidatesDetails[0]->candidate_id, ['placeholder' => __(''),'class'
+                    => 'form-control',
+                    'id' => 'candidate_id'
+                    ]) !!}
+
+                    <div class="form-group col-md-6" style="float:left;">
+                        {{ Form::label('first_name', __('First Name'), ['class' => 'col-form-label']) }}
+                        {!! Form::text('first_name', $candidatesDetails[0]->first_name, ['placeholder' => __('First
+                        Name'),'class' => 'form-control',
+                        'id' => 'first_name'
+                        ]) !!}
+                        <span class="first_name_error errors"></span>
+                    </div>
+
+                    <div class="form-group col-md-6" style="float:right" ;>
+                        {{ Form::label('middle_name', __('Middle Name'),['class' => 'col-form-label']) }}
+                        {!! Form::text('middle_name',$candidatesDetails[0]->middle_name, ['placeholder' => __('Middle
+                        Name'), 'class' =>
+                        'form-control','id' => 'middle_name']) !!}
+                        <span class="middle_name_error errors"></span>
+                    </div>
+
+                    <div class="form-group col-md-6" style="float:left" ;>
+                        {{ Form::label('last_name', __('Last Name'),['class' => 'col-form-label']) }}
+                        {!! Form::text('last_name', $candidatesDetails[0]->last_name, ['placeholder' => __('Last Name'),
+                        'class' =>
+                        'form-control','id' => 'last_name']) !!}
+                        <span class="last_name_error errors"></span>
+                    </div>
+                    <div class="form-group col-md-6" style="float:right" ;>
+                        {{ Form::label('email1', __('Email'),['class' => 'col-form-label']) }}
+                        {!! Form::text('email1', $candidatesDetails[0]->email1, ['placeholder' => __('Email'), 'class'
+                        => 'form-control','id' =>
+                        'email1']) !!}
+                        <span class="email1_error errors"></span>
+                        <span class="email_notvalid_address_error errors"></span>
+                    </div>
+                    <div class="form-group col-md-6" style="float:left" ;>
+                        {{ Form::label('email2', __('2Email'),['class' => 'col-form-label']) }}
+                        {!! Form::text('email2', $candidatesDetails[0]->email2, ['placeholder' => __('2Email'), 'class'
+                        => 'form-control','id' =>
+                        'email2']) !!}
+                        <span class="email2_error errors"></span>
+                        <span class="email2_notvalid_address_error errors"></span>
+                    </div>
+                    <div class="form-group col-md-6" style="float:right" ;>
+                        {{ Form::label('web_site', __('Website'),['class' => 'col-form-label']) }}
+                        {!! Form::text('web_site', $candidatesDetails[0]->web_site, ['placeholder' => __('Website'),
+                        'class' => 'form-control','id'
+                        => 'web_site']) !!}
+                        <span class="web_site_error errors"></span>
+                    </div>
+                    <div class="form-group col-md-6" style="float:left" ;>
+                        {{ Form::label('phone_home', __('Home Phone'),['class' => 'col-form-label']) }}
+                        {!! Form::text('phone_home', $candidatesDetails[0]->phone_home, ['placeholder' => __('Home
+                        Phone'), 'class' =>
+                        'form-control','id' => 'phone_home']) !!}
+                        <span class="phone_home_error errors"></span>
+                    </div>
+                    <div class="form-group col-md-6" style="float:right" ;>
+                        {{ Form::label('phone_cell', __('Cell Phone'),['class' => 'col-form-label']) }}
+                        {!! Form::text('phone_cell', $candidatesDetails[0]->phone_cell, ['placeholder' => __('Cell
+                        Phone'), 'class' =>
+                        'form-control','id' => 'phone_cell']) !!}
+                        <span class="phone_cell_error errors"></span>
+                    </div>
+                    <div class="form-group col-md-6" style="float:left" ;>
+                        {{ Form::label('phone_work', __('Work Phone'),['class' => 'col-form-label']) }}
+                        {!! Form::text('phone_work', $candidatesDetails[0]->phone_work, ['placeholder' => __('Work
+                        Phone'), 'class' =>
+                        'form-control','id' => 'phone_work']) !!}
+                        <span class="phone_work_error errors"></span>
+                    </div>
+                    <div class="form-group col-md-6" style="float:right" ;>
+                        {{ Form::label('address', __('Address'),['class' => 'col-form-label']) }}
+                        {!! Form::text('address', $candidatesDetails[0]->address, ['placeholder' => __('Address'),
+                        'class' => 'form-control','id'
+                        => 'address']) !!}
+                        <span class="address_error errors"></span>
+                    </div>
+                    <div class="form-group col-md-6" style="float:left" ;>
+                        {{ Form::label('city', __('City'),['class' => 'col-form-label']) }}
+                        {!! Form::text('city', $candidatesDetails[0]->city, ['placeholder' => __('City'), 'class' =>
+                        'form-control','id' =>
+                        'city']) !!}
+                        <span class="city_error errors"></span>
+                    </div>
+                    <div class="form-group col-md-6" style="float:right" ;>
+                        {{ Form::label('state', __('State'),['class' => 'col-form-label']) }}
+                        {!! Form::text('state', $candidatesDetails[0]->state, ['placeholder' => __('State'), 'class' =>
+                        'form-control','state'
+                        =>'state']) !!}
+                        <span class="state_error errors"></span>
+                    </div>
+                    <div class="form-group col-md-6" style="float:left" ;>
+                        {{ Form::label('zip', __('Postel Code'),['class' => 'col-form-label']) }}
+                        {!! Form::text('zip', $candidatesDetails[0]->zip, ['placeholder' => __('Postel Code'), 'class'
+                        => 'form-control','id'
+                        => 'zip']) !!}
+                        <span class="zip_error errors"></span>
+                    </div>
+                    <div class="form-group col-md-6" style="float:right" ;>
+                        {{ Form::label('best_time_to_call', __('Best Time to call'),['class' => 'col-form-label']) }}
+                        {!! Form::text('best_time_to_call', $candidatesDetails[0]->best_time_to_call, ['placeholder' =>
+                        __('Best Time to call'), 'class' =>
+                        'form-control','id' => 'best_time_to_call']) !!}
+                        <span class="best_time_to_call_error errors"></span>
+                    </div>
+                    <!--////////////            Other Information   //////////////-->
+                    <div class="card-body form-group col-md-6 m-auto">
+                        <h4>{{ __('Other') }}</h4>
+                    </div>
+                    <div class="form-group">
+                        {{ Form::label('can_relocate', __('Can Relocate'),['class' => 'col-form-label']) }}
+                        {!! Form::text('can_relocate', $candidatesDetails[0]->can_relocate, ['placeholder' => __('Can
+                        Relocate'), 'class' =>
+                        'form-control','id' => 'can_relocate']) !!}
+                        <span class="can_relocate_error errors"></span>
+                    </div>
+                    <div class="form-group">
+                        {{ Form::label('date_available', __('Date Available'),['class' => 'col-form-label']) }}
+                        {!! Form::date('date_available',date('Y/m/d',strtotime($candidatesDetails[0]->date_available)), ['placeholder' =>
+                        __('Date Available'), 'class' =>
+                        'form-control','id' => 'date_available']) !!}
+                        <span class="date_available_error errors"></span>
+                    </div>
+                    <div class="form-group">
+                        {{ Form::label('current_employer', __('Current Employer'),['class' => 'col-form-label']) }}
+                        {!! Form::text('current_employer', $candidatesDetails[0]->current_employer, ['placeholder' =>
+                        __('Current Employer'), 'class' =>
+                        'form-control','id' => 'current_employer']) !!}
+                        <span class="current_employer_error errors"></span>
+                    </div>
+                    <div class="form-group">
+                        {{ Form::label('current_pay', __('Current Pay'),['class' => 'col-form-label']) }}
+                        {!! Form::text('current_pay', $candidatesDetails[0]->current_pay, ['placeholder' => __('Current
+                        Pay'), 'class' =>
+                        'form-control','id' => 'current_pay']) !!}
+                        <span class="current_pay_error errors"></span>
+                    </div>
+                    <div class="form-group">
+                        {{ Form::label('desired_pay', __('Desire Pay'),['class' => 'col-form-label']) }}
+                        {!! Form::text('desired_pay', $candidatesDetails[0]->desired_pay, ['placeholder' => __('Desire
+                        Pay'), 'class' =>
+                        'form-control','id' => 'desired_pay']) !!}
+                        <span class="desired_pay_error errors"></span>
+                    </div>
+                    <div class="form-group">
+                        {{ Form::label('source', __('Source'),['class' => 'col-form-label']) }}
+                        {!! Form::text('source', $candidatesDetails[0]->source, ['placeholder' => __('source'), 'class'
+                        => 'form-control','id' =>
+                        'source']) !!}
+                        <span class="source_error errors"></span>
+                    </div>
+                    <div class="form-group">
+                        {{ Form::label('key_skills', __('Key Skills'),['class' => 'col-form-label']) }}
+                        {!! Form::text('key_skills', $candidatesDetails[0]->key_skills, ['placeholder' => __('Key
+                        Skills'), 'class' =>
+                        'form-control','id' => 'key_skills']) !!}
+                        <span class="key_skills_error errors"></span>
+                    </div>
+                    <div class="form-group">
+                        {{ Form::label('notes', __('Misc Notes'),['class' => 'col-form-label']) }}
+                        {!! Form::text('notes', $candidatesDetails[0]->notes, ['placeholder' => __('Misc Notes'),
+                        'class' => 'form-control','id'
+                        => 'notes']) !!}
+                        <span class="notes_error errors"></span>
+                    </div>
+                    <div class="form-group ">
+                        {{ Form::label('role', __('Role'),['class' => 'col-form-label']) }}
+                        {!! Form::text('desired_pay', $candidatesDetails[0]->role, ['placeholder' => __('Desire Pay'),
+                        'class' =>
+                        'form-control','id' => 'role']) !!}
+                        <span class="role_error errors"></span>
+                    </div>
+                </div>
+                <div class="card-footer">
+                    <div class="float-end">
+                        <a href="{{ route('candidates.index') }}" class="btn btn-secondary mb-3">{{ __('Cancel') }}</a>
+                        <button type="submit" id="addCandidate" class="btn btn-primary mb-3">{{ __('Save') }}</button>
                     </div>
                 </div>
 
-
-                <div class="col-xl-9">
-                    <div id="useradd-1" class="card bg-primary text-white">
-                        <div class="card-body">
-                            <div class="d-flex align-items-center">
-                                <div class="avatar me-3">
-                                    {{-- <img src="{{ $userDetail->avatar ? Storage::url($userDetail->avatar) : asset('uploads/avatar/avatar.png') }}" --}}
-                                    <img src="{{ !empty($userDetail->avatar) ? $profile . '/' . $userDetail->avatar : $profile . '/avatar.jpg' }}"
-                                        alt="kal" class="img-user wid-80 rounded-circle">
-                                </div>
-                                <div class="d-block d-sm-flex align-items-center justify-content-between w-100">
-                                    <div class="mb-3 mb-sm-0">
-                                        <h4 class="mb-1 text-white">{{ $userDetail->name }}</h4>
-                                        <p class="mb-0 text-sm">{{ $userDetail->type }}</p>
-                                    </div>
-
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div id="useradd-2" class="card">
-                        <div class="card-header">
-                            <h5>Basic info</h5>
-                            <small class="text-muted">{{ __('Mandatory informations') }}</small>
-                        </div>
-                        {{ Form::model($userDetail, ['route' => ['update.profile'], 'method' => 'POST', 'enctype' => 'multipart/form-data']) }}
-                        <div class="card-body">
-                            <div class=" row mt-3 container-fluid">
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label class="form-label">{{ __('Role') }}</label>
-                                        <input type="text" name="role" value="{{ $userDetail->type }}"
-                                            class="form-control" disabled>
-                                    </div>
-                                </div>
-
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <div class="choose-file">
-                                            <div for="avatar">
-                                                <label class="form-label">{{ __('Choose file here') }}</label>
-                                                <input type="file" class="form-control" name="profile"
-                                                    data-filename="profiles">
-                                            </div>
-                                            <p class="profiles"></p>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label class="form-label">{{ __('Full Name') }}</label>
-                                        <input type="text" name="name" value="{{ $userDetail->name }}"
-                                            class="form-control" placeholder={{ __('Name') }}>
-                                        @if ($errors->has('name'))
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $errors->first('name') }}</strong>
-                                            </span>
-                                        @endif
-                                    </div>
-                                </div>
-
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label class="form-label">{{ __('Email') }}</label>
-                                        <input type="text" name="email" value="{{ $userDetail->email }}"
-                                            class="form-control" placeholder={{ __('Email') }}>
-                                        @if ($errors->has('email'))
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $errors->first('email') }}</strong>
-                                            </span>
-                                        @endif
-                                    </div>
-                                </div>
-
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label class="form-label">{{ __('Password') }}</label>
-                                        <input type="password" name="password" value=""
-                                            placeholder="{{ __('Leave blank if you dont want to change') }}"
-                                            class="form-control" autocomplete="off">
-                                        @if ($errors->has('password'))
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $errors->first('password') }}</strong>
-                                            </span>
-                                        @endif
-                                    </div>
-                                </div>
-
-                                <div class="col-sm-6">
-                                    <div class="form-group">
-                                        <label class="form-label">{{ __('Confirm Password') }}</label>
-                                        <input type="password" name="password_confirmation" value=""
-                                            placeholder="{{ __('Leave blank if you dont want to change') }}"
-                                            class="form-control" autocomplete="off">
-                                        @if ($errors->has('password_confirmation'))
-                                            <span class="invalid-feedback" role="alert">
-                                                <strong>{{ $errors->first('password_confirmation') }}</strong>
-                                            </span>
-                                        @endif
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="card-footer">
-                            <div class="float-end">
-                                <button type="submit" class="btn btn-primary mb-3">{{ __('Update Account') }}</button>
-                            </div>
-                        </div>
-                        </form>
-                    </div>
-                    {{--  --}}
-                    @if (isset($setting['authentication']) && $setting['authentication'] == 'activate')
-
-                    <div id="useradd-3" class="card">
-                        <div class="card-header">
-                            <h5>{{ __('Two Factor Authentication') }}</h5>
-                            <small class="text-muted">Activate Two Factor Authentication.</small>
-                        </div>
-                        <div class="card-body">
-                            <div class="row justify-content-between mt-3">
-                                <div class="col-sm-auto d-flex">
-                                    @if (isset($setting['authentication']) && $setting['authentication'] == 'activate')
-                                        @include('auth.2fa_settings')
-                                    @endif
-                                    {{-- @if ($user->active_status == 1)
-                                        <a href="profile-status" class="btn btn-outline-secondary  d-flex me-3 ">
-                                            Deactivate
-                                        </a>
-                                    @endif
-                                    <a href="#" class="btn btn-danger delete-action d-flex"
-                                        data-form-id="delete-form-{{ $user->id }}">
-                                        {{ __('Delete Account') }}<i class="ti ti-chevron-right ms-1 ms-sm-2"></i></a>
-                                    {!! Form::open(['method' => 'DELETE', 'route' => ['users.destroy', $user->id], 'id' => 'delete-form-' . $user->id]) !!}
-                                    {!! Form::close() !!} --}}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    @endif
-                    {{--  --}}
-                </div>
+                {!! Form::close() !!}
             </div>
-            <!-- [ sample-page ] end -->
         </div>
-        <!-- [ Main Content ] end -->
-        {{--  --}}
+    </div>
+</div>
 
-        <!-- [ sample-page ] end -->
-    </div>
-    <!-- [ Main Content ] end -->
-    </div>
-    </div>
+<!-- [ sample-page ] end -->
+</div>
+<!-- [ Main Content ] end -->
+</div>
+</div>
 @endsection
 @push('scripts')
-    {{-- <script src="{{ asset('vendor/datepicker/js/bootstrap-datepicker.min.js') }}"></script>
-    <script src="{{ asset('vendor/plugins/croppie/js/croppie.min.js') }}"></script>
-    <script src="{{ asset('vendor/plugins/summernote/dist/summernote-bs4.min.js') }}"></script>
-    <script src="{{ asset('vendor/sweetalert/js/sweetalert.min.js') }}"></script>
+<script src="{{ asset('assets/js/plugins/choices.min.js') }}"></script>
 
-    <script src="{{ asset('vendor/js/custom.js') }}"></script> --}}
-
-
-    <script src="{{ asset('assets/js/plugins/choices.min.js') }}"></script>
-
-    <script>
-        $(document).on("click", ".useradd-1", function() {
-            $(".useradd-1").addClass("active");
-            $(".useradd-2").removeClass("active");
-            $(".useradd-3").removeClass("active");
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var genericExamples = document.querySelectorAll('[data-trigger]');
+    for (i = 0; i < genericExamples.length; ++i) {
+        var element = genericExamples[i];
+        new Choices(element, {
+            placeholderValue: 'This is a placeholder set in the config',
+            searchPlaceholderValue: 'Select Option',
         });
+    }
+});
+// Assuming you are using jQuery for simplicity
+$('#updateForm').submit(function(e) {
+    e.preventDefault(); // Prevent the default form submission
 
-        $(document).on("click", ".useradd-2", function() {
-            $(".useradd-1").removeClass("active");
-            $(".useradd-2").addClass("active");
-            $(".useradd-3").removeClass("active");
-        });
+    const formData = new FormData();
+    const fields = [
+        'first_name', 'middle_name', 'last_name',
+        'web_site', 'phone_home', 'phone_cell', 'phone_work', 'address',
+        'city', 'state', 'zip', 'best_time_to_call', 'can_relocate',
+        'date_available', 'current_employer', 'current_pay', 'desired_pay',
+        'source', 'notes', 'key_skills', 'role', 'candidate_id'
+    ];
+    // 'email1', 'email2', not update
 
-        $(document).on("click", ".useradd-3", function() {
-            $(".useradd-1").removeClass("active");
-            $(".useradd-2").removeClass("active");
-            $(".useradd-3").addClass("active");
-        });
-    </script>
+    let errors = [];
+
+    $(".errors").html("");
+
+    fields.forEach(field => {
+        const value = document.getElementById(field).value.trim();
+
+        if (value === "") {
+            errors.push(field);
+            $(`.${field}_error`).html(`${field.replace('_', ' ')} field can't be empty.`);
+        }
+
+        if (field.startsWith('email') && value !== "") {
+            if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value)) {
+                errors.push(`${field}_notvalid_address_error`);
+                $(`.${field}_notvalid_address_error`).html("Please provide a valid email address.");
+            }
+        }
+
+        formData.append(field, value);
+    });
+
+    if (errors.length > 0) {
+        return false;
+    }
+
+    $.ajaxSetup({
+        headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        },
+    });
+    $.ajax({
+        url: '/candidates/update/save', // Adjust the URL as needed
+        type: 'POST',
+        data: $(this).serialize(), // Serialize the form data
+        success: function(response) {
+            const title = response.status ? "success" : "warning";
+            Swal.fire({
+                title: response.message,
+                type: title,
+                icon: title,
+            }).then(function(result) {
+                if (result.isConfirmed && response.status) {
+                    window.location.href = "{{route('candidates.index')}}";
+                }
+            });
+        },
+        error: function(xhr, status, error) {
+            console.error('Error:', error);
+        },
+    });
+});
+
+// $('#addCandidate').click(function() {
+//     // const formData = new FormData();
+//     // const fields = [
+//     //     'first_name', 'middle_name', 'last_name',
+//     //     'web_site', 'phone_home', 'phone_cell', 'phone_work', 'address',
+//     //     'city', 'state', 'zip', 'best_time_to_call', 'can_relocate',
+//     //     'date_available', 'current_employer', 'current_pay', 'desired_pay',
+//     //     'source', 'notes', 'key_skills', 'role','candidate_id'
+//     // ];
+//     // // 'email1', 'email2', not update
+
+//     // let errors = [];
+
+//     // $(".errors").html("");
+
+//     // fields.forEach(field => {
+//     //     const value = document.getElementById(field).value.trim();
+
+//     //     if (value === "") {
+//     //         errors.push(field);
+//     //         $(`.${field}_error`).html(`${field.replace('_', ' ')} field can't be empty.`);
+//     //     }
+
+//     //     if (field.startsWith('email') && value !== "") {
+//     //         if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value)) {
+//     //             errors.push(`${field}_notvalid_address_error`);
+//     //             $(`.${field}_notvalid_address_error`).html("Please provide a valid email address.");
+//     //         }
+//     //     }
+
+//     //     formData.append(field, value);
+//     // });
+
+//     // if (errors.length > 0) {
+//     //     return false;
+//     // }
+
+//     // $.ajaxSetup({
+//     //     headers: {
+//     //         "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+//     //     },
+//     // });
+
+//     $.ajax({
+//         type: "POST",
+//         url: "{{ route('candidates.update.save') }}",
+//         dataType: "json",
+//         data: formData,
+//         contentType: false,
+//         processData: false,
+//         success: function(response) {
+//             const title = response.status ? "success" : "warning";
+//             Swal.fire({
+//                 title: response.message,
+//                 type: title,
+//                 icon: title,
+//             }).then(function(result) {
+//                 if (result.isConfirmed && response.status) {
+//                     window.location.href = "{{route('candidates.index')}}";
+//                 }
+//             });
+//         },
+//         error: function(xhr, status, error) {
+//             console.error('Error:', error);
+//         }
+//     });
+// });
+</script>
 @endpush

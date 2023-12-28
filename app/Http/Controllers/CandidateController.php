@@ -17,10 +17,10 @@ class CandidateController extends Controller
 {
     public function index(request $request)
     {  
-      $datas = DB::table('candidate')
-      ->join('users','candidate.owner','=','users.id')
-      ->select('candidate.first_name','candidate.last_name','candidate.city','candidate.state',
-      'candidate.key_skills','candidate.date_created','candidate.date_modified','users.user_name')
+      $datas = DB::table('candidates')
+      ->join('users','candidates.owner','=','users.id')
+      ->select('candidates.candidate_id','candidates.first_name','candidates.last_name','candidates.city','candidates.state',
+      'candidates.key_skills','candidates.date_created','candidates.date_modified','users.user_name')
       ->get();
       return view('candidates.index', compact('datas'));
     }
@@ -67,6 +67,7 @@ class CandidateController extends Controller
                 'can_relocate' => $request['can_relocate'],
                 'date_available' => $request['date_available'],
                 'current_employer' => $request['current_employer'],
+                'owner' => Auth::user()->id,
                 'current_pay' => $request['current_pay'],
                 'desired_pay' => $request['desired_pay'],
                 'source' => $request['source'],
@@ -76,5 +77,31 @@ class CandidateController extends Controller
         );
        return redirect()->route('candidates.index')
             ->with('success', __('Candidate created successfully'));
+    }
+
+    public function candidatesDetails($id){
+        $candidatesDetails = Candidate::where('candidate_id',$id)->get();
+        // dd( $candidatesDetails);
+        return view('candidates.show',compact('candidatesDetails'));
+    }
+
+    public function candidatesUpdate($id){
+        $candidatesDetails = Candidate::where('candidate_id',$id)->get();
+        // dd( $candidatesDetails);
+        return view('candidates.profile',compact('candidatesDetails'));
+    }
+
+    public function candidatesUpdateSave(Request $request){
+        // dd($request->all());
+        $existingCompany = Candidate::where('candidate_id',$request->candidate_id);
+
+        if ($existingCompany) {
+            $existingCompany->update($request->except(['_token']));
+
+            return response()->json(['status' => true, 'message' => 'Data updated successfully.', 'data' => $existingCompany]);
+        } else {
+            return redirect()->back()->with('error', 'Candidate not found.');
+        }
+
     }
 }

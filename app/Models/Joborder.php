@@ -27,4 +27,9 @@ class Joborder extends Model
         return $this->belongsTo(User::class,'recruiter');
     }
 
+    public function candidates()
+    {
+        return $this->belongsTo(User::class,'recruiter');
+    }
+
 }

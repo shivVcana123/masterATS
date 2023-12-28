@@ -34,6 +34,13 @@ Route::any('/companies/deatils/{id?}', [CompanyController::class, 'profileDeatil
 Route::get('/companies/update/{id?}', [CompanyController::class, 'updateDeatils'])->name('companies.update');
 Route::post('/companies/update/save', [CompanyController::class, 'companiesUpdateSave'])->name('companies.update.save');
 Route::get('/companies/delete/{id?}', [CompanyController::class, 'delete'])->name('companies.delete');
+
+
+
+
+Route::get('/candidates/details/{id?}', [CandidateController::class, 'candidatesDetails'])->name('candidates.details');
+Route::get('/candidates/update/{id?}', [CandidateController::class, 'candidatesUpdate'])->name('candidates.update');
+Route::post('/candidates/update/save', [CandidateController::class, 'candidatesUpdateSave'])->name('candidates.update.save');
 /*
 |--------------------------------------------------------------------------
 | Web Routes

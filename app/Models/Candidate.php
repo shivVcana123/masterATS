@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Joborder;
 
 class Candidate extends Model
 {
@@ -18,4 +19,13 @@ class Candidate extends Model
         'eeo_disability_status','eeo_gender','desired_pay','current_pay',
         'is_active','is_admin_hidden','best_time_to_cal'
     ];
+
+    const CREATED_AT = 'date_created';
+    const UPDATED_AT = 'date_modified';
+
+  
+    public function jobDetails()
+    {
+        return $this->hasMany(Joborder::class);
+    }
 }
