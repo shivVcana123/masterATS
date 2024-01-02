@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\Joborder;
+use App\Models\CandidateJoborder;
 
 class Candidate extends Model
 {
@@ -27,5 +28,14 @@ class Candidate extends Model
     public function jobDetails()
     {
         return $this->hasMany(Joborder::class);
+    }
+
+    public function users()
+    {
+        return $this->hasMany(User::class,'id');
+    }
+
+    public function candidateJoborder(){
+        return $this->hasMany(CandidateJobOrder::class, 'candidate_id', 'id');
     }
 }

@@ -4,8 +4,12 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\DataTables\FacilitiesDataTable;
 use App\Facades\UtilityFacades;
+use Carbon\Carbon;
 
 use App\Models\Candidate;
+use App\Models\CandidateJoborder;
+use App\Models\SavedList;
+use App\Models\SavedListEntry;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -19,22 +23,22 @@ class CandidateController extends Controller
     {  
       $datas = DB::table('candidates')
       ->join('users','candidates.owner','=','users.id')
-      ->select('candidates.candidate_id','candidates.first_name','candidates.last_name','candidates.city','candidates.state',
+      ->select('candidates.id','candidates.first_name','candidates.last_name','candidates.city','candidates.state',
       'candidates.key_skills','candidates.date_created','candidates.date_modified','users.user_name')
       ->get();
       return view('candidates.index', compact('datas'));
     }
     
-      public function create()
+    public function create()
     {      
         if (\Auth::user()->can('create-user')) {  
-
-        $roles = Role::pluck('name', 'name')->all();
-        return view('candidates.create', compact('roles'));
-    } else {
+            $roles = Role::pluck('name', 'name')->all();
+            return view('candidates.create', compact('roles'));
+        }
+    
         return redirect()->back()->with('error', 'Permission denied.');
     }
-    }
+    
 
 
     public function store(Request $request)
@@ -80,20 +84,21 @@ class CandidateController extends Controller
     }
 
     public function candidatesDetails($id){
-        $candidatesDetails = Candidate::where('candidate_id',$id)->get();
-        // dd( $candidatesDetails);
-        return view('candidates.show',compact('candidatesDetails'));
+        $candidatesDetails = Candidate::where('id',$id)->get();
+        $candidatesJobOrderDetails = CandidateJoborder::with('candidatesDetails.users','joborderDetails','joborderDetails.companies')->get();
+        $savedList = SavedList::where('number_entries','1')->get();
+        return view('candidates.show',compact('candidatesDetails','savedList','candidatesJobOrderDetails'));
     }
 
     public function candidatesUpdate($id){
-        $candidatesDetails = Candidate::where('candidate_id',$id)->get();
+        $candidatesDetails = Candidate::where('id',$id)->get();
         // dd( $candidatesDetails);
         return view('candidates.profile',compact('candidatesDetails'));
     }
 
     public function candidatesUpdateSave(Request $request){
         // dd($request->all());
-        $existingCompany = Candidate::where('candidate_id',$request->candidate_id);
+        $existingCompany = Candidate::where('id',$request->id);
 
         if ($existingCompany) {
             $existingCompany->update($request->except(['_token']));
@@ -103,5 +108,96 @@ class CandidateController extends Controller
             return redirect()->back()->with('error', 'Candidate not found.');
         }
 
+    }
+
+    // public function candidatesListSave(Request $request){
+        
+    //     $existsName = SavedList::where('description', $request->description)->get();
+
+    //     if ($existsName->isEmpty()) {
+    //         $savedList = SavedList::find($request->list_id);
+        
+    //         if ($savedList === null) {
+    //             SavedList::create([
+    //                 'description' => $request->description,
+    //                 'data_item_type' => $request->data_item_type,
+    //             ]);
+        
+    //             return response()->json(['status' => true, 'message' => 'Data created successfully.','data'=> $savedList]);
+    //         } else {
+    //             $savedList->update([
+    //                 'description' => $request->description,
+    //                 'data_item_type' => $request->data_item_type,
+    //             ]);
+        
+    //             return response()->json(['status' => true, 'message' => 'Data updated successfully.','data'=> $savedList]);
+    //         }
+    //     } else {
+    //         return response()->json(['status' => false, 'message' => 'That name is already in use, please try another.']);
+    //     }
+        
+    // }
+public function candidatesListSave(Request $request){
+
+    $savedList = SavedList::find($request->list_id);
+
+    if ($savedList === null) {
+        SavedList::create([
+            'id' => $request->list_id,
+            'description' => $request->description,
+            'data_item_type' => $request->data_item_type,
+        ]);
+
+        return response()->json(['status' => true, 'message' => 'Data created successfully.', 'data' => $savedList]);
+    } else {
+        $savedList->update([
+            'description' => $request->description,
+            'data_item_type' => $request->data_item_type,
+        ]);
+
+        return response()->json(['status' => true, 'message' => 'Data updated successfully.', 'data' => $savedList]);
+    }
+}
+
+
+    public  function candidatesListDelete($id){
+        // dd($id);
+        $deleteFromList = SavedList::find($id)->delete();
+        
+        if ($deleteFromList) {
+            return response()->json(['status' => true, 'message' => 'Data deleted successfully.']);
+        } else {
+            return redirect()->back()->with('error', 'Somthing went wrong.');
+        }
+    }
+
+
+    public function candidatesListSaveEntry(Request $request){
+        // dd($request->all());
+
+        
+        $selectedListIds = $request->input('selectedListIds');
+
+        foreach ($selectedListIds as $selectedList) {
+            // Assuming the first element is 'list_id' and the second is 'data_item_type'
+            $list_id = $selectedList[0];
+            $data_item_type = $selectedList[1];
+    
+            // Save the data to the SavedList model
+            $result = SavedListEntry::create([
+                'saved_list_id' => $list_id,
+                'data_item_type' => $data_item_type,
+                // Add other columns as needed
+            ]);
+            SavedList::where('id',$list_id)->update(['number_entries' => '1', ]);
+        }
+
+        if($result){
+            return response()->json(['status' => true, 'message' => 'Data saved successfully.']);
+        }else{
+            return response()->json(['status' => false, 'message' => 'Somthing went wrong.']);
+        }
+    
+       
     }
 }

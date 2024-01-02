@@ -13,7 +13,6 @@
         </div>
     </div>
 
-    <!-- `joborder_id`, `recruiter`, `contact_id`, `company_id`, `entered_by`, `owner`, `site_id`, `client_job_id`, `title`, `description`, `notes`, `type`, `duration`, `rate_max`, `salary`, `status`, `is_hot`, `openings`, `city`, `state`, `start_date`, `end_date`, `date_created`, `date_modified`, `public`, `company_department_id`, `is_admin_hidden`, `openings_available`, `questionnaire_id`, `import_id`, `actualrate`, `actual_rate`, `gross_margin`, `expected_rate`, `max_submission`, `interview_type`, `submission_deadline`, `work_arrangement`, `p`, `_token`, `updated_at`, `created_at -->
     <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12">
             <div class="form-group">
@@ -24,7 +23,7 @@
         <div class="col-xs-12 col-sm-12 col-md-12">
             <div class="form-group">
                 <strong>Company Name:</strong>
-                {{ $jobDetails[0]['company_id'] }}
+                {{ $jobDetails[0]['id'] }}
             </div>
         </div>
         <div class="col-xs-12 col-sm-12 col-md-12">

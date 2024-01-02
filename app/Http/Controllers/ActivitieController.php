@@ -19,19 +19,19 @@ class ActivitieController extends Controller
     public function index(request $request)
     {  
       $datas = DB::table('activity')
-      ->join('user','activity.entered_by','=','user.user_id')
-      ->join('candidate','user.user_id','=','candidate.owner')
+      ->join('users','activity.entered_by','=','users.id')
+      ->join('candidates','users.id','=','candidates.owner')
       ->join('activity_type', 'activity.type','=','activity_type.activity_type_id')
-      ->join('joborder','activity.site_id','=','joborder.site_id')
-      ->select('candidate.first_name','candidate.last_name','activity.notes',
-      'activity.date_created','activity_type.short_description','joborder.title')
+      ->join('joborders','activity.site_id','=','joborders.site_id')
+      ->select('candidates.first_name','candidates.last_name','activity.notes',
+      'activity.date_created','activity_type.short_description','joborders.title')
       ->get();
     //   $numbers =  $datas = DB::table('activity')
-    //   ->join('user','activity.entered_by','=','user.user_id')
-    //   ->join('candidate','user.user_id','=','candidate.owner')
+    //   ->join('users','activity.entered_by','=','users.id')
+    //   ->join('candidates','users.id','=','candidates.owner')
     //   ->join('activity_type', 'activity.data_item_type','=','activity_type.activity_type_id')
-    //   ->join('joborder','activity.site_id','=','joborder.site_id')
-    //   ->select('user.first_name')
+    //   ->join('joborders','activity.site_id','=','joborders.site_id')
+    //   ->select('users.first_name')
     //   ->get();
       return view('activities.index', compact('datas'));
     }

@@ -81,13 +81,13 @@ class CompanyController extends Controller
 
     public  function profileDeatils($id){
 
-      $companyDetails = Company::with('user','jobDetails')->where('company_id',$id)->get();
+      $companyDetails = Company::with('user','jobDetails')->where('id',$id)->get();
       return view('companies.show',compact('companyDetails'));
       
     }
 
     public function updateDeatils($id){
-      $companyDetails = Company::with('user')->where('company_id',$id)->get();
+      $companyDetails = Company::with('user')->where('id',$id)->get();
       return view('companies.profile',compact('companyDetails'));
     }
 
@@ -108,7 +108,7 @@ class CompanyController extends Controller
       ]);
       
   
-      $existingCompany = Company::where('company_id', $request->company_id);
+      $existingCompany = Company::where('id', $request->id);
       $existingCompany->update($request->all());
       if ($existingCompany !== false) {
         return response()->json(['status' => true,'message' => 'Data updated successfully.','data' => $existingCompany]);
@@ -120,7 +120,7 @@ class CompanyController extends Controller
     
 
     public function delete($id){
-      $delete = Company::where('company_id', $id)->delete();
+      $delete = Company::where('id', $id)->delete();
       if ($delete) {
       return response()->json(['status' => true,'message' => 'Data deleted successfully.']);
       } else {

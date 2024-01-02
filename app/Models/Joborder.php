@@ -19,7 +19,7 @@ class Joborder extends Model
 
     public function companies()
     {
-        return $this->belongsTo(Company::class);
+        return $this->belongsTo(Company::class,'id');
     }
 
     public function recruiters()
@@ -30,6 +30,10 @@ class Joborder extends Model
     public function candidates()
     {
         return $this->belongsTo(User::class,'recruiter');
+    }
+
+    public function candidateJoborder(){
+        return $this->hasMany(CandidateJobOrder::class, 'joborder_id', 'id');
     }
 
 }

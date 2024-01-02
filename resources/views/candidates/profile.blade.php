@@ -21,10 +21,10 @@
                 {!! Form::open(['id' => 'updateForm', 'method' => 'POST']) !!}
                 <div class="card-body col-md-12">
 
-                    <!-- <input type="text" class="form-control" id="candidate_id" value="{{$candidatesDetails[0]->candidate_id}}"> -->
-                    {!! Form::hidden('candidate_id', $candidatesDetails[0]->candidate_id, ['placeholder' => __(''),'class'
+                    <!-- <input type="text" class="form-control" id="id" value="{{$candidatesDetails[0]->id}}"> -->
+                    {!! Form::hidden('id', $candidatesDetails[0]->id, ['placeholder' => __(''),'class'
                     => 'form-control',
-                    'id' => 'candidate_id'
+                    'id' => 'id'
                     ]) !!}
 
                     <div class="form-group col-md-6" style="float:left;">
@@ -143,9 +143,15 @@
                     </div>
                     <div class="form-group">
                         {{ Form::label('date_available', __('Date Available'),['class' => 'col-form-label']) }}
-                        {!! Form::date('date_available',date('Y/m/d',strtotime($candidatesDetails[0]->date_available)), ['placeholder' =>
+                        <!-- {!! Form::date('date_available',date('Y/m/d',strtotime($candidatesDetails[0]->date_available)), ['placeholder' =>
                         __('Date Available'), 'class' =>
-                        'form-control','id' => 'date_available']) !!}
+                        'form-control','id' => 'date_available']) !!} -->
+                        {!! Form::date('date_available', substr($candidatesDetails[0]->date_available, 0, 10), [
+                        'placeholder' => __('Date Available'),
+                        'class' => 'form-control',
+                        'id' => 'date_available'
+                        ]) !!}
+
                         <span class="date_available_error errors"></span>
                     </div>
                     <div class="form-group">
@@ -241,7 +247,7 @@ $('#updateForm').submit(function(e) {
         'web_site', 'phone_home', 'phone_cell', 'phone_work', 'address',
         'city', 'state', 'zip', 'best_time_to_call', 'can_relocate',
         'date_available', 'current_employer', 'current_pay', 'desired_pay',
-        'source', 'notes', 'key_skills', 'role', 'candidate_id'
+        'source', 'notes', 'key_skills', 'role', 'id'
     ];
     // 'email1', 'email2', not update
 
@@ -305,7 +311,7 @@ $('#updateForm').submit(function(e) {
 //     //     'web_site', 'phone_home', 'phone_cell', 'phone_work', 'address',
 //     //     'city', 'state', 'zip', 'best_time_to_call', 'can_relocate',
 //     //     'date_available', 'current_employer', 'current_pay', 'desired_pay',
-//     //     'source', 'notes', 'key_skills', 'role','candidate_id'
+//     //     'source', 'notes', 'key_skills', 'role','id'
 //     // ];
 //     // // 'email1', 'email2', not update
 

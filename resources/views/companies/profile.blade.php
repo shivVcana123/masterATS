@@ -11,7 +11,7 @@
         <!-- @csrf -->
         <div class="row">
             <div class="col-md-6">
-                <input type="hidden" name="company_id" id="company_id" value="{{$companyDetails[0]->company_id}}"
+                <input type="hidden" name="id" id="id" value="{{$companyDetails[0]->id}}"
                     class="form-control">
                 <div class="form-group">
                     <label for="company_name">Company Name</label>
@@ -123,7 +123,7 @@
 <script>
 $("#updateCompany").click(function() {
     //var company_name = document.getElementById("company_name").value;
-    var company_id = document.getElementById("company_id").value;
+    var id = document.getElementById("id").value;
     // var email = document.getElementById("email").value;
     var primary_phone = document.getElementById("primary_phone").value;
     var secondary_phone = document.getElementById("secondary_phone").value;
@@ -220,7 +220,7 @@ $("#updateCompany").click(function() {
         return false;
     } else {
         const formData_submit = new FormData();
-        formData_submit.append("company_id", company_id.trim());
+        formData_submit.append("id", id.trim());
         // formData_submit.append("company_name", company_name.trim());
         // formData_submit.append("email", email.trim());
         formData_submit.append("primary_phone", primary_phone.trim());

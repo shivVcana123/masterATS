@@ -8,6 +8,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Spatie\Permission\Traits\HasRoles;
 use App\Models\Company;
+use App\Models\SavedList;
 
 
 class User extends Authenticatable
@@ -70,4 +71,10 @@ class User extends Authenticatable
     {
         return $this->belongsTo(Company::class);
     }
+
+    public function SavedList()
+    {
+        return $this->belongsTo(SavedList::class);
+    }
+
 }

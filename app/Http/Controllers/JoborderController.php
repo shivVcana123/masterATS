@@ -28,7 +28,7 @@ class JoborderController extends Controller
 //     $jobOrder->end_date = $request->input('end_date');
 //     $jobOrder->age = $request->input('age');
 //     $jobOrder->perposal = $request->input('perposal');
-//     $jobOrder->company_id = $request->input('company_id');
+//     $jobOrder->id = $request->input('id');
 //     $jobOrder->end_date = $request->input('end_date');
 //     $jobOrder->joborder_id	 = $request->input('joborder_id');
 //     $jobOrder->recruiter = $request->input('recruiter');
@@ -104,10 +104,10 @@ class JoborderController extends Controller
    public function index(Request $request, $letter = null)
 {  
     $query = DB::table('joborders')
-    ->join('companies', 'joborders.company_id', '=', 'companies.company_id')
+    ->join('companies', 'joborders.id', '=', 'companies.id')
     ->join('users', 'joborders.owner', '=', 'users.id')
     ->leftJoin('users as recruiter', 'joborders.recruiter', '=', 'recruiter.id')
-    ->select('joborders.joborder_id', 'joborders.title', 'joborders.status', 'joborders.date_created',
+    ->select('joborders.id', 'joborders.title', 'joborders.status', 'joborders.date_created',
         'joborders.owner', 'joborders.type', 'companies.company_name', 'users.first_name as owner_name',
         'joborders.client_job_id', 'joborders.date_modified', 'recruiter.id as recruiter_id',
         'recruiter.first_name as recruiter_name')
@@ -135,7 +135,7 @@ class JoborderController extends Controller
 }
 
 public function profile($id){
-    $jobDetails = JobOrder::where('joborder_id',$id)->get();
+    $jobDetails = JobOrder::where('id',$id)->get();
     // dd($jobDetails);
     return view('joborders.show',compact('jobDetails'));
 }

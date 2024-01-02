@@ -13,7 +13,7 @@
         </div>
         <div class="pull-right">
             <a class="btn btn-primary" style="margin-right: 5px;"
-                href="{{ url('/companies/update',$companyDetails[0]->company_id) }}"> Edit</a>
+                href="{{ url('/companies/update',$companyDetails[0]->id) }}"> Edit</a>
         </div>
     </div>
 </div>

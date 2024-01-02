@@ -110,8 +110,8 @@ form.example button {
             </tr>
                     @foreach ($datas as $data)
                                 <tr>
-                                <td>{{ $data->joborder_id }}</td>
-                                <td><a href="{{route('joborders.profile',$data->joborder_id)}}">{{ $data->title }}</a></td>
+                                <td>{{ $data->id }}</td>
+                                <td><a href="{{route('joborders.profile',$data->id)}}">{{ $data->title }}</a></td>
                                 <td>{{ $data->company_name }}</td>
                                 <td>{{ $data->type }}</td>
                                 <td>{{ $data->status }}</td>

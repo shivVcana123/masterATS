@@ -64,7 +64,7 @@ button {
                             @foreach ($datas as $data)
                             <tr>
                                 <td><a
-                                        href="{{route('candidates.details',$data->candidate_id )}}">{{ $data->first_name }}</a>
+                                        href="{{route('candidates.details',$data->id )}}">{{ $data->first_name }}</a>
                                 </td>
                                 <td>{{ $data->last_name }}</td>
                                 <td>{{ $data->city }}</td>
@@ -74,11 +74,11 @@ button {
                                 <td>{{ $data->date_created }}</td>
                                 <td>{{ $data->date_modified }}</td>
                                 <td>
-                                    <a href="{{route('candidates.details',$data->candidate_id )}}"><i
+                                    <a href="{{route('candidates.details',$data->id )}}"><i
                                             class="fa fa-eye"></i></a>
-                                    <a href="{{ url('/candidates/update',$data->candidate_id )}}"><i
+                                    <a href="{{ url('/candidates/update',$data->id )}}"><i
                                             class="fa fa-pencil"></i></a>
-                                    <a id="companiesDelete" data-id="{{$data->candidate_id}}" href="javascript:;"><i
+                                    <a id="companiesDelete" data-id="{{$data->id}}" href="javascript:;"><i
                                             class="fa fa-trash"></i></a>
                                 </td>
                             </tr>

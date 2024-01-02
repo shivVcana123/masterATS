@@ -41,6 +41,11 @@ Route::get('/companies/delete/{id?}', [CompanyController::class, 'delete'])->nam
 Route::get('/candidates/details/{id?}', [CandidateController::class, 'candidatesDetails'])->name('candidates.details');
 Route::get('/candidates/update/{id?}', [CandidateController::class, 'candidatesUpdate'])->name('candidates.update');
 Route::post('/candidates/update/save', [CandidateController::class, 'candidatesUpdateSave'])->name('candidates.update.save');
+
+
+Route::post('/candidates/list/save', [CandidateController::class, 'candidatesListSave'])->name('candidates.list.save');
+Route::get('/candidates/list/delete/{id?}', [CandidateController::class, 'candidatesListDelete'])->name('candidates.list.delete');
+Route::post('/candidates/list/save/entry', [CandidateController::class, 'candidatesListSaveEntry'])->name('candidates.list.save.entry');
 /*
 |--------------------------------------------------------------------------
 | Web Routes
