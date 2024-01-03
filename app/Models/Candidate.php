@@ -11,7 +11,7 @@ class Candidate extends Model
 {
     use HasFactory;
      protected $fillable = [
-        'candidate_id', 'site_id', 'first_name','middle_name',
+        'id', 'site_id', 'first_name','middle_name',
         'last_name', 'phone_home', 'phone_cell', 'phone_work',
         'address', 'city', 'state','zip','source', 'date_available',
         'can_relocate','notes','key_skills', 'current_employer','entered_by',

@@ -4,12 +4,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\DataTables\FacilitiesDataTable;
 use App\Facades\UtilityFacades;
+use App\Models\Activity;
 use Carbon\Carbon;
 
 use App\Models\Candidate;
 use App\Models\CandidateJoborder;
 use App\Models\SavedList;
 use App\Models\SavedListEntry;
+use App\Models\User;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -47,12 +49,12 @@ class CandidateController extends Controller
             'first_name' => 'required',
             'last_name' => 'required',
             // 'email1' => 'required|email|unique:candidate,email1',
-            'phone_cell' => 'required|unique:candidate,phone_cell',
+            'phone_cell' => 'required|unique:candidates,phone_cell',
             // 'password' => 'required|same:confirm-password',
             // 'roles' => 'required'
         ]);
         // $role_r = Role::findByName($request->roles);
-        $user   = DB::table('candidate')->insert(
+        $user = DB::table('candidates')->insert(
             [
                 'first_name' => $request['first_name'],
                 'middle_name' => $request['middle_name'],
@@ -85,7 +87,8 @@ class CandidateController extends Controller
 
     public function candidatesDetails($id){
         $candidatesDetails = Candidate::where('id',$id)->get();
-        $candidatesJobOrderDetails = CandidateJoborder::with('candidatesDetails.users','joborderDetails','joborderDetails.companies')->get();
+        $candidatesJobOrderDetails = CandidateJoborder::with('candidatesDetails','users','joborderDetails','joborderDetails.companies','activities','activities.activityTypes')->get();
+        // dd( $candidatesJobOrderDetails);
         $savedList = SavedList::where('number_entries','1')->get();
         return view('candidates.show',compact('candidatesDetails','savedList','candidatesJobOrderDetails'));
     }
@@ -146,6 +149,7 @@ public function candidatesListSave(Request $request){
             'id' => $request->list_id,
             'description' => $request->description,
             'data_item_type' => $request->data_item_type,
+            'created_by' => Auth::user()->id,
         ]);
 
         return response()->json(['status' => true, 'message' => 'Data created successfully.', 'data' => $savedList]);
@@ -161,11 +165,11 @@ public function candidatesListSave(Request $request){
 
 
     public  function candidatesListDelete($id){
-        // dd($id);
-        $deleteFromList = SavedList::find($id)->delete();
-        
+  
+        $deleteFromList = Candidate::find($id)->delete();
         if ($deleteFromList) {
-            return response()->json(['status' => true, 'message' => 'Data deleted successfully.']);
+            // return response()->json(['status' => true, 'message' => 'Data deleted successfully.']);
+            return redirect()->back()->with('success', 'Data deleted successfully.');
         } else {
             return redirect()->back()->with('error', 'Somthing went wrong.');
         }
@@ -199,5 +203,16 @@ public function candidatesListSave(Request $request){
         }
     
        
+    }
+
+    public function candidatesActivityDelete($id){
+
+        $activityDelete = Activity::find($id)->delete();
+
+        if($activityDelete){
+            return response()->json(['status' => true, 'message' => 'Data deleted successfully.']);
+        }else{
+            return response()->json(['status' => false, 'message' => 'Somthing went wrong.']);
+        }
     }
 }

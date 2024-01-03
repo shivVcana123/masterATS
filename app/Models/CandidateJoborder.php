@@ -18,6 +18,10 @@ class CandidateJoborder extends Model
         return $this->belongsTo(Joborder::class, 'joborder_id', 'id');
     }
     public function users(){
-        return $this->belongsTo(User::class, 'added_by', 'id');
+        return $this->belongsTo(User::class,'id');
+    }
+
+    public function activities(){
+        return $this->belongsTo(Activity::class,'id');
     }
 }

@@ -107,9 +107,9 @@ class JoborderController extends Controller
     ->join('companies', 'joborders.id', '=', 'companies.id')
     ->join('users', 'joborders.owner', '=', 'users.id')
     ->leftJoin('users as recruiter', 'joborders.recruiter', '=', 'recruiter.id')
-    ->select('joborders.id', 'joborders.title', 'joborders.status', 'joborders.date_created',
+    ->select('joborders.id', 'joborders.title', 'joborders.status',
         'joborders.owner', 'joborders.type', 'companies.company_name', 'users.first_name as owner_name',
-        'joborders.client_job_id', 'joborders.date_modified', 'recruiter.id as recruiter_id',
+        'joborders.client_job_id',DB::raw('DATE_FORMAT(joborders.date_modified, "%d-%m-%Y") as date_modified'), DB::raw('DATE_FORMAT(joborders.date_created, "%d-%m-%Y") as date_created'),'recruiter.id as recruiter_id',
         'recruiter.first_name as recruiter_name')
     ->orderBy('joborders.recruiter', 'ASC');
 

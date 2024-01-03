@@ -61,10 +61,10 @@ button {
                                 <th>Modified</th>
                                 <th>Action</th>
                             </tr>
+                            @if(count($datas) > 0)
                             @foreach ($datas as $data)
                             <tr>
-                                <td><a
-                                        href="{{route('candidates.details',$data->id )}}">{{ $data->first_name }}</a>
+                                <td><a href="{{route('candidates.details',$data->id )}}">{{ $data->first_name }}</a>
                                 </td>
                                 <td>{{ $data->last_name }}</td>
                                 <td>{{ $data->city }}</td>
@@ -74,17 +74,19 @@ button {
                                 <td>{{ $data->date_created }}</td>
                                 <td>{{ $data->date_modified }}</td>
                                 <td>
-                                    <a href="{{route('candidates.details',$data->id )}}"><i
-                                            class="fa fa-eye"></i></a>
-                                    <a href="{{ url('/candidates/update',$data->id )}}"><i
-                                            class="fa fa-pencil"></i></a>
-                                    <a id="companiesDelete" data-id="{{$data->id}}" href="javascript:;"><i
+                                    <a href="{{route('candidates.details',$data->id )}}"><i class="fa fa-eye"></i></a>
+                                    <a href="{{ url('/candidates/update',$data->id )}}"><i class="fa fa-pencil"></i></a>
+                                    <a id="candidateDelete" data-id="{{$data->id}}" href="javascript:;"><i
                                             class="fa fa-trash"></i></a>
                                 </td>
                             </tr>
                             @endforeach
+                            @else
+                            <tr>
+                                <td colspan="12">No data found</td>
+                            </tr>
+                            @endif
                         </table>
-
                         <!--     Table end   -->
                     </div>
                 </div>
@@ -95,3 +97,30 @@ button {
 
 
 @endsection
+@push('scripts')
+<script>
+$(document).on('click', '#candidateDelete', function() {
+
+    var candidateDelete_id = $('#candidateDelete').data('id');
+
+    Swal.fire({
+        title: 'Are you sure?',
+        text: 'You won\'t to delete this record!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: "Yes",
+        cancelButtonText: "No",
+        closeOnConfirm: false,
+        closeOnCancel: false
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = '/candidates/list/delete/' +
+                candidateDelete_id;
+        }
+    });
+
+});
+</script>
+@endpush

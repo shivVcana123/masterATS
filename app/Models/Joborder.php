@@ -17,16 +17,6 @@ class Joborder extends Model
 
     ];
 
-    public function companies()
-    {
-        return $this->belongsTo(Company::class,'id');
-    }
-
-    public function recruiters()
-    {
-        return $this->belongsTo(User::class,'recruiter');
-    }
-
     public function candidates()
     {
         return $this->belongsTo(User::class,'recruiter');
@@ -34,6 +24,21 @@ class Joborder extends Model
 
     public function candidateJoborder(){
         return $this->hasMany(CandidateJobOrder::class, 'joborder_id', 'id');
+    }
+
+    public function companies()
+    {
+        return $this->belongsTo(Company::class, 'id');
+    }
+
+    public function ownerUser()
+    {
+        return $this->belongsTo(User::class, 'owner');
+    }
+
+    public function recruiterUser()
+    {
+        return $this->belongsTo(User::class, 'recruiter');
     }
 
 }

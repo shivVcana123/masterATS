@@ -3,6 +3,7 @@
 
 @section('content')
 
+
 <style>
 .errors {
     color: red;
@@ -149,12 +150,10 @@
                         <th>Entered By</th>
                         <th>Status</th>
                         <th style="width: 65px">Action</th>
-                        <th></th>
                     </tr>
                     @foreach($candidatesJobOrderDetails as $details)
                     <tr>
                         <td>{{$details->id}}</td>
-                        <!-- <td>{{$details->title}}</td> -->
                         <td>3232</td>
                         <td><a
                                 href="{{route('joborders.profile',$details['joborderDetails']->id)}}">{{ $details['joborderDetails']->title }}</a>
@@ -163,11 +162,15 @@
                                 href="{{route('companies.deatils',$details['joborderDetails']['companies']->id)}}">{{ $details['joborderDetails']['companies']->company_name}}</a>
                         </td>
                         <td>{{$details['users']->user_name}} </td>
-                        <td>{{$details->date_submitted}}</td>
+                        <td>
+                            {{ date_format(DateTime::createFromFormat('Y-m-d H:i:s', $details->date_submitted), 'd m Y') }}
+                        </td>
                         <td>{{$details['users']->user_name}}</td>
                         <td>{{$details->status}}</td>
-                        <td>Action</td>
-                        <td></td>
+                        <td>
+                            <i class="fa fa-pencil" data-toggle="modal" data-target="#activityModal"></i>
+                            <i class="fa fa-trash"></i>
+                        </td>
                     </tr>
                     @endforeach
                 </thead>
@@ -175,8 +178,8 @@
 
                 </tbody>
             </table>
-            <i class="fa fa-plus"></i><a href="javascript:;" data-toggle="modal"
-                        data-target=".bd-example-modal-lg">Add This Candidate to Job Order</a>
+            <i class="fa fa-plus"></i><a href="javascript:;" data-toggle="modal" data-target=".bd-example-modal-lg">Add
+                This Candidate to Job Order</a>
         </div>
     </div>
 
@@ -261,7 +264,9 @@
                                     <td>{{ $details['joborderDetails']['companies']->company_name}}</td>
                                     <td>type</td>
                                     <td>{{$details->status}}</td>
-                                    <td>{{$details->date_modified}}</td>
+                                    <td>
+                                        {{ date_format(DateTime::createFromFormat('Y-m-d H:i:s', $details->date_modified), 'd m Y') }}
+                                    </td>
                                     <td></td>
                                     <td>{{$details['users']->user_name}}</td>
                                     <td>{{$details['users']->user_name}}</td>
@@ -281,14 +286,293 @@
             </div>
         </div>
     </div>
+
+
+    <!-- Candidates: Log Activity -->
+    <!-- Modal -->
+    <div class="modal fade" id="activityModal" tabindex="-1" role="dialog" aria-labelledby="activityModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content" style="width: 128%;">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="activityModalLabel">Candidates: Log Activity</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <fieldset class="form-group">
+                        <div class="container">
+                            <label for="">Regarding:</label>
+                            <select id="" name="">
+                                <option selected>Open this select menu</option>
+                                <option value="1">One</option>
+                                <option value="2">Two</option>
+                                <option value="3">Three</option>
+                            </select>
+                            <br><br>
+                            <div class="form-group row">
+                                <div class="col-sm-2">Status:</div>
+                                <div class="col-sm-10">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="gridCheck1">
+                                        <label class="form-check-label" for="gridCheck1">
+                                            Change Status
+                                        </label>
+                                        <br>
+                                        <!-- <label for="">Regarding:</label> -->
+                                        <select id="" name="">
+                                            <option selected>Open this select menu</option>
+                                            <option value="1">One</option>
+                                            <option value="2">Two</option>
+                                            <option value="3">Three</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="form-group row">
+                                <div class="col-sm-2">Activity:</div>
+                                <div class="col-sm-10">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="gridCheck1">
+                                        <label class="form-check-label" for="gridCheck1">
+                                            Log an Activity
+                                        </label>
+                                        <br>
+                                        <label for="">Activity Type:</label>
+                                        <br>
+                                        <select id="" name="">
+                                            <option selected>Open this select menu</option>
+                                            <option value="1">One</option>
+                                            <option value="2">Two</option>
+                                            <option value="3">Three</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group row">
+                                <div class="col-sm-10" style="margin-left: 95px;">
+                                    <label for="">Activity Type:</label>
+                                    <br>
+                                    <textarea name="" id="" cols="30"></textarea>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-sm-2">Schedule:</div>
+                                <div class="col-sm-10">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="gridCheck1">
+                                        <label class="form-check-label" for="gridCheck1">
+                                            Schedule Event
+                                        </label>
+                                        <br>
+                                        <!-- <label for="">Regarding:</label> -->
+                                        <select id="" name="">
+                                            <option selected>Open this select menu</option>
+                                            <option value="1">One</option>
+                                            <option value="2">Two</option>
+                                            <option value="3">Three</option>
+                                        </select>
+                                        <br><br>
+                                        <div class="month-area"
+                                            style="display: flex; flex-direction: row; align-items: center;">
+                                            <div class="form-group">
+                                                <label for="monthPicker">Select Month:</label>
+                                                <div class="input-group">
+                                                    <select id="monthDropdown" name="month">
+                                                        @for ($month = 1; $month <= 12; $month++) <option
+                                                            value="{{ $month }}">
+                                                            {{ date('M', mktime(0, 0, 0, $month, 1)) }}
+                                                            </option>
+                                                            @endfor
+                                                    </select>
+
+                                                    <select name="date" id="dayDropdown"></select>
+
+                                                    <input type="text" name="year" style="width: 15%;"
+                                                        value="{{ substr(date('Y'), -2) }}" id="year">
+
+                                                    <input type="date" name="calander_date" id="calander_date"
+                                                        style="margin-left: 10px; padding: 0px; width: 6%;">
+                                                </div>
+                                            </div>
+                                            <div class="title-area">
+                                                <label for="">Title</label>
+                                                <input type="text">
+                                            </div>
+                                            <input type="hidden" id="selectedDate" name="selected_date">
+                                        </div>
+                                        <!-- <br> -->
+                                        <div class="time-area" style="display: flex; flex-direction: row;">
+                                            <div class="form-group">
+                                                <fieldset class="form-group">
+                                                    <div class="row">
+                                                        <div class="col-sm-10">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="radio"
+                                                                    name="gridRadios" id="gridRadios1" value="option1"
+                                                                    checked>
+                                                                <div class="input-group"
+                                                                    style="display: flex; flex-direction: row; flex-wrap: nowrap;">
+                                                                    <select id="hours" name="hours">
+                                                                        @for ($hour = 1; $hour <= 12; $hour ++) <option
+                                                                            value="{{ $hour  }}">
+                                                                            {{$hour}}
+                                                                            </option>
+                                                                            @endfor
+                                                                    </select>
+
+                                                                    <select id="minutes" name="minutes">
+                                                                        <option value="00">00</option>
+                                                                        <option value="15">15</option>
+                                                                        <option value="30">30</option>
+                                                                        <option value="45">45</option>
+                                                                    </select>
+
+                                                                    <select id="day_am_pm" name="day_am_pm">
+                                                                        <option value="AM">AM</option>
+                                                                        <option value="PM">PM</option>
+                                                                    </select>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </fieldset>
+                                            </div>
+                                            <div class="length-area" style="margin-left: 105px; display: grid; align-items: center; align-content: center;
+">
+                                                <label for="">Length:</label>
+                                                <select id="length_hours" name="length_hours"
+                                                    style="width: 173px;  padding: 3px;">
+                                                    <option value="00">00</option>
+                                                    <option value="15">15</option>
+                                                    <option value="30">30</option>
+                                                    <option value="45">45</option>
+                                                </select>
+                                            </div>
+                                            <input type="hidden" id="selectedDate" name="selected_date">
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </fieldset>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Activity -->
+    <div class="form-group col-md-12" style="margin-top: 7px">
+        <div class="form-control" style="border-color: transparent;padding-left: 0px">
+            <label style="font-size: 18px">Activity</label>
+        </div>
+
+
+        <div class="table-responsive col-md-12">
+            @if(count($candidatesJobOrderDetails) > 0)
+            <table class="table table-striped table-bordered" id="table">
+                <thead class="no-border">
+                    <tr>
+                        <th>ID</th>
+                        <th>Date</th>
+                        <th>Type</th>
+                        <th>Entered</th>
+                        <th>Regarding</th>
+                        <th>Notes</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach($candidatesJobOrderDetails as $details)
+                    @if(
+                    $details['activities'] != null &&
+                    $details['joborderDetails'] != null &&
+                    $details['users'] != null &&
+                    $details['candidatesDetails'] != null
+                    )
+                    <tr>
+                        <td>{{$details->id}}</td>
+                        <td>
+                            {{ date_format(DateTime::createFromFormat('Y-m-d H:i:s', $details->date_created), 'd m Y (h:iA)') }}
+                        </td>
+
+
+                        <td>{{$details['activities']['activityTypes'][0]->short_description}} </td>
+                        <td>{{$details['users']->user_name}}</td>
+                        <td>{{$details['joborderDetails']->title}}
+                            ({{$details['joborderDetails']['companies']->company_name}})</td>
+                        <td>{{substr(optional($details['activities'])->notes, 0, 30)}}</td>
+                        <td>
+                            <i class="fa fa-pencil"></i>
+                            <i class="fa fa-trash" id="delete_activity" data-id="{{$details->id}}"></i>
+                        </td>
+                    </tr>
+                    @else
+                    <tr>
+                        <td colspan="7">No data found</td>
+                    </tr>
+                    @endif
+                    @endforeach
+                </tbody>
+
+            </table>
+            @else
+            <p>No data found</p>
+            @endif
+        </div>
+
+    </div>
 </div>
 @endsection
 @push('scripts')
 <script src="{{ asset('assets/js/plugins/choices.min.js') }}"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/js/bootstrap-datepicker.min.js">
+</script>
 <script>
+$(document).ready(function() {
+    // Set default date to current date
+    var currentDate = new Date();
+    var defaultDate = currentDate.toISOString().slice(0, 10);
+    $('#calander_date').val(defaultDate);
+
+    // Initialize dropdowns with default date
+    updateDropdowns(currentDate);
+
+    // Listen for changes in the calander_date input
+    $('#calander_date').change(function() {
+        var selectedDate = new Date($(this).val());
+        updateDropdowns(selectedDate);
+    });
+
+    function updateDropdowns(date) {
+        // Set month
+        $('#monthDropdown').val(date.getMonth() + 1);
+
+        // Set day
+        var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+        $('#dayDropdown').empty();
+        for (var day = 1; day <= lastDay; day++) {
+            $('#dayDropdown').append('<option value="' + day + '">' + day + '</option>');
+        }
+
+        // Set year
+        $('#year').val(date.getFullYear().toString().substr(-2));
+    }
+});
 var wrapper = $(".input_fields_wrap"); // Fields wrapper
 var add_button = $(".add_field_button"); // Add button ID
-//$('.bd-example-modal-lg').modal('show');
+$('#activityModal').modal('show');
 
 
 $(add_button).click(function(e) {
@@ -462,6 +746,41 @@ $(document).ready(function() {
                 console.error('Error:', error);
             },
         });
+    });
+});
+
+$(document).on('click', '#delete_activity', function() {
+
+    var activity_id = $('#delete_activity').data('id');
+
+    Swal.fire({
+        title: 'Are you sure?',
+        text: 'You won\'t to delete this record!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: "Yes",
+        cancelButtonText: "No",
+        closeOnConfirm: false,
+        closeOnCancel: false
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = '/candidates/activity/delete/' +
+                activity_id;
+        }
+    });
+    const title = response.status ? "success" : "warning";
+    Swal.fire({
+        title: response.message,
+        type: title,
+        icon: title,
+    }).then(function(result) {
+        if (result.isConfirmed && response.status) {
+            $('#exampleModal').modal('hide');
+            window.location.href =
+                "{{ url('/candidates/details',$candidatesDetails[0]->id ) }}";
+        }
     });
 });
 </script>

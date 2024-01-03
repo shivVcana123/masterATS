@@ -46,6 +46,10 @@ Route::post('/candidates/update/save', [CandidateController::class, 'candidatesU
 Route::post('/candidates/list/save', [CandidateController::class, 'candidatesListSave'])->name('candidates.list.save');
 Route::get('/candidates/list/delete/{id?}', [CandidateController::class, 'candidatesListDelete'])->name('candidates.list.delete');
 Route::post('/candidates/list/save/entry', [CandidateController::class, 'candidatesListSaveEntry'])->name('candidates.list.save.entry');
+
+
+
+Route::get('/candidates/activity/delete/{id?}', [CandidateController::class, 'candidatesActivityDelete'])->name('candidates.activity.delete');
 /*
 |--------------------------------------------------------------------------
 | Web Routes

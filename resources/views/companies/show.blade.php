@@ -108,14 +108,14 @@
                     <th style="width: 65px">Recruiter</th>
                     <th style="width: 67px">Owner </th>
                     <th style="width: 65px">Action</th>
-                    <th></th>
+                   
                 </tr>
                 @foreach($companyDetails[0]['user'] as $detailss)
                 @foreach($companyDetails[0]['jobDetails'] as $details)
                 <tr>
-                    <td>{{$details->joborder_id}}</td>
+                    <td>{{$details->id}}</td>
                     <!-- <td>{{$details->title}}</td> -->
-                    <td><a href="{{route('joborders.profile',$details->joborder_id)}}">{{ $details->title }}</a></td>
+                    <td><a href="{{route('joborders.profile',$details->id)}}">{{ $details->title }}</a></td>
                     <td>{{$details->type}}</td>
                     <td>{{$details->status}}</td>
                     <td>{{$details->date_created}}</td>
@@ -127,7 +127,6 @@
                     <td>{{$details->recruiter}}</td>
                     <td>{{$detailss->user_name}} </td>
                     <td>Action</td>
-                    <td></td>
                 </tr>
                 @endforeach
                 @endforeach
