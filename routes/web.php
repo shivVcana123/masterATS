@@ -48,8 +48,17 @@ Route::get('/candidates/list/delete/{id?}', [CandidateController::class, 'candid
 Route::post('/candidates/list/save/entry', [CandidateController::class, 'candidatesListSaveEntry'])->name('candidates.list.save.entry');
 
 
+Route::post('/candidates/add/candidate/joborder', [CandidateController::class, 'candidatesAddCandidateJoborder'])->name('candidates.add.candidate.joborder');
+
+
 
 Route::get('/candidates/activity/delete/{id?}', [CandidateController::class, 'candidatesActivityDelete'])->name('candidates.activity.delete');
+
+Route::post('/candidates/activity/save', [CandidateController::class, 'candidatesActivitySave'])->name('candidates.activity.save');
+
+Route::get('/candidates/candidate/joborder/delete/{id?}', [CandidateController::class, 'candidatesJoborderDelete'])->name('candidates.candidate.joborder.delete');
+
+Route::get('/candidates/joborder/delete/{id?}', [CandidateController::class, 'joborderDelete'])->name('candidates.joborder.delete');
 /*
 |--------------------------------------------------------------------------
 | Web Routes

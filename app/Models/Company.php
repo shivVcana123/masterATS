@@ -22,7 +22,7 @@ class Company extends Model
 
     public function jobDetails()
     {
-        return $this->hasMany(Joborder::class,'company_id','id');
+        return $this->hasMany(Joborder::class,'company_id', 'id');
     }
   
 }

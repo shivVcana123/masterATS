@@ -12,6 +12,10 @@
 .buttn-area {
     display: flex;
 }
+
+.highlight {
+    color: red;
+}
 </style>
 <div class="row">
     <div class="col-lg-12 margin-tb">
@@ -28,63 +32,209 @@
     </div>
 </div>
 
-
+<!-- Candidates Details -->
 <div class="row">
-    <div class="col-xs-12 col-sm-12 col-md-12">
-        <div class="form-group">
-            <strong>Name:</strong>
-            <div class="btn-group">
-                <button type="button" class="btn btn-secondary "> {{ $candidatesDetails[0]->first_name }}
-                    {{ $candidatesDetails[0]->middle_name }}
-                    {{ $candidatesDetails[0]->last_name }}</button>
-                <button type="button" class="btn btn-secondary  dropdown-toggle dropdown-toggle-split"
-                    data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                    <span class="sr-only">Toggle Dropdown</span>
-                </button>
-                <div class="dropdown-menu">
-                    <a class="dropdown-item" href="javascript:;" data-toggle="modal" data-target="#exampleModal">Add to
-                        List</a>
-                    <a class="dropdown-item" href="javascript:;" data-toggle="modal"
-                        data-target=".bd-example-modal-lg">Add
-                        to Job Order </a>
-                </div>
-            </div>
-        </div>
-    </div>
+    <table class="detailsOutside">
+        <tbody>
+            <tr style="vertical-align:top;">
+                <td width="50%" height="100%">
+                    <table class="detailsInside" height="100%">
+                        <tbody>
+                            <tr>
+                                <td class="vertical">Name:</td>
+                                <td class="data">
+                                    <div class="btn-group">
+                                        <input type="hidden" id="candidate_id" value="{{ $candidatesDetails[0]->id }}">
+                                        <button type="button" class="btn btn-secondary ">
+                                            {{ $candidatesDetails[0]->first_name }}
+                                            {{ $candidatesDetails[0]->middle_name }}
+                                            {{ $candidatesDetails[0]->last_name }}</button>
+                                        <button type="button"
+                                            class="btn btn-secondary  dropdown-toggle dropdown-toggle-split"
+                                            data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            <span class="sr-only">Toggle Dropdown</span>
+                                        </button>
+                                        <div class="dropdown-menu">
+                                            <a class="dropdown-item" href="javascript:;" data-toggle="modal"
+                                                data-target="#exampleModal">Add to
+                                                List</a>
+                                            <a class="dropdown-item" href="javascript:;" data-toggle="modal"
+                                                data-target=".bd-example-modal-lg">Add
+                                                to Job Order </a>
+                                        </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="vertical">E-Mail:</td>
+                                <td class="data">
+                                    <a href="#">
+                                        {{ $candidatesDetails[0]->email1 }} </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="vertical">2nd E-Mail:</td>
+                                <td class="data">
+                                    <a href="mailto:">
+                                        {{ $candidatesDetails[0]->email2 }}
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="vertical">Home Phone:</td>
+                                <td class="data">{{ $candidatesDetails[0]->phone_home}}</td>
+                            </tr>
+                            <tr>
+                                <td class="vertical">Cell Phone:</td>
+                                <td class="data">{{ $candidatesDetails[0]->phone_cell  }}</td>
+                            </tr>
+                            <tr>
+                                <td class="vertical">Work Phone:</td>
+                                <td class="data">{{ $candidatesDetails[0]->phone_work  }}</td>
+                            </tr>
+                            <tr>
+                                <td class="vertical">Best Time To Call:</td>
+                                <td class="data">{{ $candidatesDetails[0]->best_time_to_call }}</td>
+                            </tr>
+                            <tr>
+                                <td class="vertical">Address:</td>
+                                <td class="data">{{ $candidatesDetails[0]->address }}</td>
+                            </tr>
+                            <tr>
+                                <td class="vertical">&nbsp;</td>
+                                <td class="data">
+                                    1 </td>
+                            </tr>
+                            <tr>
+                                <td class="vertical">Web Site:</td>
+                                <td class="data">{{ $candidatesDetails[0]->web_site }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td class="vertical">Source:</td>
+                                <td class="data">{{ $candidatesDetails[0]->source }}</td>
+                            </tr>
+                            <tr>
+                                <td class="vertical"></td>
+                                <td class="data">2</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+                <td width="50%" height="100%" valign="top">
+                    <table class="detailsInside" height="100%">
+                        <tbody>
+                            <tr>
+                                <td class="vertical">Date Available:</td>
+                                <td class="data">{{ $candidatesDetails[0]->date_available }}</td>
+                            </tr>
+                            <tr>
+                                <td class="vertical">Current Employer:</td>
+                                <td class="data">{{ $candidatesDetails[0]->current_employer }}</td>
+                            </tr>
+                            <tr>
+                                <td class="vertical">Key Skills:</td>
+                                <td class="data">{{ $candidatesDetails[0]->key_skills }}</td>
+                            </tr>
+                            <tr>
+                                <td class="vertical">Can Relocate:</td>
+                                <td class="data">{{ $candidatesDetails[0]->can_relocate }}</td>
+                            </tr>
+                            <tr>
+                                <td class="vertical">Current Pay:</td>
+                                <td class="data">{{ $candidatesDetails[0]->current_pay }}</td>
+                            </tr>
+                            <tr>
+                                <td class="vertical">Desired Pay:</td>
+                                <td class="data">{{ $candidatesDetails[0]->desired_pay }}</td>
+                            </tr>
+                            <tr>
+                                <td class="vertical">Pipeline:</td>
+                                <td class="data">Pipeline</td>
+                            </tr>
+                            <tr>
+                                <td class="vertical">Submitted:</td>
+                                <td class="data">Submitted</td>
+                            </tr>
+                            <tr>
+                                <td class="vertical">Created:</td>
+                                <td class="data">{{ $candidatesDetails[0]->date_created  }}</td>
+                            </tr>
+                            <tr>
+                                <td class="vertical">Owner:</td>
+                                <td class="data">{{ $candidatesDetails[0]->owner  }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <table class="detailsOutside">
+        <tbody>
+            <tr>
+                <td>
+                    <table class="detailsInside">
+                        <tbody>
+                            <tr>
+                                <td valign="top" class="vertical">Misc. Notes:</td>
+                                <td id="shortNotes" style="display:block;" class="data">
+                                </td>
+                            </tr>
+                            <tr>
+                                <td valign="top" class="vertical">Upcoming Events:</td>
+                                <td id="schedule_event" class="data" value="Schedule Event"><a href="javascript:;">Schedule Event</a></td>
+                            </tr>
+                            <tr>
+                                <td valign="top" class="vertical">Attachments:</td>
+                                <td valign="top" class="data">
+                                    <table class="attachmentsTable">
+                                        <tbody>
+                                            <tr>
+                                                <td>
+                                                    <a href="javascript:;">
+                                                        <!-- <img src="images/attachment.gif" alt="" width="16" height="16"
+                                                            border="0"> -->
 
-    <!-- Candidates Details -->
-    <div class="container">
-        <div class="col-xs-12 col-sm-12 col-md-12">
-            <div class="form-group">
-                <strong>E-Mail:</strong>
-                {{ $candidatesDetails[0]->email1 }}
-            </div>
-        </div>
-        <div class="col-xs-12 col-sm-12 col-md-12">
-            <div class="form-group">
-                <strong>2nd E-Mail:</strong>
-                {{ $candidatesDetails[0]->email2 }}
-            </div>
-        </div>
-        <div class="col-xs-12 col-sm-12 col-md-12">
-            <div class="form-group">
-                <strong>Home Phone:</strong>
-                {{ $candidatesDetails[0]->phone_home  }}
-            </div>
-        </div>
-        <div class="col-xs-12 col-sm-12 col-md-12">
-            <div class="form-group">
-                <strong>Cell Phone:</strong>
-                {{ $candidatesDetails[0]->phone_cell  }}
-            </div>
-        </div>
-        <div class="col-xs-12 col-sm-12 col-md-12">
-            <div class="form-group">
-                <strong>Work Phone:</strong>
-                {{ $candidatesDetails[0]->phone_work  }}
-            </div>
-        </div>
-    </div>
+                                                        Sirisha Kotha.DOCX
+                                                    </a>
+                                                </td>
+                                                <td><a href="javascript:;">
+                                                        <!-- <img width="15" height="15" style="border: none;"
+                                                            src="images/search.gif" alt="(Preview)"> -->
+                                                    </a></td>
+                                                <td> 01-03-24 (05:24:22 PM)</td>
+                                                <td>
+                                                    <a href="javascript:;">
+                                                        <!-- <img src="images/actions/delete.gif" alt="" width="16"
+                                                            height="16" border="0" title="Delete"> -->
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <a href="javascript:;">
+                                        <!-- <img src="images/paperclip_add.gif" width="16" height="16" border="0"
+                                            alt="Add Attachment" class="absmiddle"> -->
+                                        &nbsp;Add Attachment
+                                    </a>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td valign="top" class="vertical">Tags:
+                                    <a href="javascript:;">
+                                        Add/Remove
+                                    </a>
+                                </td>
+                                <td valign="top" class="data"> </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <!-- Candidates Details End -->
 
     <!-- Button trigger modal -->
 
@@ -138,7 +288,7 @@
             <label style="font-size: 18px">Job Orders For Candidates</label>
         </div>
         <div class="table-responsive col-md-12">
-            <table class="table table-striped table-bordered" id="table">
+            <table class="table table-striped table-bordered" id="job_orders_for_candidates">
                 <thead class="no-border">
                     <tr>
                         <th>ID</th>
@@ -151,31 +301,35 @@
                         <th>Status</th>
                         <th style="width: 65px">Action</th>
                     </tr>
+                </thead>
+                <tbody id="container" class="no-border-x no-border-y ui-sortable">
                     @foreach($candidatesJobOrderDetails as $details)
                     <tr>
                         <td>{{$details->id}}</td>
                         <td>3232</td>
-                        <td><a
+                        <td data-id="{{$details['joborderDetails']->id}}" id="joborderDetails_id"><a
                                 href="{{route('joborders.profile',$details['joborderDetails']->id)}}">{{ $details['joborderDetails']->title }}</a>
                         </td>
                         <td><a
                                 href="{{route('companies.deatils',$details['joborderDetails']['companies']->id)}}">{{ $details['joborderDetails']['companies']->company_name}}</a>
                         </td>
-                        <td>{{$details['users']->user_name}} </td>
+                        <td>@if($details['ownerUser'])
+                            {{ $details['ownerUser']->user_name }}
+                            @else
+                            No associated company
+                            @endif
+                        </td>
                         <td>
                             {{ date_format(DateTime::createFromFormat('Y-m-d H:i:s', $details->date_submitted), 'd m Y') }}
                         </td>
                         <td>{{$details['users']->user_name}}</td>
                         <td>{{$details->status}}</td>
                         <td>
-                            <i class="fa fa-pencil" data-toggle="modal" data-target="#activityModal"></i>
-                            <i class="fa fa-trash"></i>
+                            <i class="fa fa-pencil" id="Activity" value="Activity"></i>
+                            <i class="fa fa-trash" id="candidate_joborders_delete" data-value="{{$details->id}}"></i>
                         </td>
                     </tr>
                     @endforeach
-                </thead>
-                <tbody id="container" class="no-border-x no-border-y ui-sortable">
-
                 </tbody>
             </table>
             <i class="fa fa-plus"></i><a href="javascript:;" data-toggle="modal" data-target=".bd-example-modal-lg">Add
@@ -218,10 +372,10 @@
     <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-lg">
-            <div class="modal-content" style="width: 150%; margin-left: -18%;">
+            <div class="modal-content" style="width: 210%; margin-left: -45%;">
                 <div class="form-group col-md-12" style="margin-top: -15px; margin-left: -5px; padding: 2%;">
                     <div class="form-control" style="border-color: transparent;padding-left: 0px">
-                        <label style="font-size: 18px">Job Orders For Candidates</label>
+                        <label style="font-size: 18px">Add Candidates to Job Order</label>
                     </div>
                     <div class="buttn-area">
                         <form class="example" action="{{ route('joborders.index') }}">
@@ -238,47 +392,62 @@
 
                     </div><br>
                     <div class="table-responsive col-md-12">
-                        <table class="table table-striped table-bordered" id="table">
+                        <table class="table table-striped table-bordered" id="add_candidates_to_job_order_list">
                             <thead class="no-border">
                                 <tr>
-                                    <th>ID</th>
-                                    <th>Ref. Number</th>
-                                    <th>Title</th>
-                                    <th>Company</th>
-                                    <th>Type</th>
-                                    <th>Status</th>
-                                    <th>Modified</th>
-                                    <th>Start</th>
-                                    <th>Recruiter</th>
+                                    <th style="width: 67px">ID</th>
+                                    <th style="width: 67px">Ref. Number</th>
+                                    <th style="width: 67px">Title</th>
+                                    <th style="width: 67px">Company</th>
+                                    <th style="width: 67px">Type</th>
+                                    <th style="width: 67px">Status</th>
+                                    <th style="width: 67px">Modified</th>
+                                    <th style="width: 67px">Start</th>
+                                    <th style="width: 67px">Recruiter</th>
                                     <th style="width: 67px">Owner </th>
                                     <th style="width: 65px">Action</th>
                                     <!-- <th></th> -->
                                 </tr>
-                                @foreach($candidatesJobOrderDetails as $details)
+                            </thead>
+                            <tbody id="container" class="no-border-x no-border-y ui-sortable">
+                                @foreach($joborderList as $details)
                                 <tr>
                                     <td>{{$details->id}}</td>
                                     <td>3232</td>
-                                    <td><a
-                                            href="{{route('joborders.profile',$details['joborderDetails']->id)}}">{{ $details['joborderDetails']->title }}</a>
+                                    <!-- style="color: #51459d;" -->
+                                    <td id="joborder_id" data-id="{{$details->id}}">{{ $details->title }}</td>
+                                    <td>@if($details['companies'])
+                                        {{ $details['companies']->company_name }}
+                                        @else
+                                        No associated company
+                                        @endif
                                     </td>
-                                    <td>{{ $details['joborderDetails']['companies']->company_name}}</td>
-                                    <td>type</td>
+                                    <td>{{$details->type}}</td>
                                     <td>{{$details->status}}</td>
                                     <td>
-                                        {{ date_format(DateTime::createFromFormat('Y-m-d H:i:s', $details->date_modified), 'd m Y') }}
+                                        {{ date_format(DateTime::createFromFormat('Y-m-d H:i:s', $details->date_created), 'd m Y') }}
                                     </td>
-                                    <td></td>
-                                    <td>{{$details['users']->user_name}}</td>
-                                    <td>{{$details['users']->user_name}}</td>
-                                    <td><a
-                                            href="{{route('joborders.profile',$details['joborderDetails']->id)}}">View</a>
+                                    <td>{{$details->start_date}}</td>
+                                    <td>@if($details['ownerUser'])
+                                        {{ $details['ownerUser']->user_name }}
+                                        @else
+                                        No associated company
+                                        @endif
                                     </td>
-                                    <!-- <td></td> -->
+
+                                    <td>@if($details['recruiterUser'])
+                                        {{ $details['recruiterUser']->user_name }}
+                                        @else
+                                        No associated company
+                                        @endif
+                                    </td>
+
+                                    <td>
+                                        <i class="fa fa-pencil" data-toggle="modal" data-target="#activityModal"></i>
+                                        <i class="fa fa-trash" id="joborders_delete" data-value="{{$details->id}}"></i>
+                                    </td>
                                 </tr>
                                 @endforeach
-                            </thead>
-                            <tbody id="container" class="no-border-x no-border-y ui-sortable">
-
                             </tbody>
                         </table>
                     </div>
@@ -293,7 +462,7 @@
     <div class="modal fade" id="activityModal" tabindex="-1" role="dialog" aria-labelledby="activityModalLabel"
         aria-hidden="true">
         <div class="modal-dialog" role="document">
-            <div class="modal-content" style="width: 128%;">
+            <div class="modal-content" style="width: 149%; margin-left: -90px;">
                 <div class="modal-header">
                     <h5 class="modal-title" id="activityModalLabel">Candidates: Log Activity</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -303,78 +472,89 @@
                 <div class="modal-body">
                     <fieldset class="form-group">
                         <div class="container">
-                            <label for="">Regarding:</label>
-                            <select id="" name="">
-                                <option selected>Open this select menu</option>
-                                <option value="1">One</option>
-                                <option value="2">Two</option>
-                                <option value="3">Three</option>
-                            </select>
-                            <br><br>
-                            <div class="form-group row">
-                                <div class="col-sm-2">Status:</div>
-                                <div class="col-sm-10">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="gridCheck1">
-                                        <label class="form-check-label" for="gridCheck1">
-                                            Change Status
-                                        </label>
-                                        <br>
-                                        <!-- <label for="">Regarding:</label> -->
-                                        <select id="" name="">
-                                            <option selected>Open this select menu</option>
-                                            <option value="1">One</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
-                                        </select>
+                            <div class="activity-area">
+                                <label for="">Regarding:</label>
+                                <select id="joborder_item" name="joborder_item" style="margin-left: 23px;">
+                                    <option selected disabled="disabled">General</option>
+                                    @foreach($candidatesJobOrderDetails as $details)
+                                    <option value="{{$details['joborderDetails']->id}}">
+                                        {{$details['joborderDetails']->title}}</option>
+                                    @endforeach
+                                </select>
+                                <input class="form-check-input" type="checkbox" id="checkbox_mail_send_item"
+                                    name="checkbox_mail_send_item" style="margin-left: 30px;">
+                                <label class="form-check-label" for="checkbox_mail_send_item">
+                                    Send E-Mail Notification to Candidate
+                                </label>
+                                <br><br>
+                                <div class="form-group row">
+                                    <div class="col-sm-2">Status:</div>
+                                    <div class="col-sm-10">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="checkbox_status_change">
+                                            <label class="form-check-label" for="checkbox_status_change">
+                                                Change Status
+                                            </label>
+                                            <br>
+                                            <!-- <label for="">Regarding:</label> -->
+                                            <select id="change_status_item" name="change_status_item" class="inputbox"
+                                                style="width: 150px;">
+                                                <option selected disabled>Select a Status</option>
+                                                @foreach($changeStatus as $details)
+                                                <option value="{{$details->id}}">{{$details->description}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div class="form-group row">
-                                <div class="col-sm-2">Activity:</div>
-                                <div class="col-sm-10">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="gridCheck1">
-                                        <label class="form-check-label" for="gridCheck1">
-                                            Log an Activity
-                                        </label>
-                                        <br>
-                                        <label for="">Activity Type:</label>
-                                        <br>
-                                        <select id="" name="">
-                                            <option selected>Open this select menu</option>
-                                            <option value="1">One</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
-                                        </select>
+                                <div class="form-group row">
+                                    <div class="col-sm-2">Activity:</div>
+                                    <div class="col-sm-10">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="checkbox_activity">
+                                            <label class="form-check-label" for="checkbox_activity">
+                                                Log an Activity
+                                            </label>
+                                            <br>
+                                            <label for="select_checkbox_activity">Activity Type:</label>
+                                            <br>
+                                            <select id="select_checkbox_activity" name="select_checkbox_activity">
+                                                <option selected disabled>Select Activity Type</option>
+                                                @foreach($activityType as $details)
+                                                <option value="{{$details->id}}">{{$details->short_description}}
+                                                </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
 
 
-                            <div class="form-group row">
-                                <div class="col-sm-10" style="margin-left: 95px;">
-                                    <label for="">Activity Type:</label>
-                                    <br>
-                                    <textarea name="" id="" cols="30"></textarea>
+                                <div class="form-group row">
+                                    <div class="col-sm-10" style="margin-left: 115px;">
+                                        <label for="activity_type_description">Activity Type:</label>
+                                        <br>
+                                        <textarea name="activity_type_description" id="activity_type_description"
+                                            cols="30"></textarea>
+                                    </div>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <div class="col-sm-2">Schedule:</div>
                                 <div class="col-sm-10">
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="gridCheck1">
-                                        <label class="form-check-label" for="gridCheck1">
+                                        <input class="form-check-input" type="checkbox" id="checkbox_schedule">
+                                        <label class="form-check-label" for="checkbox_schedule">
                                             Schedule Event
                                         </label>
                                         <br>
                                         <!-- <label for="">Regarding:</label> -->
-                                        <select id="" name="">
-                                            <option selected>Open this select menu</option>
-                                            <option value="1">One</option>
-                                            <option value="2">Two</option>
-                                            <option value="3">Three</option>
+                                        <select id="schedule_event_type" name="schedule_event_type">
+                                            <option selected disabled>Select Event Type</option>
+                                            @foreach($calendarEvenType as $details)
+                                            <option value="{{$details->id}}">{{$details->short_description}}</option>
+                                            @endforeach
                                         </select>
                                         <br><br>
                                         <div class="month-area"
@@ -390,9 +570,9 @@
                                                             @endfor
                                                     </select>
 
-                                                    <select name="date" id="dayDropdown"></select>
+                                                    <select name="date" id="dateDropdown"></select>
 
-                                                    <input type="text" name="year" style="width: 15%;"
+                                                    <input type="text" name="year" id="year" style="width: 15%;"
                                                         value="{{ substr(date('Y'), -2) }}" id="year">
 
                                                     <input type="date" name="calander_date" id="calander_date"
@@ -400,8 +580,8 @@
                                                 </div>
                                             </div>
                                             <div class="title-area">
-                                                <label for="">Title</label>
-                                                <input type="text">
+                                                <label for="title">Title</label>
+                                                <input type="text" id="title" name="title">
                                             </div>
                                             <input type="hidden" id="selectedDate" name="selected_date">
                                         </div>
@@ -413,7 +593,7 @@
                                                         <div class="col-sm-10">
                                                             <div class="form-check">
                                                                 <input class="form-check-input" type="radio"
-                                                                    name="gridRadios" id="gridRadios1" value="option1"
+                                                                    name="hoursRadios" id="hoursRadios1" value=""
                                                                     checked>
                                                                 <div class="input-group"
                                                                     style="display: flex; flex-direction: row; flex-wrap: nowrap;">
@@ -443,29 +623,62 @@
                                                     </div>
                                                 </fieldset>
                                             </div>
-                                            <div class="length-area" style="margin-left: 105px; display: grid; align-items: center; align-content: center;
-">
+                                            <div class="length-area"
+                                                style="margin-left: 190px; display: grid; align-items: center; align-content: center;">
                                                 <label for="">Length:</label>
                                                 <select id="length_hours" name="length_hours"
                                                     style="width: 173px;  padding: 3px;">
-                                                    <option value="00">00</option>
-                                                    <option value="15">15</option>
-                                                    <option value="30">30</option>
-                                                    <option value="45">45</option>
+                                                    <option value="15">15 minuts</option>
+                                                    <option value="30">30 minuts</option>
+                                                    <option value="45">45 minuts</option>
+                                                    <option value="1">1 hours</option>
+                                                    <option value="1.5">1.5 hours</option>
+                                                    <option value="2">2 hours</option>
+                                                    <option value="3">3 hours</option>
+                                                    <option value="4">4 hours</option>
+                                                    <option value="more">More then 4 hours</option>
+
                                                 </select>
                                             </div>
-                                            <input type="hidden" id="selectedDate" name="selected_date">
+                                        </div>
+
+                                        <!-- <br> -->
+                                        <div class="time-area" style="display: flex; flex-direction: row;">
+                                            <div class="form-group">
+                                                <fieldset class="form-group">
+                                                    <div class="row">
+                                                        <div class="col-sm-10">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="radio"
+                                                                    name="all_day_radios" id="all_day_radios" value=""
+                                                                    checked>
+                                                                <div class="input-group">
+                                                                    All Day / No Specific Time
+                                                                </div>
+                                                            </div>
+                                                            <input type="checkbox" name="public_entry"
+                                                                id="public_entry">
+                                                            Public Entry
+                                                        </div>
+                                                    </div>
+                                                </fieldset>
+                                            </div>
+                                            <div class="length-area"
+                                                style="margin-left: 205px; display: grid; align-items: center; align-content: center;">
+                                                <label for="">Description:</label>
+                                                <textarea name="length_description" id="length_description"
+                                                    cols="30"></textarea>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-
                         </div>
                     </fieldset>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button type="button" class="btn btn-primary" id="save_activity_btn">Save changes</button>
                 </div>
             </div>
         </div>
@@ -540,6 +753,46 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/js/bootstrap-datepicker.min.js">
 </script>
 <script>
+var candidate_id = $('#candidate_id').val();
+
+$(document).on('click', '#add_candidates_to_job_order_list tbody td#joborder_id', function() {
+    var jobID = $(this).data('id');
+    $.ajaxSetup({
+        headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        },
+    });
+
+    $.ajax({
+        url: '/candidates/add/candidate/joborder',
+        type: 'POST',
+        data: {
+            jobID: jobID,
+            candidate_id: candidate_id,
+        },
+        success: function(response) {
+            const title = response.status ? "success" : "warning";
+            Swal.fire({
+                title: response.message,
+                type: title,
+                icon: title,
+            }).then(function(result) {
+                if (result.isConfirmed && response.status) {
+                    window.location.href =
+                        "{{ url('/candidates/details',$candidatesDetails[0]->id ) }}";
+                }
+            });
+        },
+        error: function(xhr, status, error) {
+            console.error('Error:', error);
+        },
+    });
+});
+
+
+
+
+
 $(document).ready(function() {
     // Set default date to current date
     var currentDate = new Date();
@@ -561,18 +814,85 @@ $(document).ready(function() {
 
         // Set day
         var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
-        $('#dayDropdown').empty();
+        $('#dateDropdown').empty();
         for (var day = 1; day <= lastDay; day++) {
-            $('#dayDropdown').append('<option value="' + day + '">' + day + '</option>');
+            $('#dateDropdown').append('<option value="' + day + '">' + day + '</option>');
         }
 
         // Set year
         $('#year').val(date.getFullYear().toString().substr(-2));
     }
 });
+
+
+
+
+$(document).on('click', '#save_activity_btn', function() {
+    var joborder_item = $('#joborder_item').val();
+    var change_status_item = $('#change_status_item').val();
+    var select_checkbox_activity = $('#select_checkbox_activity').val();
+    var activity_type_description = $('#activity_type_description').val();
+    var schedule_event_type = $('#schedule_event_type').val();
+    var monthDropdown = $('#monthDropdown').val();
+    var dateDropdown = $('#dateDropdown').val();
+    var year = $('#year').val();
+    var title = $('#title').val();
+    var hours = $('#hours').val();
+    var minutes = $('#minutes').val();
+    var day_am_pm = $('#day_am_pm').val();
+    var length_hours = $('#length_hours').val();
+    var length_description = $('#length_description').val();
+
+    $.ajaxSetup({
+        headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        },
+    });
+
+    $.ajax({
+        url: '/candidates/activity/save',
+        type: 'POST',
+        data: {
+            joborder_item: joborder_item,
+            change_status_item: change_status_item,
+            select_checkbox_activity: select_checkbox_activity,
+            activity_type_description: activity_type_description,
+            schedule_event_type: schedule_event_type,
+            monthDropdown: monthDropdown,
+            dateDropdown: dateDropdown,
+            year: year,
+            title: title,
+            hours: hours,
+            minutes: minutes,
+            day_am_pm: day_am_pm,
+            length_hours: length_hours,
+            length_description: length_description,
+        },
+        success: function(response) {
+            const title = response.status ? "success" : "warning";
+            Swal.fire({
+                title: response.message,
+                type: title,
+                icon: title,
+            }).then(function(result) {
+                if (result.isConfirmed && response.status) {
+                    $('#exampleModal').modal('hide');
+                    window.location.href =
+                        "{{ url('/candidates/details',$candidatesDetails[0]->id ) }}";
+                }
+            });
+        },
+        error: function(xhr, status, error) {
+            console.error('Error:', error);
+        },
+    });
+});
+
+
+
 var wrapper = $(".input_fields_wrap"); // Fields wrapper
 var add_button = $(".add_field_button"); // Add button ID
-$('#activityModal').modal('show');
+// $('#activityModal').modal('show');
 
 
 $(add_button).click(function(e) {
@@ -749,6 +1069,7 @@ $(document).ready(function() {
     });
 });
 
+
 $(document).on('click', '#delete_activity', function() {
 
     var activity_id = $('#delete_activity').data('id');
@@ -766,22 +1087,143 @@ $(document).on('click', '#delete_activity', function() {
         closeOnCancel: false
     }).then((result) => {
         if (result.isConfirmed) {
-            window.location.href = '/candidates/activity/delete/' +
-                activity_id;
+            $.ajax({
+                url: '/candidates/activity/delete/' + activity_id,
+                type: 'GET',
+                success: function(response) {
+                    const title = response.status ? "success" : "warning";
+                    Swal.fire({
+                        title: response.message,
+                        type: title,
+                        icon: title,
+                    }).then(function(result) {
+                        if (result.isConfirmed && response.status) {
+                            window.location.href =
+                                "{{ url('/candidates/details',$candidatesDetails[0]->id ) }}";
+                        }
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error);
+                },
+            });
         }
     });
-    const title = response.status ? "success" : "warning";
+});
+
+$(document).on('click', '#candidate_joborders_delete', function() {
+
+    var candidate_joborder_id = $(this).data('value');
+
     Swal.fire({
-        title: response.message,
-        type: title,
-        icon: title,
-    }).then(function(result) {
-        if (result.isConfirmed && response.status) {
-            $('#exampleModal').modal('hide');
-            window.location.href =
-                "{{ url('/candidates/details',$candidatesDetails[0]->id ) }}";
+        title: 'Are you sure?',
+        text: 'You won\'t to delete this record!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: "Yes",
+        cancelButtonText: "No",
+        closeOnConfirm: false,
+        closeOnCancel: false
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '/candidates/candidate/joborder/delete/' + candidate_joborder_id,
+                type: 'GET',
+                success: function(response) {
+                    const title = response.status ? "success" : "warning";
+                    Swal.fire({
+                        title: response.message,
+                        type: title,
+                        icon: title,
+                    }).then(function(result) {
+                        if (result.isConfirmed && response.status) {
+                            window.location.href =
+                                "{{ url('/candidates/details',$candidatesDetails[0]->id ) }}";
+                        }
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error);
+                },
+            });
         }
     });
+});
+
+$(document).on('click', '#joborders_delete', function() {
+
+    var joborder_id = $(this).data('value');
+    // alert(candidate_joborder_id);
+
+    Swal.fire({
+        title: 'Are you sure?',
+        text: 'You won\'t to delete this record!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: "Yes",
+        cancelButtonText: "No",
+        closeOnConfirm: false,
+        closeOnCancel: false
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '/candidates/joborder/delete/' + joborder_id,
+                type: 'GET',
+                success: function(response) {
+                    const title = response.status ? "success" : "warning";
+                    Swal.fire({
+                        title: response.message,
+                        type: title,
+                        icon: title,
+                    }).then(function(result) {
+                        if (result.isConfirmed && response.status) {
+                            window.location.href =
+                                "{{ url('/candidates/details',$candidatesDetails[0]->id ) }}";
+                        }
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error);
+                },
+            });
+        }
+    });
+});
+
+
+$(document).ready(function() {
+    // Loop through each td with id 'joborder_id' in table 1
+    $('#add_candidates_to_job_order_list #joborder_id').each(function() {
+        var jobId = $(this).data('id');
+
+        // Check if the jobId exists in the third column of the second table
+        if ($('#job_orders_for_candidates td[data-id="' + jobId + '"]:eq(2)').length > 0) {
+            // Job ID exists in table 2, remove highlight class
+            $(this).removeClass('highlight');
+        } else {
+            // Job ID does not exist in table 2, add highlight class
+            $(this).addClass('highlight');
+        }
+    });
+});
+
+
+$(document).on('click', '#schedule_event, #schedule_event td', function() {
+    if($(this).attr('value') == 'Schedule Event'){
+        $('.activity-area').hide();
+    }
+    $('#activityModal').modal('show');
+});
+
+$(document).on('click', '#Activity, #Activity td', function() {
+    if($(this).attr('value') == 'Activity'){
+        $('.activity-area').show();
+    }
+    $('#activityModal').modal('show');
 });
 </script>
 @endpush

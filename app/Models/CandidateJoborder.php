@@ -11,6 +11,9 @@ class CandidateJoborder extends Model
 
     protected $fillable = ['id', 'candidate_id', 'joborder_id', 'site_id', 'status', 'date_submitted', 'date_created', 'date_modified', 'rating_value', 'added_by'];
 
+    const CREATED_AT = 'date_created';
+    const UPDATED_AT = 'date_modified';
+
     public function candidatesDetails(){
         return $this->belongsTo(Candidate::class, 'candidate_id', 'id');
     }
@@ -18,7 +21,7 @@ class CandidateJoborder extends Model
         return $this->belongsTo(Joborder::class, 'joborder_id', 'id');
     }
     public function users(){
-        return $this->belongsTo(User::class,'id');
+        return $this->belongsTo(User::class,'added_by');
     }
 
     public function activities(){

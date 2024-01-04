@@ -13,9 +13,11 @@ class Activity extends Model
 
     protected $fillable = ['id', 'data_item_id', 'data_item_type', 'joborder_id', 'site_id', 'entered_by', 'date_created', 'type', 'notes', 'date_modified'];
 
+    const CREATED_AT = 'date_created';
+    const UPDATED_AT = 'date_modified';
 
     public function candidateJoborder(){
-        return $this->hasMany(CandidateJoborder::class,'joborder_id');
+        return $this->hasMany(CandidateJoborder::class,'joborder_id','id');
     }
 
     public function activityTypes(){

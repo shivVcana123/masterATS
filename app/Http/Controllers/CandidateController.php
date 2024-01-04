@@ -5,10 +5,14 @@ use Illuminate\Http\Request;
 use App\DataTables\FacilitiesDataTable;
 use App\Facades\UtilityFacades;
 use App\Models\Activity;
+use App\Models\ActivityType;
+use App\Models\calendarEvenType;
 use Carbon\Carbon;
 
 use App\Models\Candidate;
 use App\Models\CandidateJoborder;
+use App\Models\ChangeStatus;
+use App\Models\Joborder;
 use App\Models\SavedList;
 use App\Models\SavedListEntry;
 use App\Models\User;
@@ -88,9 +92,18 @@ class CandidateController extends Controller
     public function candidatesDetails($id){
         $candidatesDetails = Candidate::where('id',$id)->get();
         $candidatesJobOrderDetails = CandidateJoborder::with('candidatesDetails','users','joborderDetails','joborderDetails.companies','activities','activities.activityTypes')->get();
-        // dd( $candidatesJobOrderDetails);
+
+        // dd($candidatesJobOrderDetails);
+        $joborderList = Joborder::with('companies','ownerUser','recruiterUser')->get();
+        // dd($joborderList);
         $savedList = SavedList::where('number_entries','1')->get();
-        return view('candidates.show',compact('candidatesDetails','savedList','candidatesJobOrderDetails'));
+        $activityType = ActivityType::get();
+        $calendarEvenType = calendarEvenType::get();
+        $changeStatus = ChangeStatus::get();
+        // dd($calendarEvenType);
+
+
+        return view('candidates.show',compact('candidatesDetails','savedList','candidatesJobOrderDetails','activityType','calendarEvenType','changeStatus','joborderList'));
     }
 
     public function candidatesUpdate($id){
@@ -210,6 +223,66 @@ public function candidatesListSave(Request $request){
         $activityDelete = Activity::find($id)->delete();
 
         if($activityDelete){
+            return response()->json(['status' => true, 'message' => 'Data deleted successfully.']);
+        }else{
+            return response()->json(['status' => false, 'message' => 'Somthing went wrong.']);
+        }
+    }
+
+    public function candidatesActivitySave(Request $request){
+        $data = $request->all();
+
+        $result = Activity::create([
+            'data_item_id' =>$data['change_status_item'],
+            'data_item_type' =>$data['schedule_event_type'],
+            'joborder_id' =>$data['joborder_item'],
+            'site_id' => null, 
+            'entered_by' =>Auth::user()->id,
+            'type' =>$data['schedule_event_type'],
+            'notes' =>$data['length_description'], 
+        ]);
+
+        if($result){
+            return response()->json(['status' => true, 'message' => 'Data create successfully.','data' => $result]);
+        }else{
+            return response()->json(['status' => false, 'message' => 'Somthing went wrong.']);
+        }
+    }
+
+
+    public function candidatesAddCandidateJoborder(Request $request){
+        $data = $request->all();
+        
+        $result = CandidateJoborder::create([
+            'candidate_id' =>$data['candidate_id'],
+            'joborder_id' =>$data['jobID'],
+            'added_by' =>Auth::user()->id,
+        ]);
+
+        if($result){
+            return response()->json(['status' => true, 'message' => 'Candidate add successfully.']);
+        }else{
+            return response()->json(['status' => false, 'message' => 'Somthing went wrong.']);
+        }
+    }
+
+
+    public function candidatesJoborderDelete($id){
+
+        $candidatesJoborderDelete = CandidateJoborder::find($id)->delete();
+
+        if($candidatesJoborderDelete){
+            return response()->json(['status' => true, 'message' => 'Data deleted successfully.']);
+        }else{
+            return response()->json(['status' => false, 'message' => 'Somthing went wrong.']);
+        }
+    }
+
+    public function joborderDelete($id){
+
+        $joborderDelete = Joborder::find($id)->delete();
+
+        if($joborderDelete){
             return response()->json(['status' => true, 'message' => 'Data deleted successfully.']);
         }else{
             return response()->json(['status' => false, 'message' => 'Somthing went wrong.']);
