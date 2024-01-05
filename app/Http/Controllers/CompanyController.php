@@ -79,14 +79,14 @@ class CompanyController extends Controller
       }
     }
 
-    public  function profileDeatils($id){
+    public  function profiledetails($id){
 
       $companyDetails = Company::with('user','jobDetails')->where('id',$id)->get();
       return view('companies.show',compact('companyDetails'));
       
     }
 
-    public function updateDeatils($id){
+    public function updatedetails($id){
       $companyDetails = Company::with('user')->where('id',$id)->get();
       return view('companies.profile',compact('companyDetails'));
     }

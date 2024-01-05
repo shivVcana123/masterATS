@@ -102,7 +102,6 @@ button {
 $(document).on('click', '#candidateDelete', function() {
 
     var candidateDelete_id = $('#candidateDelete').data('id');
-
     Swal.fire({
         title: 'Are you sure?',
         text: 'You won\'t to delete this record!',
@@ -116,11 +115,28 @@ $(document).on('click', '#candidateDelete', function() {
         closeOnCancel: false
     }).then((result) => {
         if (result.isConfirmed) {
-            window.location.href = '/candidates/list/delete/' +
-                candidateDelete_id;
+            $.ajax({
+                url: '/candidates/list/delete/' + candidateDelete_id,
+                type: 'GET',
+                success: function(response) {
+                    const title = response.status ? "success" : "warning";
+                    Swal.fire({
+                        title: response.message,
+                        type: title,
+                        icon: title,
+                    }).then(function(result) {
+                        if (result.isConfirmed && response.status) {
+                            window.location.href =
+                                "{{ url('/candidates/index'";
+                        }
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error);
+                },
+            });
         }
     });
-
 });
 </script>
 @endpush

@@ -101,7 +101,7 @@ form.example button {
                             @foreach($data['user'] as $user) 
                             <tr>
                                 <td><a
-                                        href="{{route('companies.deatils',$data->id )}}">{{ $data->company_name }}</a>
+                                        href="{{route('companies.details',$data->id )}}">{{ $data->company_name }}</a>
                                 </td>
                                 <td>{{$data['jobDetails']->count() }} </td>
                                 <td>{{ $data->city }}</td>
@@ -112,7 +112,7 @@ form.example button {
                                 <td>{{ $data->created_at }}</td>
                                 <td>{{ $data->updated_at }}</td>
                                 <td>
-                                    <a href="{{route('companies.deatils',$data->id )}}"><i
+                                    <a href="{{route('companies.details',$data->id )}}"><i
                                             class="fa fa-eye"></i></a>
                                     <a href="{{ url('/companies/update',$data->id )}}"><i
                                             class="fa fa-pencil"></i></a>

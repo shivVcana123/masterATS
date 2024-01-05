@@ -115,7 +115,7 @@
                 <tr>
                     <td>{{$details->id}}</td>
                     <!-- <td>{{$details->title}}</td> -->
-                    <td><a href="{{route('joborders.profile',$details->id)}}">{{ $details->title }}</a></td>
+                    <td><a href="{{route('joborders.details',$details->id)}}">{{ $details->title }}</a></td>
                     <td>{{$details->type}}</td>
                     <td>{{$details->status}}</td>
                     <td>{{$details->date_created}}</td>

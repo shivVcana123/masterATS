@@ -14,6 +14,7 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ListtController;
 use App\Http\Controllers\CalenderController;
+use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\HomeController;
@@ -22,16 +23,19 @@ use Illuminate\Support\Facades\Route;
 
 // Route::get('/joborders/{letter?}', [JobOrderController::class, 'index'])->name('joborders.index');
 Route::get('/joborders/create', [JobOrderController::class, 'create'])->name('joborders.create');
-Route::post('/addjoborder', [JobOrderController::class, 'store'])->name('joborders.store');
-Route::get('/joborders/profile/{id?}', [JobOrderController::class, 'profile'])->name('joborders.profile');
+Route::post('/add/joborder', [JobOrderController::class, 'store'])->name('joborders.store');
+Route::get('/joborders/details/{id?}', [JobOrderController::class, 'profileDetails'])->name('joborders.details');
+Route::get('/joborder/update/{id?}', [JobOrderController::class, 'joborderUpdate'])->name('joborders.update');
+Route::post('/joborder/update/save', [JobOrderController::class, 'joborderUpdateSave'])->name('joborders.update.save');
+Route::get('/joborders/delete/{id?}', [JobOrderController::class, 'joborderDelete'])->name('joborders.delete');
 
 
 
 // Route::get('/companies/index/{letter?}', [CompanyController::class, 'index'])->name('companies.index');
 Route::get('/companies/create', [CompanyController::class, 'create'])->name('companies.create');
 Route::post('/companies/store', [CompanyController::class, 'store'])->name('companies.store');
-Route::any('/companies/deatils/{id?}', [CompanyController::class, 'profileDeatils'])->name('companies.deatils');
-Route::get('/companies/update/{id?}', [CompanyController::class, 'updateDeatils'])->name('companies.update');
+Route::any('/companies/details/{id?}', [CompanyController::class, 'profileDetails'])->name('companies.details');
+Route::get('/companies/update/{id?}', [CompanyController::class, 'updateDetails'])->name('companies.update');
 Route::post('/companies/update/save', [CompanyController::class, 'companiesUpdateSave'])->name('companies.update.save');
 Route::get('/companies/delete/{id?}', [CompanyController::class, 'delete'])->name('companies.delete');
 
@@ -53,12 +57,14 @@ Route::post('/candidates/add/candidate/joborder', [CandidateController::class, '
 
 
 Route::get('/candidates/activity/delete/{id?}', [CandidateController::class, 'candidatesActivityDelete'])->name('candidates.activity.delete');
-
 Route::post('/candidates/activity/save', [CandidateController::class, 'candidatesActivitySave'])->name('candidates.activity.save');
-
 Route::get('/candidates/candidate/joborder/delete/{id?}', [CandidateController::class, 'candidatesJoborderDelete'])->name('candidates.candidate.joborder.delete');
-
 Route::get('/candidates/joborder/delete/{id?}', [CandidateController::class, 'joborderDelete'])->name('candidates.joborder.delete');
+
+
+Route::post('/document/upload', [DocumentController::class, 'documentUpload'])->name('document.upload');
+Route::get('/document/delete/{id?}', [DocumentController::class, 'documentDelete'])->name('document.delete');
+Route::get('/document/download/{id?}', [DocumentController::class, 'documentDownload'])->name('document.download');
 /*
 |--------------------------------------------------------------------------
 | Web Routes

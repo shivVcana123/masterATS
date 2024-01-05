@@ -81,6 +81,7 @@ class JoborderController extends Controller
 
        public function store(Request $request)
     {
+        // dd($request->all());
         $request->validate([
             'title' => 'required',
             'start_date' => 'required|date',
@@ -93,9 +94,16 @@ class JoborderController extends Controller
             'submission_deadline' => 'required|date',
         ]);
 
-        JobOrder::create($request->all());
+        $data = $request->all();
+        $data['entered_by'] = Auth::user()->id;
+        $data['owner'] = Auth::user()->id;
+       $jobCreate = JobOrder::create($data);
 
-        return redirect()->route('joborders.create')->with('success', 'Job Order created successfully!');
+        if ($jobCreate) {
+            return response()->json(['status' => true, 'message' => 'Job Order created successfully.','data' => $jobCreate]);
+        } else {
+            return redirect()->back()->with('error', 'Somthing went wrong.');
+        }
     }
 
 
@@ -134,9 +142,47 @@ class JoborderController extends Controller
         return view('joborders.index', compact('datas', 'letter','request'));
 }
 
-public function profile($id){
-    $jobDetails = JobOrder::where('id',$id)->get();
-    // dd($jobDetails);
+public function profiledetails($id){
+    $jobDetails = JobOrder::with('documents')->where('id',$id)->get();
     return view('joborders.show',compact('jobDetails'));
+}
+
+public function joborderUpdate($id){
+
+    $jobDetails = JobOrder::where('id',$id)->get();
+
+    return view('joborders.edit',compact('jobDetails'));
+}
+
+public function joborderDelete($id){
+    $jobDelete = JobOrder::find('id',$id)->delete();
+    if ($jobDelete) {
+        return response()->json(['status' => true, 'message' => 'Data deleted successfully.']);
+    } else {
+        return redirect()->back()->with('error', 'Somthing went wrong.');
+    }
+}
+
+
+public function joborderUpdateSave(Request $request){
+    // $request->validate([
+    //     'title' => 'required',
+    //     'start_date' => 'required|date',
+    //     'end_date' => 'required|date',
+    //     // 'joborder_id' => 'required',
+    //     'recruiter' => 'required',
+    //     'client_job_id' => 'required',
+    //     'expected_rate' => 'required',
+    //     'interview_type' => 'required',
+    //     'submission_deadline' => 'required|date',
+    // ]);
+
+    $updateData = Joborder::find($request->jobOrder_id)->update($request->all());
+
+    if ($updateData) {
+        return response()->json(['status' => true, 'message' => 'Data updated successfully.','data' => $updateData]);
+    } else {
+        return redirect()->back()->with('error', 'Somthing went wrong.');
+    }
 }
 }

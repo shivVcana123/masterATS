@@ -36,4 +36,9 @@ class Joborder extends Model
         return $this->belongsTo(User::class, 'recruiter');
     }
 
+    public function documents()
+    {
+        return $this->hasMany(Document::class,'joborder_id','id');
+    }
+
 }

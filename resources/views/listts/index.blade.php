@@ -52,7 +52,7 @@
                             @foreach ($datas as $data)
                             <tr>
                                 <td>{{ $data->number_entries }}</td>
-                                <td><a href="{{url('/companies/deatils',$data->id)}}">{{ $data->description }}</a></td>
+                                <td><a href="{{url('/companies/details',$data->id)}}">{{ $data->description }}</a></td>
                                 <td>@switch($data->data_item_type)
                                     @case('100')
                                     <p>Candidate</p>

@@ -182,7 +182,8 @@
                             </tr>
                             <tr>
                                 <td valign="top" class="vertical">Upcoming Events:</td>
-                                <td id="schedule_event" class="data" value="Schedule Event"><a href="javascript:;">Schedule Event</a></td>
+                                <td id="schedule_event" class="data" value="Schedule Event"><a
+                                        href="javascript:;">Schedule Event</a></td>
                             </tr>
                             <tr>
                                 <td valign="top" class="vertical">Attachments:</td>
@@ -212,7 +213,7 @@
                                             </tr>
                                         </tbody>
                                     </table>
-                                    <a href="javascript:;">
+                                    <a href="javascript:;" data-toggle="modal" data-target="#attachmenModal">
                                         <!-- <img src="images/paperclip_add.gif" width="16" height="16" border="0"
                                             alt="Add Attachment" class="absmiddle"> -->
                                         &nbsp;Add Attachment
@@ -235,6 +236,51 @@
     </table>
 
     <!-- Candidates Details End -->
+
+
+    <!-- Small modal -->
+    <!-- Create Candidate Attachment -->
+    <div class="modal fade" id="attachmenModal" tabindex="-1" role="dialog" aria-labelledby="attachmenModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="attachmenModalLabel">Create Candidate Attachment</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                        <form name="createAttachmentForm" id="createAttachmentForm"
+                            action="#" enctype="multipart/form-data" method="post">
+                            <input type="hidden" name="postback" id="postback" value="postback">
+                            <input type="hidden" id="candidateID" name="candidateID" value="76">
+                            <table class="editTable">
+                                <tbody>
+                                    <tr>
+                                        <td class="tdVertical">Attachment:</td>
+                                        <td class="tdData"><input type="file" id="file" name="file"></td>
+                                    </tr>
+                                    <tr>
+                                        <td class="tdVertical">Resume:</td>
+                                        <td>
+                                            <input type="radio" id="resume" name="resume" value="1"
+                                                checked="checked">Yes
+                                            <input type="radio" id="resume" name="resume" value="0">No
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Save changes</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 
     <!-- Button trigger modal -->
 
@@ -308,10 +354,10 @@
                         <td>{{$details->id}}</td>
                         <td>3232</td>
                         <td data-id="{{$details['joborderDetails']->id}}" id="joborderDetails_id"><a
-                                href="{{route('joborders.profile',$details['joborderDetails']->id)}}">{{ $details['joborderDetails']->title }}</a>
+                                href="{{route('joborders.update',$details['joborderDetails']->id)}}">{{ $details['joborderDetails']->title }}</a>
                         </td>
                         <td><a
-                                href="{{route('companies.deatils',$details['joborderDetails']['companies']->id)}}">{{ $details['joborderDetails']['companies']->company_name}}</a>
+                                href="{{route('companies.details',$details['joborderDetails']['companies']->id)}}">{{ $details['joborderDetails']['companies']->company_name}}</a>
                         </td>
                         <td>@if($details['ownerUser'])
                             {{ $details['ownerUser']->user_name }}
@@ -353,7 +399,7 @@
                     @foreach($savedList as $details)
                     <tr>
                         <td>{{$details->id}}</td>
-                        <td><a href="{{route('joborders.profile',$details->id)}}">{{ $details->description }}</a>
+                        <td><a href="{{route('joborders.update',$details->id)}}">{{ $details->description }}</a>
                         </td>
                         <td></td>
                     </tr>
@@ -367,7 +413,7 @@
     </div>
     <!-- Button trigger modal -->
 
-    <!-- Job Orders For listing -->
+    <!-- Add Candidates Job Orders For listing -->
     <!-- Modal -->
     <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
         aria-hidden="true">
@@ -476,10 +522,13 @@
                                 <label for="">Regarding:</label>
                                 <select id="joborder_item" name="joborder_item" style="margin-left: 23px;">
                                     <option selected disabled="disabled">General</option>
-                                    @foreach($candidatesJobOrderDetails as $details)
-                                    <option value="{{$details['joborderDetails']->id}}">
+                                    @foreach($candidatesJobOrderDetails as $key => $details)
+                                    <option value="{{$details['joborderDetails']->id}}"
+                                        {{ old('candidatesJobOrderDetails') == $key ? 'selected' : ''}}>
                                         {{$details['joborderDetails']->title}}</option>
                                     @endforeach
+
+
                                 </select>
                                 <input class="form-check-input" type="checkbox" id="checkbox_mail_send_item"
                                     name="checkbox_mail_send_item" style="margin-left: 30px;">
@@ -1213,14 +1262,14 @@ $(document).ready(function() {
 
 
 $(document).on('click', '#schedule_event, #schedule_event td', function() {
-    if($(this).attr('value') == 'Schedule Event'){
+    if ($(this).attr('value') == 'Schedule Event') {
         $('.activity-area').hide();
     }
     $('#activityModal').modal('show');
 });
 
 $(document).on('click', '#Activity, #Activity td', function() {
-    if($(this).attr('value') == 'Activity'){
+    if ($(this).attr('value') == 'Activity') {
         $('.activity-area').show();
     }
     $('#activityModal').modal('show');
