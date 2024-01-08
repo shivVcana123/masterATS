@@ -81,7 +81,8 @@ class CompanyController extends Controller
 
     public  function profiledetails($id){
 
-      $companyDetails = Company::with('user','jobDetails')->where('id',$id)->get();
+      $companyDetails = Company::with('user','jobDetails','contacts')->where('id',$id)->get();
+      // dd($companyDetails);
       return view('companies.show',compact('companyDetails'));
       
     }

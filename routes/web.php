@@ -65,6 +65,10 @@ Route::get('/candidates/joborder/delete/{id?}', [CandidateController::class, 'jo
 Route::post('/document/upload', [DocumentController::class, 'documentUpload'])->name('document.upload');
 Route::get('/document/delete/{id?}', [DocumentController::class, 'documentDelete'])->name('document.delete');
 Route::get('/document/download/{id?}', [DocumentController::class, 'documentDownload'])->name('document.download');
+
+
+Route::post('/contacts/update', [ContactController::class, 'contactsUpdateData'])->name('contacts.update');
+Route::get('/contacts/delete/{id?}', [ContactController::class, 'contactDelete'])->name('contacts.delete');
 /*
 |--------------------------------------------------------------------------
 | Web Routes

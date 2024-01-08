@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\User;
 use App\Models\Joborder;
+use App\Models\Contact;
 
 class Company extends Model
 {
@@ -23,6 +24,11 @@ class Company extends Model
     public function jobDetails()
     {
         return $this->hasMany(Joborder::class,'company_id', 'id');
+    }
+
+    public function contacts()
+    {
+        return $this->hasMany(Contact::class,'id');
     }
   
 }
