@@ -98,10 +98,9 @@ form.example button {
                                 <th>Action</th>
                             </tr>
                             @foreach($datas as $data)
-                            @foreach($data['user'] as $user) 
+                            @foreach($data['user'] as $user)
                             <tr>
-                                <td><a
-                                        href="{{route('companies.details',$data->id )}}">{{ $data->company_name }}</a>
+                                <td><a href="{{route('companies.details',$data->id )}}">{{ $data->company_name }}</a>
                                 </td>
                                 <td>{{$data['jobDetails']->count() }} </td>
                                 <td>{{ $data->city }}</td>
@@ -112,12 +111,12 @@ form.example button {
                                 <td>{{ $data->created_at }}</td>
                                 <td>{{ $data->updated_at }}</td>
                                 <td>
-                                    <a href="{{route('companies.details',$data->id )}}"><i
-                                            class="fa fa-eye"></i></a>
-                                    <a href="{{ url('/companies/update',$data->id )}}"><i
-                                            class="fa fa-pencil"></i></a>
+                                    <a href="{{route('companies.details',$data->id )}}"><i class="fa fa-eye"></i></a>
+                                    <a href="{{ url('/companies/update',$data->id )}}"><i class="fa fa-pencil"></i></a>
                                     <a id="companiesDelete" data-id="{{$data->id}}" href="javascript:;"><i
                                             class="fa fa-trash"></i></a>
+
+                                    <a href="{{ url('/companies/history',$data->id )}}"><i class="fa fa-history"></i></a>
                                 </td>
                             </tr>
                             @endforeach

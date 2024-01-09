@@ -34,10 +34,10 @@ class ContactController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create($company_id = null)
     {
-        $company = Company::get();
-        return view('contacts.create',compact('company'));
+        $company = Company::where('owner',Auth::user()->id)->get();
+        return view('contacts.create',compact('company','company_id'));
     }
 
     /**
@@ -122,4 +122,23 @@ class ContactController extends Controller
             return response()->json(['status' => false, 'message' => 'Somthing went wrong.']);
         }
     }
+
+    public function contactDetails($id = null)
+    {
+        $contacts = Contact::where('company_id',$id)->get();
+        if( $contacts){
+            return response()->json(['status' => true, 'message' => 'Contect deleted successfully.','data' => $contacts]);
+        }else{
+            return response()->json(['status' => false, 'message' => 'Somthing went wrong.']);
+        }
+    }
+
+    // public function contactDetails($id = null)
+    // {
+    //     $contacts = Contact::where('company_id',$id)->get();
+        
+    //     return view('contacts.index',compact('contacts'));
+    // }
+
+    
 }

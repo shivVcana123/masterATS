@@ -166,7 +166,7 @@
             </td>
         </tr>
     </tbody>
-</table>
+</table><br>
 <table class="detailsInside">
     <tbody>
         <tr>
@@ -174,35 +174,26 @@
             <td valign="top" class="data">
                 <table class="attachmentsTable">
                     <tbody>
+
                         <tr>
-                            <td>
-                                <a href="javascript:;">
-                                    <!-- <img src="images/attachment.gif" alt="" width="16" height="16" border="0">
-                                    &nbsp; -->
-                                    gitignore
-                                </a>
-                            </td>
-                            <td>01-08-24 (12:54:12 AM)</td>
-                            <td>
-                                <a href="javascript:;" title="Delete"
-                                    onclick="javascript:return confirm('Delete this attachment?');">
-                                    <img src="images/actions/delete.gif" alt="" width="16" height="16" border="0">
-                                </a>
-                            </td>
+                            <td><a href="javascript:;" id="documentDownload" data-id="">dfdsd.pdf</a></td>
+                            <td>&nbsp; &nbsp;datetime</td>
+                            <td>&nbsp; &nbsp;<i class="fa fa-trash" id="document_delete_id" data-value=""></i></td>
                         </tr>
+
                     </tbody>
-                </table>
-                <a href="#">
-                    <!-- <img src="images/paperclip_add.gif" width="16" height="16" border="0" alt="add attachment"
-                        class="absmiddle"> -->
-                    &nbsp;Add Attachment
-                </a>
+                </table><br>
+                <form id="document_form" enctype="multipart/form-data" method="POST" style="margin-left: -101px;">
+
+                    <input type="hidden" name="joborder_id" id="joborder_id" value="{{$companyDetails[0]->id}}">
+                    <input type="hidden" name="company_id" id="company_id" value="{{$companyDetails[0]->company_id}}">
+
+                    <label for="document_file"> Add Attachment:</label>&nbsp;
+                    <input type="file" name="document_file" id="document_file" accept=".pdf, .doc, .docx, .txt">
+                    <button type="button" class="btn btn-sm btn-primary" id="submit_file">Submit</button>
+                    <br><span class="document_file_error errors"></span>
+                </form>
             </td>
-        </tr>
-        <tr>
-            <td valign="top" class="vertical">Misc. Notes:</td>
-            <td id="shortNotes" style="display:block;" class="data">
-                Toby.Padegenis@jud.ct.gov </td>
         </tr>
     </tbody>
 </table>
@@ -232,6 +223,8 @@
                     <th style="width: 65px">Action</th>
 
                 </tr>
+            </thead>
+            <tbody id="container" class="no-border-x no-border-y ui-sortable">
                 @foreach($companyDetails[0]['user'] as $detailss)
                 @foreach($companyDetails[0]['jobDetails'] as $details)
                 <tr>
@@ -252,11 +245,12 @@
                 </tr>
                 @endforeach
                 @endforeach
-            </thead>
-            <tbody id="container" class="no-border-x no-border-y ui-sortable">
-
             </tbody>
         </table>
+        <i class="fa fa-plus"></i><a
+            href="{{ url('/candidates/create', ['company_id' => $companyDetails[0]->id]) }}">Add
+            Add Job Order</a>
+
     </div>
 </div>
 
@@ -281,28 +275,27 @@
                 </tr>
             </thead>
             <tbody id="container" class="no-border-x no-border-y ui-sortable">
-                @foreach($companyDetails[0]['user'] as $detailss)
-                @foreach($companyDetails[0]['jobDetails'] as $details)
+                @foreach($companyDetails[0]['user'] as $details)
+                @foreach($companyDetails[0]['contacts'] as $detailss)
                 <tr>
-                    <td>{{$details->id}}</td>
-                    <!-- <td>{{$details->title}}</td> -->
-                    <td><a href="{{route('joborders.details',$details->id)}}">{{ $details->title }}</a></td>
-                    <td>{{$details->type}}</td>
-                    <td>{{$details->status}}</td>
-                    <td>{{$details->date_created}}</td>
-                    <td>{{$details->date_modified}}</td>
-                    <td>{{$details->start_date}}</td>
-                    <td>{{$details->title}}</td>
-                    <td>{{$details->title}}</td>
-                    <td>{{$details->p}} </td>
-                    <td>{{$details->recruiter}}</td>
-                    <td>{{$detailss->user_name}} </td>
+                    <td>{{$detailss->id}}</td>
+                    <td><a href="{{url('contacts',$detailss->id)}}">{{$detailss->first_name}}</a></td>
+                    <td><a href="{{url('contacts',$detailss->id)}}">{{$detailss->last_name}}</a></td>
+                    <td>{{$detailss->title}}</td>
+                    <td>{{$detailss->company_department_id}}</td>
+                    <td>{{$detailss->phone_work}}</td>
+                    <td>{{$detailss->phone_cell}}</td>
+                    <td>{{$detailss->date_created}}</td>
+                    <td>{{$details->user_name}} </td>
                     <td>Action</td>
                 </tr>
                 @endforeach
                 @endforeach
             </tbody>
         </table>
+        <i class="fa fa-plus"></i><a href="{{ url('/contacts/create', ['company_id' => $companyDetails[0]->id]) }}">Add
+            Add Contact</a>
+
     </div>
 </div>
 

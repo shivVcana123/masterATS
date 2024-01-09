@@ -128,4 +128,12 @@ class CompanyController extends Controller
           return redirect()->back()->with('error', 'Something went wrong.');
       }
     }
+    
+
+    public function companyHistory($id){
+
+      $companyHistory = Company::where('id', $id)->get();
+
+      return view('companies.show_history',compact('companyHistory'));
+    }
 }

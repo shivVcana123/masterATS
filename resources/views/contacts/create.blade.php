@@ -1,6 +1,6 @@
 @extends('layouts.admin')
 @section('content')
-<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet"/>
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
 <style>
 .errors {
     color: red;
@@ -12,7 +12,6 @@
         <!-- @csrf -->
         <div class="row">
             <div class="col-md-6">
-
                 <div class="form-group">
                     <label for="first_name">First Name:</label>
                     <input type="text" name="first_name" id="first_name" class="form-control">
@@ -23,23 +22,30 @@
                     <input type="text" name="last_name" id="last_name" class="form-control">
                     <span class="last_name_error errors"></span>
                 </div>
+
                 <div class="form-group">
                     <div class="row company-area" style="display: flex; align-items: center;">
                         <div class="col-6">
-                            <select name="company_id" id="company_id"  class="form-control">
+                            <select name="company_id" id="company_id" class="form-control">
                                 <option selected disabled>Select Company</option>
                                 @foreach($company as $data)
-                                <option value="{{$data->id}}">{{$data->company_name}}</option>
+                                <option value="{{ $data->id }}" {{ $company_id == $data->id ? 'selected' : '' }}>
+                                    {{ $data->company_name }}
+                                </option>
                                 @endforeach
                             </select>
+
+
                             <!-- <label for="company_id">Company Name</label>
                             <input type="text" name="company_id" id="company_id" class="form-control"> -->
                             <span class="company_id_error errors"></span>
                         </div>
+                        @if($company_id == null)
                         <div class="col-6">
                             <input type="checkbox" name="checkbox_company_value" id="checkbox_company_value" value="0">
                             <label for=""> Internal Contact</label>
                         </div>
+                        @endif
                     </div>
                 </div>
 
@@ -89,8 +95,11 @@
                 </div>
                 <div class="form-group">
                     <label for="reports_to">Reports to</label>
-                    <input type="text" name="reports_to" id="reports_to" class="form-control">
-                    <span class="reports_to_error errors"></span>
+                    <!-- <input type="text" name="reports_to" id="reports_to" class="form-control"> -->
+                    <select name="reports_to" id="reports_to" class="form-control">
+                        <!-- <option value="" class="report_none">(None)</option> -->
+                    </select>
+                    <!-- <span class="reports_to_error errors"></span> -->
                 </div>
                 <div class="form-group">
                     <label for="title">Title</label>
@@ -137,10 +146,76 @@
 @push('scripts')
 <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
+$(document).ready(function() {
+    $("#company_id").select2();
 
-$(function(){
-  $("#company_id").select2();
- });
+});
+
+$(document).on('click', '#checkbox_company_value', function() {
+    // Get the Select2 instance for the company_id dropdown
+    var companySelect = $('#company_id').select2();
+
+    // Check if the checkbox is checked
+    if ($(this).prop('checked')) {
+        companySelect.empty();
+        companySelect.append('<option value="0">Internal Postings</option>').trigger('change');
+        companySelect.prop('disabled', true);
+    } else {
+        $('#company_id option[value="0"]').remove();
+        $(this).prop('disabled', false);
+        companySelect.prop('disabled', false);
+        companySelect.select2();
+    }
+});
+
+
+
+$(document).ready(function() {
+    function fetchContacts(companyId) {
+        // Clear existing options in reports_to select
+        $('#reports_to').empty();
+
+        // Append the "(None)" option
+        $('#reports_to').append('<option value="">(None)</option>');
+
+        if (companyId) {
+            // Ajax request to fetch data based on the selected company_id
+            $.ajax({
+                url: "/contacts/details/" + companyId,
+                method: 'GET',
+                success: function(response) {
+                    if (response.status) {
+                        // Add new options based on the fetched data
+                        $.each(response.data, function(index, contact) {
+                            $('#reports_to').append('<option value="' + contact.id + '">' +
+                                contact.first_name + ' ' + contact.last_name +
+                                '</option>');
+                        });
+
+                        console.log(response.message);
+                    } else {
+                        console.error('Error fetching contacts:', response.message);
+                    }
+                },
+                error: function(error) {
+                    console.error('Error fetching contacts:', error);
+                }
+            });
+        }
+    }
+
+    // Initial fetch when the page loads
+    fetchContacts($('#company_id').val());
+
+    // Event listener for change in company_id select
+    $('#company_id').change(function() {
+        var companyId = $(this).val();
+        fetchContacts(companyId);
+    });
+});
+
+
+
 $("#addNewContact").click(function() {
 
     const formData = new FormData();

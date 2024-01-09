@@ -91,47 +91,52 @@ form.example button {
                                 <button class="btn btn-primary">Add Job Order</button>
                             </a>
                         </div>
-                        @if(count($datas) > 0)
+
                         <table style="width:100%">
-                            <tr>
-                                <th>ID</th>
-                                <th>Title</th>
-                                <th>Company</th>
-                                <th>Type</th>
-                                <th>Status</th>
-                                <th>Created</th>
-                                <th>Cpy Job Id</th>
-                                <th>Modified</th>
-                                <th>Submission Deadline</th>
-                                <th>Recruiter</th>
-                                <th>Owner</th>
-                                <th style="width:80px">Action</th>
-                            </tr>
-                            @foreach ($datas as $data)
-                            <tr>
-                                <td>{{ $data->id }}</td>
-                                <td><a href="{{route('joborders.details',$data->id)}}">{{ $data->title }}</a></td>
-                                <td>{{ $data->company_name }}</td>
-                                <td>{{ $data->type }}</td>
-                                <td>{{ $data->status }}</td>
-                                <td>{{ $data->date_created }}</td>
-                                <td> {{ $data->client_job_id }}</td>
-                                <td> {{ $data->date_modified }}</td>
-                                <td></td>
-                                <td>{{ $data->recruiter_name }}</td>
-                                <td>{{ $data->owner_name }}</td>
-                                <td>
-                                    <a href="{{route('joborders.details',$data->id)}}"><i class="fa fa-eye"></i></a>
-                                    <a href="{{url('/joborder/update',$data->id)}}"><i class="fa fa-pencil"></i></a>
-                                    <a href="javascript:;" id="joborder_delete_id" data-id="{{$data->id}}"><i
-                                            class="fa fa-trash"></i></a>
-                                </td>
-                            </tr>
-                            @endforeach
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Title</th>
+                                    <th>Company</th>
+                                    <th>Type</th>
+                                    <th>Status</th>
+                                    <th>Created</th>
+                                    <th>Cpy Job Id</th>
+                                    <th>Modified</th>
+                                    <th>Submission Deadline</th>
+                                    <th>Recruiter</th>
+                                    <th>Owner</th>
+                                    <th style="width:80px">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @if(count($datas) > 0)
+                                @foreach ($datas as $data)
+                                <tr>
+                                    <td>{{ $data->id }}</td>
+                                    <td><a href="{{route('joborders.details',$data->id)}}">{{ $data->title }}</a></td>
+                                    <td>{{ $data->company_name }}</td>
+                                    <td>{{ $data->type }}</td>
+                                    <td>{{ $data->status }}</td>
+                                    <td>{{ $data->date_created }}</td>
+                                    <td> {{ $data->client_job_id }}</td>
+                                    <td> {{ $data->date_modified }}</td>
+                                    <td></td>
+                                    <td>{{ $data->recruiter_name }}</td>
+                                    <td>{{ $data->owner_name }}</td>
+                                    <td>
+                                        <a href="{{route('joborders.details',$data->id)}}"><i class="fa fa-eye"></i></a>
+                                        <a href="{{url('/joborder/update',$data->id)}}"><i class="fa fa-pencil"></i></a>
+                                        <a href="javascript:;" id="joborder_delete_id" data-id="{{$data->id}}"><i
+                                                class="fa fa-trash"></i></a>
+                                    </td>
+                                </tr>
+                                @endforeach
+                            </tbody>
+                            @else
+                            <td colspan="12">No data found</td>
+                            @endif
                         </table>
-                        @else
-                        <p>No data found</p>
-                        @endif
                         <!-- Pagination Links -->
                         @foreach (range('A', 'Z') as $letterOption)
                         <a href="{{ route('joborders.index', ['letter' => $letterOption]) }}"

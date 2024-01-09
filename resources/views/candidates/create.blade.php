@@ -19,6 +19,9 @@
                 {!! Form::open(['route' => 'candidates.store', 'method' => 'POST']) !!}
                 <div class="card-body col-md-12">
 
+                    {!! Form::hidden('job_id', $job_id, ['placeholder' => __('First Name'), 'class' =>
+                        'form-control','id' => 'job_id']) !!}
+
                     <div class="form-group col-md-6" style="float:left" ;>
                         {{ Form::label('first_name', __('First Name'),['class' => 'col-form-label']) }}
                         {!! Form::text('first_name', null, ['placeholder' => __('First Name'), 'class' =>
@@ -198,229 +201,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
-
-// $('#addCandidate').click(function() {
-//     var first_name = document.getElementById('first_name').value;
-//     var middle_name = document.getElementById('middle_name').value;
-//     var last_name = document.getElementById('last_name').value;
-//     var email1 = document.getElementById('email1').value;
-//     var email2 = document.getElementById('email2').value;
-//     var web_site = document.getElementById('web_site').value;
-//     var phone_home = document.getElementById('phone_home').value;
-//     var phone_cell = document.getElementById('phone_cell').value;
-//     var phone_work = document.getElementById('phone_work').value;
-//     var address = document.getElementById('address').value;
-//     var city = document.getElementById('city').value;
-//     var state = document.getElementById('state').value;
-//     var zip = document.getElementById('zip').value;
-//     var best_time_to_call = document.getElementById('best_time_to_call').value;
-//     var can_relocate = document.getElementById('can_relocate').value;
-//     var date_available = document.getElementById('date_available').value;
-//     var current_employer = document.getElementById('current_employer').value;
-//     var current_pay = document.getElementById('current_pay').value;
-//     var desired_pay = document.getElementById('desired_pay').value;
-//     var source = document.getElementById('source').value;
-//     var notes = document.getElementById('notes').value;
-//     var key_skills = document.getElementById('key_skills').value;
-//     var role = document.getElementById('role').value;
-
-//     let errors = [];
-//     $(".errors").html("");
-
-//     if (first_name === "") {
-//         errors.push("first_name");
-//         $(".first_name_error").html("First name field can't be empty.");
-//     }
-//     if (middle_name === "") {
-//         errors.push("middle_name");
-//         $(".middle_name_error").html("Middle name field can't be empty.");
-//     }
-//     if (last_name === "") {
-//         errors.push("last_name");
-//         $(".last_name_error").html("Last name field can't be empty.");
-//     }
-
-//     if (email1 === "") {
-//         errors.push("email1");
-//         $(".email1_error").html("Email1 field can't be empty.");
-//     }
-//     if (email1 != "") {
-//         if (
-//             /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email1)
-//         ) {} else {
-//             errors.push("email_notvalid_address_error");
-//             $(".email_notvalid_address_error").html(
-//                 "Please provide your valid email address."
-//             );
-//         }
-//     }
-//     if (email2 === "") {
-//         errors.push("email2");
-//         $(".email2_error").html("Email2 field can't be empty.");
-//     }
-//     if (email2 != "") {
-//         if (
-//             /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email2)
-//         ) {} else {
-//             errors.push("email2_notvalid_address_error");
-//             $(".email2_notvalid_address_error").html(
-//                 "Please provide your valid email address."
-//             );
-//         }
-//     }
-//     if (web_site === "") {
-//         errors.push("web_site");
-//         $(".web_site_error").html("web site field can't be empty.");
-//     }
-//     if (phone_home === "") {
-//         errors.push("phone_home");
-//         $(".phone_home_error").html("Phone home field can't be empty.");
-//     }
-//     if (phone_cell === "") {
-//         errors.push("phone_cell");
-//         $(".phone_cell_error").html("Phone cell field can't be empty.");
-//     }
-
-//     if (phone_work === "") {
-//         errors.push("phone_work");
-//         $(".phone_work_error").html("Phone work field can't be empty.");
-//     }
-//     if (address === "") {
-//         errors.push("address");
-//         $(".address_error").html("Address field can't be empty.");
-//     }
-//     if (city === "") {
-//         errors.push("city");
-//         $(".city_error").html("City field can't be empty.");
-//     }
-//     if (state === "") {
-//         errors.push("state");
-//         $(".state_error").html("State field can't be empty.");
-//     }
-
-//     if (zip === "") {
-//         errors.push("zip");
-//         $(".zip_error").html("postal code field can't be empty.");
-//     }
-//     if (best_time_to_call === "") {
-//         errors.push("best_time_to_call");
-//         $(".best_time_to_call_error").html("Best time to call field can't be empty.");
-//     }
-//     if (can_relocate === "") {
-//         errors.push("can_relocate");
-//         $(".can_relocate_error").html("Can relocate field can't be empty.");
-//     }
-//     if (date_available === "") {
-//         errors.push("date_available");
-//         $(".date_available_error").html("Date available field can't be empty.");
-//     }
-
-//     if (current_employer === "") {
-//         errors.push("current_employer");
-//         $(".current_employer_error").html("Current employer field can't be empty.");
-//     }
-
-//     if (current_pay === "") {
-//         errors.push("current_pay");
-//         $(".current_pay_error").html("Current pay field can't be empty.");
-//     }
-//     if (desired_pay === "") {
-//         errors.push("desired_pay");
-//         $(".desired_pay_error").html("Desired pay field can't be empty.");
-//     }
-//     if (source === "") {
-//         errors.push("source");
-//         $(".source_error").html("Source field can't be empty.");
-//     }
-//     if (notes === "") {
-//         errors.push("notes");
-//         $(".notes_error").html("Notes field can't be empty.");
-//     }
-
-//     if (key_skills === "") {
-//         errors.push("key_skills");
-//         $(".key_skills_error").html("Key skills field can't be empty.");
-//     }
-//     if (role === "") {
-//         errors.push("role");
-//         $(".role_error").html("Role field can't be empty.");
-//     }
-
-//     if (errors.length > 0) {
-//         return false;
-//     } else {
-//         const formData_submit = new FormData();
-//         formData_submit.append("first_name", first_name.trim());
-//         formData_submit.append("middle_name", middle_name.trim());
-//         formData_submit.append("last_name", last_name.trim());
-//         formData_submit.append("email1", email1.trim());
-//         formData_submit.append("email2", email2.trim());
-//         formData_submit.append("web_site", web_site.trim());
-//         formData_submit.append("phone_home", phone_home.trim());
-//         formData_submit.append("phone_cell", phone_cell.trim());
-//         formData_submit.append("phone_work", phone_work.trim());
-//         formData_submit.append("address", address.trim());
-//         formData_submit.append("address", address.trim());
-//         formData_submit.append("city", city.trim());
-//         formData_submit.append("state", state.trim());
-//         formData_submit.append("zip", zip.trim());
-//         formData_submit.append("best_time_to_call", best_time_to_call.trim());
-//         formData_submit.append("can_relocate", can_relocate.trim());
-//         formData_submit.append("date_available", date_available.trim());
-//         formData_submit.append("current_employer", current_employer.trim());
-//         formData_submit.append("current_pay", current_pay.trim());
-//         formData_submit.append("desired_pay", desired_pay.trim());
-//         formData_submit.append("source", source.trim());
-//         formData_submit.append("notes", notes.trim());
-//         formData_submit.append("key_skills", key_skills.trim());
-//         formData_submit.append("role", role.trim());
-
-//         $.ajaxSetup({
-//             headers: {
-//                 "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr(
-//                     "content"
-//                 ),
-//             },
-//         });
-
-//         $.ajax({
-//             type: "POST",
-//             url: "{{ route('companies.store') }}",
-//             dataType: "json",
-//             data: formData_submit,
-//             contentType: false,
-//             processData: false,
-//             success: function(response) {
-//                 if (response.status == true) {
-//                     Swal.fire({
-//                         title: response.message,
-//                         type: "success",
-//                         icon: "success",
-//                     }).then(function(result) {
-//                         if (result.isConfirmed) {
-//                             window.location.href = "{{route('companies.index')}}";
-//                         }
-//                     });
-//                 } else {
-//                     Swal.fire({
-//                         title: response.message,
-//                         icon: "warning",
-//                     }).then(function(result) {
-//                         if (result.isConfirmed) {
-
-//                         }
-//                     });
-//                 }
-//             },
-//             error: function(xhr, status, error) {
-//                 // Handle the error scenario
-//                 console.error('Error:', error);
-//             }
-//         });
-//     }
-
-// });
-
 $('#addCandidate').click(function() {
     const formData = new FormData();
     const fields = [
@@ -457,6 +237,8 @@ $('#addCandidate').click(function() {
         return false;
     }
 
+var jobOrder_id = $('#job_id').val();
+    formData.append('jobOrder_id','jobOrder_id');
     $.ajaxSetup({
         headers: {
             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),

@@ -4,6 +4,7 @@ namespace App\DataTables;
 
 use App\Facades\UtilityFacades;
 use App\Models\Facilitie;
+use App\Models\User;
 use Carbon\Carbon;
 use Yajra\DataTables\Html\Button;
 use Yajra\DataTables\Html\Column;

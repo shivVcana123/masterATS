@@ -144,6 +144,7 @@ class JoborderController extends Controller
 
 public function profiledetails($id){
     $jobDetails = JobOrder::with('documents')->where('id',$id)->get();
+    // dd($jobDetails);
     return view('joborders.show',compact('jobDetails'));
 }
 

@@ -39,9 +39,11 @@ Route::get('/companies/update/{id?}', [CompanyController::class, 'updateDetails'
 Route::post('/companies/update/save', [CompanyController::class, 'companiesUpdateSave'])->name('companies.update.save');
 Route::get('/companies/delete/{id?}', [CompanyController::class, 'delete'])->name('companies.delete');
 
+Route::get('/companies/history/{id?}', [CompanyController::class, 'companyHistory'])->name('companies.history');
 
 
 
+Route::get('/candidates/create/{job_id?}', [CandidateController::class, 'create'])->name('candidates.create');
 Route::get('/candidates/details/{id?}', [CandidateController::class, 'candidatesDetails'])->name('candidates.details');
 Route::get('/candidates/update/{id?}', [CandidateController::class, 'candidatesUpdate'])->name('candidates.update');
 Route::post('/candidates/update/save', [CandidateController::class, 'candidatesUpdateSave'])->name('candidates.update.save');
@@ -66,9 +68,10 @@ Route::post('/document/upload', [DocumentController::class, 'documentUpload'])->
 Route::get('/document/delete/{id?}', [DocumentController::class, 'documentDelete'])->name('document.delete');
 Route::get('/document/download/{id?}', [DocumentController::class, 'documentDownload'])->name('document.download');
 
-
+Route::get('/contacts/create/{company_id?}', [ContactController::class, 'create'])->name('contacts.create');
 Route::post('/contacts/update', [ContactController::class, 'contactsUpdateData'])->name('contacts.update');
 Route::get('/contacts/delete/{id?}', [ContactController::class, 'contactDelete'])->name('contacts.delete');
+Route::get('/contacts/details/{contact_id?}', [ContactController::class, 'contactDetails'])->name('contacts.details');
 /*
 |--------------------------------------------------------------------------
 | Web Routes

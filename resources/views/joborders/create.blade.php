@@ -161,12 +161,12 @@
                 </div>
                 <div class="form-group">
                     <label for="is_hot">Is Hot</label>
-                    <input type="checkbox" name="is_hot" id="is_hot">
+                    <input type="checkbox" name="is_hot" id="is_hot" value="1">
                     <span class="is_hot_error errors"></span>
                 </div>
                 <div class="form-group">
                     <label for="public">Public</label>
-                    <input type="checkbox" name="public" id="public">
+                    <input type="checkbox" name="public" id="public" value="1">
                     <span class="public_error errors"></span>
                 </div>
             </div>
@@ -192,6 +192,9 @@
 $(document).on('click', '#add_jobOrder_btn', function(e) {
     e.preventDefault(); // Prevent the default form submission
 
+    var is_hot = $('#is_hot').is( ':checked' ) ? 1: 0
+    var is_public = $('#public').is( ':checked' ) ? 1: 0
+
     const formData = new FormData();
     const fields = [
         'recruiter', 'contact_id', 'company_id', 'entered_by', 'owner', 'site_id',
@@ -202,6 +205,9 @@ $(document).on('click', '#add_jobOrder_btn', function(e) {
         'max_submission', 'interview_type', 'submission_deadline', 'work_arrangement', 'p', '_token',
     ];
 
+
+    formData.append('is_hot',is_hot);
+    formData.append('is_public',is_public);
     let errors = [];
 
     $(".errors").html("");

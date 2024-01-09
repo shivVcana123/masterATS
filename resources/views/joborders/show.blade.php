@@ -158,8 +158,8 @@
                         @foreach($jobDetails[0]['documents'] as $value)
                         <tr>
                             <td><a href="javascript:;" id="documentDownload"
-                                    data-id="{{$value->id}}">{{$value->document_file}}</a></td>
-                            <td>&nbsp; &nbsp;{{date("d/m/Y (h:i A)", strtotime($value->created_at))}}</td>
+                                    data-id="{{$value->id}}">{{$value->title}}</a></td>
+                            <td>&nbsp; &nbsp;{{date("d/m/Y (h:i A)", strtotime($value->date_created))}}</td>
                             <td>&nbsp; &nbsp;<i class="fa fa-trash" id="document_delete_id"
                                     data-value="{{$value->id}}"></i></td>
                         </tr>
@@ -223,6 +223,7 @@
                 @endforeach
             </tbody>
         </table>
+        <i class="fa fa-plus"></i><a href="{{ url('/candidates/create', ['job_id' => $jobDetails[0]['id']]) }}">Add Candidate to This Job Order</a>
     </div>
 </div>
 @endsection

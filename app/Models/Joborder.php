@@ -38,7 +38,7 @@ class Joborder extends Model
 
     public function documents()
     {
-        return $this->hasMany(Document::class,'joborder_id','id');
+        return $this->hasMany(Attachment::class,'joborder_id','id');
     }
 
 }

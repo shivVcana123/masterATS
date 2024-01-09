@@ -35,11 +35,15 @@ class CandidateController extends Controller
       return view('candidates.index', compact('datas'));
     }
     
-    public function create()
-    {      
+    public function create($job_id = null)
+    {   
+        
+        // dd($job_id);
+        // $id = $job_id ?? null;
+
         if (\Auth::user()->can('create-user')) {  
             $roles = Role::pluck('name', 'name')->all();
-            return view('candidates.create', compact('roles'));
+            return view('candidates.create', compact('roles','job_id'));
         }
     
         return redirect()->back()->with('error', 'Permission denied.');
@@ -113,7 +117,7 @@ class CandidateController extends Controller
     }
 
     public function candidatesUpdateSave(Request $request){
-        // dd($request->all());
+        dd($request->all());
         $existingCompany = Candidate::where('id',$request->id);
 
         if ($existingCompany) {
