@@ -12,8 +12,8 @@ use Illuminate\Support\Facades\Hash;
 use File;
 use Illuminate\Support\Facades\Auth;
 use Laracasts\Flash\Flash;
-use App\Http\Models\User;
-
+use App\Models\Company;
+use App\Models\User;
 
 class JoborderController extends Controller
 {
@@ -21,62 +21,65 @@ class JoborderController extends Controller
 // public function create(Request $request)
 // {
    
-//     $jobOrder = new JobOrder();
-    
-//     $jobOrder->title = $request->input('title');
-//     $jobOrder->start_date = $request->input('start date');
-//     $jobOrder->end_date = $request->input('end_date');
-//     $jobOrder->age = $request->input('age');
-//     $jobOrder->perposal = $request->input('perposal');
-//     $jobOrder->id = $request->input('id');
-//     $jobOrder->end_date = $request->input('end_date');
-//     $jobOrder->joborder_id	 = $request->input('joborder_id');
-//     $jobOrder->recruiter = $request->input('recruiter');
-//     $jobOrder->contact_id = $request->input('contact_id');
-//     $jobOrder->entered_by = $request->input('entered_by');
-//     $jobOrder->owner = $request->input('owner');
-//     $jobOrder->client_job_id = $request->input('client_job_id');
-//     $jobOrder->description = $request->input('description');
-//     $jobOrder->notes = $request->input('notes');
-//     $jobOrder->type = $request->input('type');
-//     $jobOrder->duration = $request->input('duration');
-//     $jobOrder->rate_max = $request->input('rate_max');
-//     $jobOrder->salary = $request->input('salary');
-//     $jobOrder->status = $request->input('status');
-//     $jobOrder->openings = $request->input('openings');
-//     $jobOrder->city = $request->input('city');
-//     $jobOrder->state = $request->input('state');
-//     $jobOrder->public = $request->input('public');
-//     $jobOrder->company_department_id = $request->input('company_department_id');
-//     $jobOrder->openings = $request->input('openings');
-//     $jobOrder->questionnaire_id = $request->input('questionnaire_id');
-//     $jobOrder->site_id = $request->input('site_id');
-//     $jobOrder->actual_rate = $request->input('actual_rate');
-//     $jobOrder->gross_margin = $request->input('gross_margin');
-//     $jobOrder->expected_rate = $request->input('expected_rate');
-//     $jobOrder->max_submission = $request->input('max_submission');
-//     $jobOrder->interview_type = $request->input('interview_type');
-//     $jobOrder->submission_deadline = $request->input('submission_deadline');
-//     $jobOrder->work_arrangement = $request->input('work_arrangement');
-//     $jobOrder->p = $request->input('p');
-//     $jobOrder->recruiter = $request->input('recruiter');
-//     $jobOrder->order = $request->input('order');
-//     $jobOrder->is_admin_hidden = $request->input('is_admin_hidden');
-//     $jobOrder->questionnaire_id	 = $request->input('questionnaire_id');
-//     $jobOrder->openings_available = $request->input('openings_available');
-//     $jobOrder->is_hot = $request->input('is_hot');
-//     $jobOrder->date_created = $request->input('date_created');
-//     $jobOrder->date_modified = $request->input('date_modified');
+    //     $jobOrder = new JobOrder();
+        
+    //     $jobOrder->title = $request->input('title');
+    //     $jobOrder->start_date = $request->input('start date');
+    //     $jobOrder->end_date = $request->input('end_date');
+    //     $jobOrder->age = $request->input('age');
+    //     $jobOrder->perposal = $request->input('perposal');
+    //     $jobOrder->id = $request->input('id');
+    //     $jobOrder->end_date = $request->input('end_date');
+    //     $jobOrder->joborder_id	 = $request->input('joborder_id');
+    //     $jobOrder->recruiter = $request->input('recruiter');
+    //     $jobOrder->contact_id = $request->input('contact_id');
+    //     $jobOrder->entered_by = $request->input('entered_by');
+    //     $jobOrder->owner = $request->input('owner');
+    //     $jobOrder->client_job_id = $request->input('client_job_id');
+    //     $jobOrder->description = $request->input('description');
+    //     $jobOrder->notes = $request->input('notes');
+    //     $jobOrder->type = $request->input('type');
+    //     $jobOrder->duration = $request->input('duration');
+    //     $jobOrder->rate_max = $request->input('rate_max');
+    //     $jobOrder->salary = $request->input('salary');
+    //     $jobOrder->status = $request->input('status');
+    //     $jobOrder->openings = $request->input('openings');
+    //     $jobOrder->city = $request->input('city');
+    //     $jobOrder->state = $request->input('state');
+    //     $jobOrder->public = $request->input('public');
+    //     $jobOrder->company_department_id = $request->input('company_department_id');
+    //     $jobOrder->openings = $request->input('openings');
+    //     $jobOrder->questionnaire_id = $request->input('questionnaire_id');
+    //     $jobOrder->site_id = $request->input('site_id');
+    //     $jobOrder->actual_rate = $request->input('actual_rate');
+    //     $jobOrder->gross_margin = $request->input('gross_margin');
+    //     $jobOrder->expected_rate = $request->input('expected_rate');
+    //     $jobOrder->max_submission = $request->input('max_submission');
+    //     $jobOrder->interview_type = $request->input('interview_type');
+    //     $jobOrder->submission_deadline = $request->input('submission_deadline');
+    //     $jobOrder->work_arrangement = $request->input('work_arrangement');
+    //     $jobOrder->p = $request->input('p');
+    //     $jobOrder->recruiter = $request->input('recruiter');
+    //     $jobOrder->order = $request->input('order');
+    //     $jobOrder->is_admin_hidden = $request->input('is_admin_hidden');
+    //     $jobOrder->questionnaire_id	 = $request->input('questionnaire_id');
+    //     $jobOrder->openings_available = $request->input('openings_available');
+    //     $jobOrder->is_hot = $request->input('is_hot');
+    //     $jobOrder->date_created = $request->input('date_created');
+    //     $jobOrder->date_modified = $request->input('date_modified');
 
-//     $jobOrder->save();
+    //     $jobOrder->save();
 
-//     return redirect()->route('joborders.create');
+    //     return redirect()->route('joborders.create');
 // }
 
 
-    public function create()
+    public function create($company_id = null)
     {
-        return view('joborders.create');
+        $company = Company::where('owner',Auth::user()->id)->get();
+        $users = User::get();
+        // dd($users);
+        return view('joborders.create',compact('company_id','company','users'));
     }
 
        public function store(Request $request)
@@ -111,15 +114,17 @@ class JoborderController extends Controller
 
    public function index(Request $request, $letter = null)
 {  
-    $query = DB::table('joborders')
-    ->join('companies', 'joborders.id', '=', 'companies.id')
-    ->join('users', 'joborders.owner', '=', 'users.id')
-    ->leftJoin('users as recruiter', 'joborders.recruiter', '=', 'recruiter.id')
-    ->select('joborders.id', 'joborders.title', 'joborders.status',
-        'joborders.owner', 'joborders.type', 'companies.company_name', 'users.first_name as owner_name',
-        'joborders.client_job_id',DB::raw('DATE_FORMAT(joborders.date_modified, "%d-%m-%Y") as date_modified'), DB::raw('DATE_FORMAT(joborders.date_created, "%d-%m-%Y") as date_created'),'recruiter.id as recruiter_id',
-        'recruiter.first_name as recruiter_name')
-    ->orderBy('joborders.recruiter', 'ASC');
+    // $query = DB::table('joborders')
+    // ->join('companies', 'joborders.id', '=', 'companies.id')
+    // ->join('users', 'joborders.owner', '=', 'users.id')
+    // ->leftJoin('users as recruiter', 'joborders.recruiter', '=', 'recruiter.id')
+    // ->select('joborders.id', 'joborders.title', 'joborders.status',
+    //     'joborders.owner', 'joborders.type', 'companies.company_name', 'users.first_name as owner_name',
+    //     'joborders.client_job_id',DB::raw('DATE_FORMAT(joborders.date_modified, "%d-%m-%Y") as date_modified'), DB::raw('DATE_FORMAT(joborders.date_created, "%d-%m-%Y") as date_created'),'recruiter.id as recruiter_id',
+    //     'recruiter.first_name as recruiter_name')
+    // ->orderBy('joborders.recruiter', 'ASC');
+
+    $query = Joborder::with('companies','ownerUser','recruiterUser');
 
         // Check if 'letter' parameter is present and apply the filter
         if ($request->has('letter')) {
@@ -138,6 +143,8 @@ class JoborderController extends Controller
 
         $datas = $query->get();
 
+        // dd(  $datas);
+
 
         return view('joborders.index', compact('datas', 'letter','request'));
 }
@@ -151,8 +158,10 @@ public function profiledetails($id){
 public function joborderUpdate($id){
 
     $jobDetails = JobOrder::where('id',$id)->get();
+    $company = Company::all();
+    $users = User::all();
 
-    return view('joborders.edit',compact('jobDetails'));
+    return view('joborders.edit',compact('jobDetails','company','users'));
 }
 
 public function joborderDelete($id){

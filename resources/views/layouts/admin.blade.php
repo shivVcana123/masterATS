@@ -56,7 +56,9 @@ else{
     <link rel="stylesheet" href="{{ asset('assets/fonts/material.css') }}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
     {{--  <link rel="stylesheet" href="{{ asset('assets/css/style.css') }}" id="main-style-link">  --}}
+
 
 
     <!-- vendor css -->
@@ -227,7 +229,7 @@ else{
 
 
     <script src="{{ asset('assets/js/plugins/choices.min.js') }}"></script>
-
+   
 
     <!-- Apex Chart -->
     <script src="{{ asset('assets/js/plugins/apexcharts.min.js') }}"></script>
@@ -253,6 +255,7 @@ else{
 <script src="{{ asset('js/moment.min.js') }}"></script>
 <script src="{{ asset('js/bootstrap-datetimepicker.min.js') }}"></script>
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11.0.19/dist/sweetalert2.all.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 {{--  <script src="{{ asset('js/custom.js') }}"></script>  --}}
     <script>
         var toster_pos = "{{ env('SITE_RTL') == 'on' ? 'left' : 'right' }}";

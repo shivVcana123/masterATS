@@ -354,3 +354,4 @@ $(document).on('click', '#documentDownload', function() {
     });
 });
 </script>
+@endpush

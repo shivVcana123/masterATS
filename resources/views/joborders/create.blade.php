@@ -16,18 +16,11 @@
                     <span class="title_error errors"></span>
                 </div>
 
-                <div class="form-group">
-                    <label for="contact_id">Contact Id</label>
-                    <input type="text" name="contact_id" id="contact_id" class="form-control">
-                    <span class="contact_id_error errors"></span>
-                </div>
-
-                <div class="form-group">
+                <!-- <div class="form-group">
                     <label for="company_id">Company Id</label>
                     <input type="text" name="company_id" id="company_id" class="form-control">
                     <span class="company_id_error errors"></span>
-                </div>
-
+                </div> -->
                 <div class="form-group">
                     <label for="client_job_id">Client Job ID</label>
                     <input type="text" name="client_job_id" id="client_job_id" class="form-control">
@@ -35,14 +28,66 @@
                 </div>
 
                 <div class="form-group">
+                    <label for="company_id">Company</label>
+                    <div class="row company-area" style="display: flex; align-items: center;">
+                        <div class="col-6">
+                            <select name="company_id" id="company_id" class="form-control">
+                                <option selected disabled>Select Company</option>
+                                @foreach($company as $data)
+                                <option value="{{ $data->id }}" {{ $company_id == $data->id ? 'selected' : '' }}>
+                                    {{ $data->company_name }}
+                                </option>
+                                @endforeach
+                            </select>
+
+
+                            <!-- <label for="company_id">Company Name</label>
+                            <input type="text" name="company_id" id="company_id" class="form-control"> -->
+                            <span class="company_id_error errors"></span>
+                        </div>
+                        @if($company_id == null)
+                        <div class="col-6">
+                            <input type="checkbox" name="checkbox_company_value" id="checkbox_company_value" value="0">
+                            <label for=""> Internal Contact</label>
+                        </div>
+                        @endif
+                    </div>
+                </div>
+
+
+
+                <div class="form-group">
+                    <label for="contact_id">Contact</label>
+                    <!-- <input type="text" name="contact_id" id="contact_id" class="form-control"> -->
+                    <select name="contact_id" id="contact_id" class="form-control">
+                        <!-- <option value="" class="contact_phone">(None)</option> -->
+                    </select>
+                    <span class="contact_id_error errors"></span>
+                </div>
+
+
+                <div class="form-group">
                     <label for="recruiter">Recruiter</label>
-                    <input type="text" name="recruiter" id="recruiter" class="form-control">
+                    <!-- <input type="text" name="recruiter" id="recruiter" class="form-control"> -->
+                    <select name="recruiter" id="recruiter" class="form-control">
+                        @foreach($users as $data)
+                        <option value="{{ $data->id }}">
+                            {{ $data->user_name }}
+                        </option>
+                        @endforeach
+                    </select>
                     <span class="recruiter_error errors"></span>
                 </div>
 
                 <div class="form-group">
                     <label for="type">Type</label>
-                    <input type="text" name="type" id="type" class="form-control">
+                    <!-- <input type="text" name="type" id="type" class="form-control"> -->
+                    <select name="type" id="type" class="form-control">
+                        <option value="C">C (Contract)</option>
+                        <option value="C2H">C2H (Contract To Hire)</option>
+                        <option value="FL">FL (Freelance)</option>
+                        <option value="H">H (Hire)</option>
+                    </select>
                     <span class="type_error errors"></span>
                 </div>
 
@@ -97,9 +142,9 @@
                 </div>
 
                 <div class="form-group">
-                    <label for="interview_type">Interview Type</label>
-                    <input type="text" name="interview_type" id="interview_type" class="form-control">
-                    <span class="interview_type_error errors"></span>
+                    <label for="enter_bill_rate">Enter Bill Rate</label>
+                    <input type="text" name="enter_bill_rate" id="enter_bill_rate" class="form-control">
+                    <span class="enter_bill_rate_error errors"></span>
                 </div>
 
                 <div class="form-group">
@@ -192,12 +237,12 @@
 $(document).on('click', '#add_jobOrder_btn', function(e) {
     e.preventDefault(); // Prevent the default form submission
 
-    var is_hot = $('#is_hot').is( ':checked' ) ? 1: 0
-    var is_public = $('#public').is( ':checked' ) ? 1: 0
+    var is_hot = $('#is_hot').is(':checked') ? 1 : 0
+    var is_public = $('#public').is(':checked') ? 1 : 0
 
     const formData = new FormData();
     const fields = [
-        'recruiter', 'contact_id', 'company_id', 'entered_by', 'owner', 'site_id',
+        'recruiter', 'company_id', 'entered_by', 'owner', 'site_id',
         'client_job_id', 'title', 'description', 'notes', 'type', 'duration', 'rate_max', 'salary',
         'status', 'openings', 'city', 'state', 'start_date', 'end_date', 'date_created',
         'date_modified', 'company_department_id', 'is_admin_hidden', 'openings_available',
@@ -206,8 +251,8 @@ $(document).on('click', '#add_jobOrder_btn', function(e) {
     ];
 
 
-    formData.append('is_hot',is_hot);
-    formData.append('is_public',is_public);
+    formData.append('is_hot', is_hot);
+    formData.append('is_public', is_public);
     let errors = [];
 
     $(".errors").html("");
@@ -261,6 +306,90 @@ $(document).on('click', '#add_jobOrder_btn', function(e) {
             console.error('Error:', error);
         },
     });
+});
+
+$(document).ready(function() {
+    function fetchContacts(companyId) {
+        // Clear existing options in contact_id select
+        $('#contact_id').empty();
+
+        // Append the "(None)" option
+        $('#contact_id').append('<option value="">(None)</option>');
+
+        if (companyId) {
+            // Ajax request to fetch data based on the selected company_id
+            $.ajax({
+                url: "/contacts/details/" + companyId,
+                method: 'GET',
+                success: function(response) {
+                    if (response.status) {
+                        // Add new options based on the fetched data
+                        $.each(response.data, function(index, contact) {
+                            $('#contact_id').append('<option value="' + contact.id + '">' +
+                                contact.first_name + ' ' + contact.last_name +
+                                '</option>');
+                        });
+
+                        console.log(response.message);
+                    } else {
+                        console.error('Error fetching contacts:', response.message);
+                    }
+                },
+                error: function(error) {
+                    console.error('Error fetching contacts:', error);
+                }
+            });
+        }
+    }
+
+    // Initial fetch when the page loads
+    fetchContacts($('#company_id').val());
+
+    // Event listener for change in company_id select
+    $('#company_id').change(function() {
+        var companyId = $(this).val();
+        fetchContacts(companyId);
+    });
+});
+
+
+function calculateDuration() {
+    var startDate = new Date(document.getElementById("start_date").value);
+    var endDate = new Date(document.getElementById("end_date").value);
+
+    // Calculate the difference in milliseconds
+    var timeDifference = endDate - startDate;
+
+    // Calculate the number of days
+    var daysDifference = Math.floor(timeDifference / (1000 * 60 * 60 * 24));
+
+    // Calculate the number of months
+    var monthsDifference = (endDate.getFullYear() - startDate.getFullYear()) * 12 + (endDate.getMonth() - startDate
+        .getMonth());
+
+    document.getElementById("duration").value = daysDifference + " days, " + monthsDifference + " months";
+}
+
+// Attach the function to the change event of the date inputs
+document.getElementById("start_date").addEventListener("change", calculateDuration);
+document.getElementById("end_date").addEventListener("change", calculateDuration);
+
+
+$(document).on('click', '#checkbox_company_value', function() {
+    // Get the Select2 instance for the company_id dropdown
+    var companySelect = $('#company_id').select2();
+
+    // Check if the checkbox is checked
+    if ($(this).prop('checked')) {
+        companySelect.empty();
+        companySelect.append('<option value="0">Internal Postings</option>').trigger('change');
+        companySelect.prop('disabled', true);
+    } else {
+        $('#company_id option[value="0"]').remove();
+        $(this).prop('disabled', false);
+        companySelect.prop('disabled', false);
+        companySelect.select2();
+    }
 });
 </script>
 @endpush

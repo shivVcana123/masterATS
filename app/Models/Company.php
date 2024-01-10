@@ -25,10 +25,5 @@ class Company extends Model
     {
         return $this->hasMany(Joborder::class,'company_id', 'id');
     }
-
-    public function contacts()
-    {
-        return $this->hasMany(Contact::class,'id');
-    }
   
 }

@@ -26,7 +26,7 @@
                                     <span class="title_error errors"></span>
                                 </div>
 
-                                <div class="form-group">
+                                <!-- <div class="form-group">
                                     <label for="contact_id">Contact Id</label>
                                     <input type="text" name="contact_id" id="contact_id" class="form-control"
                                         value="{{$jobDetails[0]->contact_id}}">
@@ -58,6 +58,82 @@
                                     <label for="type">Type</label>
                                     <input type="text" name="type" id="type" class="form-control"
                                         value="{{$jobDetails[0]->type}}">
+                                    <span class="type_error errors"></span>
+                                </div> -->
+
+                                <div class="form-group">
+                                    <label for="client_job_id">Client Job ID</label>
+                                    <input type="text" name="client_job_id" id="client_job_id" class="form-control">
+                                    <span class="client_job_id_error errors"></span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="company_id">Company</label>
+                                    <div class="row company-area" style="display: flex; align-items: center;">
+                                        <div class="col-6">
+                                            <select name="company_id" id="company_id" class="form-control">
+                                                <option selected disabled>Select Company</option>
+                                                @foreach($company as $data)
+                                                <option value="{{ $data->id }}"
+                                                    {{ $jobDetails[0]->company_id == $data->id ? 'selected' : '' }}>
+                                                    {{ $data->company_name }}
+                                                </option>
+                                                @endforeach
+                                            </select>
+
+
+                                            <!-- <label for="company_id">Company Name</label>
+                            <input type="text" name="company_id" id="company_id" class="form-control"> -->
+                                            <span class="company_id_error errors"></span>
+                                        </div>
+                                        @if($jobDetails[0]->company_id == null)
+                                        <div class="col-6">
+                                            <input type="checkbox" name="checkbox_company_value"
+                                                id="checkbox_company_value" value="0">
+                                            <label for=""> Internal Contact</label>
+                                        </div>
+                                        @endif
+                                    </div>
+                                </div>
+
+
+
+                                <div class="form-group">
+                                    <label for="contact_id">Contact</label>
+                                    <!-- <input type="text" name="contact_id" id="contact_id" class="form-control"> -->
+                                    <select name="contact_id" id="contact_id" class="form-control">
+                                        <!-- <option value="" class="contact_phone">(None)</option> -->
+                                    </select>
+                                    <span class="contact_id_error errors"></span>
+                                </div>
+
+
+                                <div class="form-group">
+                                    <label for="recruiter">Recruiter</label>
+                                    <!-- <input type="text" name="recruiter" id="recruiter" class="form-control"> -->
+                                    <select name="recruiter" id="recruiter" class="form-control">
+                                        @foreach($users as $data)
+                                        <option value="{{ $data->id }}">
+                                            {{ $data->user_name }}
+                                        </option>
+                                        @endforeach
+                                    </select>
+                                    <span class="recruiter_error errors"></span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="type">Type</label>
+                                    <!-- <input type="text" name="type" id="type" class="form-control"> -->
+                                    <select name="type" id="type" class="form-control">
+                                        <option value="C" {{$jobDetails[0]->type == 'C' ? 'selected' : ''}}>C (Contract)
+                                        </option>
+                                        <option value="C2H" {{$jobDetails[0]->type == 'C2H' ? 'selected' : ''}}>C2H
+                                            (Contract To Hire)</option>
+                                        <option value="FL" {{$jobDetails[0]->type == 'FL' ? 'selected' : ''}}>FL
+                                            (Freelance)</option>
+                                        <option value="H" {{$jobDetails[0]->type == 'H' ? 'selected' : ''}}>H (Hire)
+                                        </option>
+                                    </select>
                                     <span class="type_error errors"></span>
                                 </div>
 
@@ -241,7 +317,7 @@ $(document).on('click', '#update_jobOrder_btn', function(e) {
 
     const formData = new FormData();
     const fields = [
-        'jobOrder_id', 'recruiter', 'contact_id', 'company_id', 'entered_by', 'owner', 'site_id',
+        'jobOrder_id', 'recruiter', 'company_id', 'entered_by', 'owner', 'site_id',
         'client_job_id', 'title', 'description', 'notes', 'type', 'duration', 'rate_max', 'salary',
         'status', 'openings', 'city', 'state', 'start_date', 'end_date', 'date_created',
         'date_modified', 'company_department_id', 'is_admin_hidden', 'openings_available',
@@ -301,6 +377,50 @@ $(document).on('click', '#update_jobOrder_btn', function(e) {
         error: function(xhr, status, error) {
             console.error('Error:', error);
         },
+    });
+});
+
+$(document).ready(function() {
+    function fetchContacts(companyId) {
+        // Clear existing options in contact_id select
+        $('#contact_id').empty();
+
+        // Append the "(None)" option
+        $('#contact_id').append('<option value="">(None)</option>');
+
+        if (companyId) {
+            // Ajax request to fetch data based on the selected company_id
+            $.ajax({
+                url: "/contacts/details/" + companyId,
+                method: 'GET',
+                success: function(response) {
+                    if (response.status) {
+                        // Add new options based on the fetched data
+                        $.each(response.data, function(index, contact) {
+                            $('#contact_id').append('<option value="' + contact.id + '">' +
+                                contact.first_name + ' ' + contact.last_name +
+                                '</option>');
+                        });
+
+                        console.log(response.message);
+                    } else {
+                        console.error('Error fetching contacts:', response.message);
+                    }
+                },
+                error: function(error) {
+                    console.error('Error fetching contacts:', error);
+                }
+            });
+        }
+    }
+
+    // Initial fetch when the page loads
+    fetchContacts($('#company_id').val());
+
+    // Event listener for change in company_id select
+    $('#company_id').change(function() {
+        var companyId = $(this).val();
+        fetchContacts(companyId);
     });
 });
 </script>

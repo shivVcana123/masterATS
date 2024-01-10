@@ -185,8 +185,8 @@
                 </table><br>
                 <form id="document_form" enctype="multipart/form-data" method="POST" style="margin-left: -101px;">
 
-                    <input type="hidden" name="joborder_id" id="joborder_id" value="{{$companyDetails[0]->id}}">
-                    <input type="hidden" name="company_id" id="company_id" value="{{$companyDetails[0]->company_id}}">
+                    <!-- <input type="text" name="joborder_id" id="joborder_id" value="{{$companyDetails[0]->id}}"> -->
+                    <input type="text" name="company_id" id="company_id" value="{{$companyDetails[0]->id}}">
 
                     <label for="document_file"> Add Attachment:</label>&nbsp;
                     <input type="file" name="document_file" id="document_file" accept=".pdf, .doc, .docx, .txt">
@@ -225,30 +225,50 @@
                 </tr>
             </thead>
             <tbody id="container" class="no-border-x no-border-y ui-sortable">
-                @foreach($companyDetails[0]['user'] as $detailss)
-                @foreach($companyDetails[0]['jobDetails'] as $details)
+
+                @foreach($companyDetails[0]['jobDetails'] as $key => $details)
                 <tr>
                     <td>{{$details->id}}</td>
                     <!-- <td>{{$details->title}}</td> -->
                     <td><a href="{{route('joborders.details',$details->id)}}">{{ $details->title }}</a></td>
-                    <td>{{$details->type}}</td>
+                    <td> @switch($details->type)
+                        @case('C')
+                        <span> C (Contract)</span>
+                        @break
+
+                        @case('C2H')
+                        <span> C2H (Contract To Hire)</span>
+                        @break
+                        @case('FL')
+                        <span> FL (Freelance)</span>
+                        @break
+
+                        @case('H')
+                        <span>H (Hire)</span>
+                        @break
+
+                        @default
+                        <span>NA</span>
+                        @endswitch
+                    </td>
                     <td>{{$details->status}}</td>
                     <td>{{$details->date_created}}</td>
                     <td>{{$details->date_modified}}</td>
                     <td>{{$details->start_date}}</td>
-                    <td>{{$details->title}}</td>
+                    <td>{{ isset($details->ageDays) ? number_format(intval($details->ageDays)) : '' }}</td>
+
                     <td>{{$details->title}}</td>
                     <td>{{$details->p}} </td>
-                    <td>{{$details->recruiter}}</td>
-                    <td>{{$detailss->user_name}} </td>
-                    <td>Action</td>
+                    <td>{{$details['recruiterUser']->user_name}}</td>
+                    <td>{{$details['ownerUser']->user_name}} </td>
+                    <td>
+                        <a href="{{url('/joborder/update',$details->id)}}"><i class="fa fa-pencil"></i></a>
+                    </td>
                 </tr>
-                @endforeach
                 @endforeach
             </tbody>
         </table>
-        <i class="fa fa-plus"></i><a
-            href="{{ url('/candidates/create', ['company_id' => $companyDetails[0]->id]) }}">Add
+        <i class="fa fa-plus"></i><a href="{{ url('/joborders/create', ['company_id' => $companyDetails[0]->id]) }}">Add
             Add Job Order</a>
 
     </div>
@@ -276,7 +296,7 @@
             </thead>
             <tbody id="container" class="no-border-x no-border-y ui-sortable">
                 @foreach($companyDetails[0]['user'] as $details)
-                @foreach($companyDetails[0]['contacts'] as $detailss)
+                @foreach($companyDetails[0]['jobDetails'][0]['contacts'] as $detailss)
                 <tr>
                     <td>{{$detailss->id}}</td>
                     <td><a href="{{url('contacts',$detailss->id)}}">{{$detailss->first_name}}</a></td>
@@ -287,7 +307,9 @@
                     <td>{{$detailss->phone_cell}}</td>
                     <td>{{$detailss->date_created}}</td>
                     <td>{{$details->user_name}} </td>
-                    <td>Action</td>
+                    <td>
+                        <a href="{{url('/contacts/'.$details->id.'/edit')}}"><i class="fa fa-pencil"></i></a>
+                    </td>
                 </tr>
                 @endforeach
                 @endforeach
@@ -300,3 +322,130 @@
 </div>
 
 @endsection
+@push('scripts')
+<script>
+$(document).on('click', '#submit_file', function(e) {
+    e.preventDefault();
+    // var joborder_id = $('#joborder_id').val();
+    var company_id = $('#company_id').val();
+
+    const formData = new FormData();
+    const fileInput = $('#document_file')[0];
+
+    let errors = [];
+    $(".errors").html("");
+
+    if (fileInput.files.length > 0) {
+        const file = fileInput.files[0];
+        // formData.append('joborder_id', joborder_id);
+        formData.append('company_id', company_id);
+        formData.append('document_file', file);
+    } else {
+        errors.push('document_file');
+        $(".document_file_error").html('Please select a document file');
+    }
+
+    if (errors.length > 0) {
+        return false;
+    }
+
+
+    $.ajaxSetup({
+        headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        },
+    });
+    $.ajax({
+        url: '/document/upload', // Adjust the URL as needed
+        type: 'POST',
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function(response) {
+            const title = response.status ? "success" : "warning";
+            Swal.fire({
+                title: response.message,
+                type: title,
+                icon: title,
+            }).then(function(result) {
+                if (result.isConfirmed && response.status) {
+                    window.location.href =
+                        "{{ url('/companies/details',$companyDetails[0]->id ) }}";
+                }
+            });
+        },
+        error: function(xhr, status, error) {
+            console.error('Error:', error);
+        },
+    });
+});
+
+$(document).on('click', '#document_delete_id', function() {
+
+    var documentId = $(this).data('value');
+
+    Swal.fire({
+        title: 'Are you sure?',
+        text: 'You won\'t to delete this record!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: "Yes",
+        cancelButtonText: "No",
+        closeOnConfirm: false,
+        closeOnCancel: false
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '/document/delete/' + documentId,
+                type: 'GET',
+                success: function(response) {
+                    console.log(response);
+                    const title = response.status ? "success" : "warning";
+                    Swal.fire({
+                        title: response.message,
+                        type: title,
+                        icon: title,
+                    }).then(function(result) {
+                        if (result.isConfirmed && response.status) {
+                            window.location.href =
+                                "{{ url('/companies/details',$companyDetails[0]->id ) }}";
+                        }
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error);
+                },
+            });
+        }
+    });
+});
+
+$(document).on('click', '#documentDownload', function() {
+    var documentDownload = $(this).data('id');
+
+    $.ajax({
+        url: '/document/download/' + documentDownload,
+        type: 'GET',
+        success: function(response) {
+            console.log(response);
+            const title = response.status ? "success" : "warning";
+            Swal.fire({
+                title: response.message,
+                type: title,
+                icon: title,
+            }).then(function(result) {
+                if (result.isConfirmed && response.status) {
+                    window.location.href =
+                        "{{ url('/companies/details',$companyDetails[0]->id ) }}";
+                }
+            });
+        },
+        error: function(xhr, status, error) {
+            console.error('Error:', error);
+        },
+    });
+});
+</script>
+@endpush

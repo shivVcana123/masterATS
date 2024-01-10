@@ -7,6 +7,7 @@ use App\DataTables\FacilitiesDataTable;
 use App\Facades\UtilityFacades;
 
 use App\Models\Company;
+use DateTime;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -41,8 +42,9 @@ class CompanyController extends Controller
     
     }
 
-    public function create(){
-      return view('companies.create');
+    public function create($company_id = null){
+      $company = Company::where('owner',Auth::user()->id)->get();
+      return view('companies.create',compact('company_id','company'));
     }
 
 
@@ -81,8 +83,20 @@ class CompanyController extends Controller
 
     public  function profiledetails($id){
 
-      $companyDetails = Company::with('user','jobDetails','contacts')->where('id',$id)->get();
+      $ageDays = '';
+      $currentDate = new DateTime();
+
+      $companyDetails = Company::with('jobDetails.candidateJoborder','jobDetails','jobDetails.contacts','jobDetails.ownerUser','jobDetails.recruiterUser')->where('id',$id)->get();
       // dd($companyDetails);
+
+        foreach ($companyDetails[0]['jobDetails'] as $key => $jobDetail) {
+          $startDate = new DateTime($jobDetail->start_date);
+          $daysDifference = $startDate->diff($currentDate)->format('%a');
+          $ageDays[$jobDetail->id] = $daysDifference;
+        }
+      $companyDetails[0]['jobDetails'][ $key]['ageDays'] = $ageDays;
+
+
       return view('companies.show',compact('companyDetails'));
       
     }

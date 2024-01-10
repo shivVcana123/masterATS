@@ -22,7 +22,7 @@ use App\Http\Controllers\LoginSecurityController;
 use Illuminate\Support\Facades\Route;
 
 // Route::get('/joborders/{letter?}', [JobOrderController::class, 'index'])->name('joborders.index');
-Route::get('/joborders/create', [JobOrderController::class, 'create'])->name('joborders.create');
+Route::get('/joborders/create/{company_id?}', [JobOrderController::class, 'create'])->name('joborders.create');
 Route::post('/add/joborder', [JobOrderController::class, 'store'])->name('joborders.store');
 Route::get('/joborders/details/{id?}', [JobOrderController::class, 'profileDetails'])->name('joborders.details');
 Route::get('/joborder/update/{id?}', [JobOrderController::class, 'joborderUpdate'])->name('joborders.update');
@@ -32,7 +32,7 @@ Route::get('/joborders/delete/{id?}', [JobOrderController::class, 'joborderDelet
 
 
 // Route::get('/companies/index/{letter?}', [CompanyController::class, 'index'])->name('companies.index');
-Route::get('/companies/create', [CompanyController::class, 'create'])->name('companies.create');
+Route::get('/companies/create/{company_id?}', [CompanyController::class, 'create'])->name('companies.create');
 Route::post('/companies/store', [CompanyController::class, 'store'])->name('companies.store');
 Route::any('/companies/details/{id?}', [CompanyController::class, 'profileDetails'])->name('companies.details');
 Route::get('/companies/update/{id?}', [CompanyController::class, 'updateDetails'])->name('companies.update');

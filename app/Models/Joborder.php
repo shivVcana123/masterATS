@@ -41,4 +41,9 @@ class Joborder extends Model
         return $this->hasMany(Attachment::class,'joborder_id','id');
     }
 
+    public function contacts()
+    {
+        return $this->hasMany(Contact::class,'company_id','id');
+    }
+
 }

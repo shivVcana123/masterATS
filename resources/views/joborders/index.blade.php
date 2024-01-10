@@ -115,15 +115,34 @@ form.example button {
                                 <tr>
                                     <td>{{ $data->id }}</td>
                                     <td><a href="{{route('joborders.details',$data->id)}}">{{ $data->title }}</a></td>
-                                    <td>{{ $data->company_name }}</td>
-                                    <td>{{ $data->type }}</td>
+                                    <td>{{ $data['companies']->company_name }}</td>
+                                    <td> @switch($data->type)
+                                        @case('C')
+                                        <span> C (Contract)</span>
+                                        @break
+
+                                        @case('C2H')
+                                        <span> C2H (Contract To Hire)</span>
+                                        @break
+                                        @case('FL')
+                                        <span> FL (Freelance)</span>
+                                        @break
+
+                                        @case('H')
+                                        <span>H (Hire)</span>
+                                        @break
+
+                                        @default
+                                        <span>NA</span>
+                                        @endswitch
+                                    </td>
                                     <td>{{ $data->status }}</td>
                                     <td>{{ $data->date_created }}</td>
                                     <td> {{ $data->client_job_id }}</td>
                                     <td> {{ $data->date_modified }}</td>
-                                    <td></td>
-                                    <td>{{ $data->recruiter_name }}</td>
-                                    <td>{{ $data->owner_name }}</td>
+                                    <td> {{ $data->submission_deadline }}</td>
+                                    <td>{{ $data['recruiterUser']->user_name }}</td>
+                                    <td>{{ $data['ownerUser']->user_name }}</td>
                                     <td>
                                         <a href="{{route('joborders.details',$data->id)}}"><i class="fa fa-eye"></i></a>
                                         <a href="{{url('/joborder/update',$data->id)}}"><i class="fa fa-pencil"></i></a>
