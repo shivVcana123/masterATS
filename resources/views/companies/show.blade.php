@@ -174,19 +174,20 @@
             <td valign="top" class="data">
                 <table class="attachmentsTable">
                     <tbody>
-
-                        <tr>
-                            <td><a href="javascript:;" id="documentDownload" data-id="">dfdsd.pdf</a></td>
-                            <td>&nbsp; &nbsp;datetime</td>
-                            <td>&nbsp; &nbsp;<i class="fa fa-trash" id="document_delete_id" data-value=""></i></td>
+                       @foreach($companyDetails[0]['jobDetails'][0]['documents'] as $details)
+                       <tr>
+                           <td><a href="javascript:;" id="documentDownload" data-id="{{$details->id}}">{{$details->original_filename}}</a></td>
+                           <td>&nbsp; &nbsp;{{date("d/m/Y (h:i A)", strtotime($details->date_created))}}</td>
+                           <td>&nbsp; &nbsp;<i class="fa fa-trash" id="document_delete_id" data-value="{{$details->id}}"></i></td>
                         </tr>
+                        @endforeach
 
                     </tbody>
                 </table><br>
                 <form id="document_form" enctype="multipart/form-data" method="POST" style="margin-left: -101px;">
 
                     <!-- <input type="text" name="joborder_id" id="joborder_id" value="{{$companyDetails[0]->id}}"> -->
-                    <input type="text" name="company_id" id="company_id" value="{{$companyDetails[0]->id}}">
+                    <input type="hidden" name="company_id" id="company_id" value="{{$companyDetails[0]->id}}">
 
                     <label for="document_file"> Add Attachment:</label>&nbsp;
                     <input type="file" name="document_file" id="document_file" accept=".pdf, .doc, .docx, .txt">
@@ -268,7 +269,7 @@
                 @endforeach
             </tbody>
         </table>
-        <i class="fa fa-plus"></i><a href="{{ url('/joborders/create', ['company_id' => $companyDetails[0]->id]) }}">Add
+        <i class="fa fa-plus"></i><a href="{{ url('/joborders/create', ['company_id' => $companyDetails[0]->id]) }}">
             Add Job Order</a>
 
     </div>
@@ -295,7 +296,6 @@
                 </tr>
             </thead>
             <tbody id="container" class="no-border-x no-border-y ui-sortable">
-                @foreach($companyDetails[0]['user'] as $details)
                 @foreach($companyDetails[0]['jobDetails'][0]['contacts'] as $detailss)
                 <tr>
                     <td>{{$detailss->id}}</td>
@@ -311,7 +311,6 @@
                         <a href="{{url('/contacts/'.$details->id.'/edit')}}"><i class="fa fa-pencil"></i></a>
                     </td>
                 </tr>
-                @endforeach
                 @endforeach
             </tbody>
         </table>
@@ -422,30 +421,14 @@ $(document).on('click', '#document_delete_id', function() {
     });
 });
 
+// Document download
 $(document).on('click', '#documentDownload', function() {
     var documentDownload = $(this).data('id');
 
-    $.ajax({
-        url: '/document/download/' + documentDownload,
-        type: 'GET',
-        success: function(response) {
-            console.log(response);
-            const title = response.status ? "success" : "warning";
-            Swal.fire({
-                title: response.message,
-                type: title,
-                icon: title,
-            }).then(function(result) {
-                if (result.isConfirmed && response.status) {
-                    window.location.href =
-                        "{{ url('/companies/details',$companyDetails[0]->id ) }}";
-                }
-            });
-        },
-        error: function(xhr, status, error) {
-            console.error('Error:', error);
-        },
-    });
+    var url = '/document/download/' + documentDownload;
+    window.open(url, '_blank');  // Open the download link in a new tab
 });
+
+
 </script>
 @endpush

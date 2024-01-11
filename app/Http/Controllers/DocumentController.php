@@ -213,32 +213,44 @@ class DocumentController extends Controller
         }
     }
 
+    // public function documentDownload($id)
+    // {
+    //     $documentDownload = Attachment::find($id);
+    //     if (!$documentDownload) {
+    //         abort(404); // Document not found
+    //     }
+    
+    //     $download_file = $documentDownload->title;
+    //     $file_path = asset('documents/' . $download_file);
+    //     if (!file_exists($file_path)) {
+    //         abort(404, 'File not found');
+    //     }
+    
+    //     $headers = [
+    //         'Content-Type' => mime_content_type($file_path),
+    //     ];
+    
+    //     return response()->download($file_path, $documentDownload->original_filename, $headers);
+    // }
+
     public function documentDownload($id)
-    {
-        $documentDownload = Attachment::find($id);
-    
-       
-        if (!$documentDownload) {
-            abort(404); // Document not found
-        }
-    
-        $download_file = $documentDownload->title;
-        // C:\xampp\htdocs\atsnewproject\masterATS\storage\documents
-        dd(url()->current());
-       
-        // Ensure the file exists before attempting to download
-        $file_path = public_path('storage/documents/' . $download_file);
-        dd($file_path);
-        // C:\xampp\htdocs\atsnewproject\masterATS\storage\app/public/documents/Anti Harassment and Discrimination Policy.docx"
-        // C:\xampp\htdocs\atsnewproject\masterATS\storage\documents
-        if (!file_exists($file_path)) {
-            abort(404, 'File not found');
-        }
-    
-        $headers = [
-            'Content-Type' => mime_content_type($file_path),
-        ];
-    
-        return response()->download($file_path, $documentDownload->original_filename, $headers);
+{
+    $documentDownload = Attachment::find($id);
+    if (!$documentDownload) {
+        abort(404); // Document not found
     }
+
+    $download_file = $documentDownload->title;
+    $file_path = public_path('documents/' . $download_file);
+
+    if (!file_exists($file_path)) {
+        abort(404, 'File not found');
+    }
+
+    $headers = [
+        'Content-Type' => mime_content_type($file_path),
+    ];
+
+    return response()->download($file_path, $documentDownload->original_filename, $headers);
+}
 }

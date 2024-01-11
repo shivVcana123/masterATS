@@ -1,6 +1,5 @@
 @extends('layouts.admin')
 @section('content')
-
 <style>
 .errors {
     color: red;
@@ -43,19 +42,16 @@
                     <input type="text" name="fax_number" id="fax_number" class="form-control">
                     <span class="fax_number_error errors"></span>
                 </div>
-
                 <div class="form-group">
-                    <label for="rate_max">Departments</label>
-                    <input type="text" name="rate_max" id="rate_max" class="form-control">
-                    <span class="rate_max_error errors"></span>
+                    <label for="notes">Misc. Notes</label>
+                    <textarea name="notes" id="notes"></textarea>
+                    <span class="notes_error errors"></span>
                 </div>
-
                 <div class="form-group">
                     <label for="is_hot">Hot Company</label>
                     <input type="checkbox" name="is_hot" id="is_hot" value="1">
                     <span class="is_hot_error errors"></span>
                 </div>
-
             </div>
             <div class="col-md-6">
 
@@ -90,15 +86,9 @@
                 </div>
                 <div class="form-group">
                     <label for="key_technologies">Key Technologies</label>
-                    <input type="text" name="key_technologies" id="key_technologies" class="form-control">
+                    <textarea id="key_technologies" name="key_technologies"></textarea>
                     <span class="key_technologies_error errors"></span>
                 </div>
-            </div>
-
-            <div class="form-group">
-                <label for="notes">Misc. Notes</label>
-                <input type="text" name="notes" id="notes" class="form-control">
-                <span class="notes_error errors"></span>
             </div>
 
 
@@ -107,9 +97,16 @@
 </div>
 @endsection
 @push('scripts')
+<script src="https://cdn.ckeditor.com/4.16.1/standard/ckeditor.js"></script>
 
 <script>
+CKEDITOR.replace('key_technologies');
+var editor = CKEDITOR.instances.key_technologies;
+
+CKEDITOR.replace('notes');
+var editors = CKEDITOR.instances.notes;
 $("#addNewCompany").click(function() {
+
     var company_name = document.getElementById("company_name").value;
     var email = document.getElementById("email").value;
     var primary_phone = document.getElementById("primary_phone").value;
@@ -120,8 +117,8 @@ $("#addNewCompany").click(function() {
     var state = document.getElementById("state").value;
     var zip = document.getElementById("zip").value;
     var web_url = document.getElementById("web_url").value;
-    var key_technologies = document.getElementById("key_technologies").value;
-    var notes = document.getElementById("notes").value;
+    var key_technologies = editor.getData();
+    var notes = editors.getData();
 
     let errors = [];
     $(".errors").html("");

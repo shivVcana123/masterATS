@@ -7,6 +7,7 @@ use App\DataTables\FacilitiesDataTable;
 use App\Facades\UtilityFacades;
 
 use App\Models\Company;
+use App\Models\User;
 use DateTime;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\DB;
@@ -21,7 +22,7 @@ class CompanyController extends Controller
     {  
 
       // $query = Company::with('user');
-      $query = Company::with(['user', 'jobDetails'])
+      $query = Company::with(['jobDetails.ownerUser', 'jobDetails'])
       ->withCount('jobDetails');
           // Check if 'letter' parameter is present and apply the filter
           if ($request->has('letter')) {
@@ -86,7 +87,7 @@ class CompanyController extends Controller
       $ageDays = '';
       $currentDate = new DateTime();
 
-      $companyDetails = Company::with('jobDetails.candidateJoborder','jobDetails','jobDetails.contacts','jobDetails.ownerUser','jobDetails.recruiterUser')->where('id',$id)->get();
+      $companyDetails = Company::with('jobDetails.candidateJoborder','jobDetails','jobDetails.contacts','jobDetails.ownerUser','jobDetails.recruiterUser','jobDetails.documents')->where('id',$id)->get();
       // dd($companyDetails);
 
         foreach ($companyDetails[0]['jobDetails'] as $key => $jobDetail) {
@@ -102,8 +103,10 @@ class CompanyController extends Controller
     }
 
     public function updatedetails($id){
-      $companyDetails = Company::with('user')->where('id',$id)->get();
-      return view('companies.profile',compact('companyDetails'));
+      $companyDetails = Company::with('companyDepartment')->where('id',$id)->get();
+      // dd($companyDetails);
+      $users = User::get();
+      return view('companies.profile',compact('companyDetails','users'));
     }
 
     public function companiesUpdateSave(Request $request)

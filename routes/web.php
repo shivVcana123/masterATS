@@ -14,6 +14,7 @@ use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\ContactController;
 use App\Http\Controllers\ListtController;
 use App\Http\Controllers\CalenderController;
+use App\Http\Controllers\DepartmentController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Auth;
@@ -72,6 +73,9 @@ Route::get('/contacts/create/{company_id?}', [ContactController::class, 'create'
 Route::post('/contacts/update', [ContactController::class, 'contactsUpdateData'])->name('contacts.update');
 Route::get('/contacts/delete/{id?}', [ContactController::class, 'contactDelete'])->name('contacts.delete');
 Route::get('/contacts/details/{contact_id?}', [ContactController::class, 'contactDetails'])->name('contacts.details');
+
+
+Route::get('/department/delete/{id?}', [DepartmentController::class, 'departmentDelete'])->name('department.delete');
 /*
 |--------------------------------------------------------------------------
 | Web Routes

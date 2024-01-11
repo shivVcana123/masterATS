@@ -98,7 +98,6 @@ form.example button {
                                 <th>Action</th>
                             </tr>
                             @foreach($datas as $data)
-                            @foreach($data['user'] as $user)
                             <tr>
                                 <td><a href="{{route('companies.details',$data->id )}}">{{ $data->company_name }}</a>
                                 </td>
@@ -107,7 +106,7 @@ form.example button {
                                 <td>{{ $data->state }}</td>
                                 <td>{{ $data->primary_phone }}</td>
 
-                                <td>{{ $user->user_name }}</td>
+                                <td>dsdas</td>
                                 <td>{{ $data->created_at }}</td>
                                 <td>{{ $data->updated_at }}</td>
                                 <td>
@@ -119,7 +118,6 @@ form.example button {
                                     <a href="{{ url('/companies/history',$data->id )}}"><i class="fa fa-history"></i></a>
                                 </td>
                             </tr>
-                            @endforeach
                             @endforeach
                             @else
                             <p>No data fonnd</p>

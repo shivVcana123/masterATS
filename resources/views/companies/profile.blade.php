@@ -11,8 +11,7 @@
         <!-- @csrf -->
         <div class="row">
             <div class="col-md-6">
-                <input type="hidden" name="id" id="id" value="{{$companyDetails[0]->id}}"
-                    class="form-control">
+                <input type="hidden" name="id" id="id" value="{{$companyDetails[0]->id}}" class="form-control">
                 <div class="form-group">
                     <label for="company_name">Company Name</label>
                     <input type="text" name="company_name" id="company_name" class="form-control"
@@ -48,11 +47,33 @@
                     <span class="fax_number_error errors"></span>
                 </div>
 
+                <!-- <input type="text" name="department_name" id="department_name" class="form-control"
+                    value="{{ $companyDetails[0]->department_name }}"> -->
+                <!-- <div class="form-group">
+                    <label for="department_name">Departments</label>
+                    <select name="department_name" id="department_name" class="form-control">
+                        @foreach($companyDetails[0]['companyDepartment'] as $department)
+                        <option value="{{$department->id}}">{{$department->name}}</option>
+                        @endforeach -->
+                    </select>
+                    <!-- <select name="department_name" id="department_name"
+                        class="form-control">
+                        @foreach($companyDetails[0]['companyDepartment'] as $department)
+                        <option value="{{$department->id}}">{{$department->name}}</option>
+                        @endforeach
+                    </select> -->
+                    <!-- <span class="department_name_error errors"></span>
+                </div> -->
+
                 <div class="form-group">
-                    <label for="rate_max">Departments</label>
-                    <input type="text" name="rate_max" id="rate_max" class="form-control"
-                        value="{{ $companyDetails[0]->rate_max }}">
-                    <span class="rate_max_error errors"></span>
+                    <label for="fax_number">Owner</label>
+                    <select name="user_name" id="user_name" class="form-control">
+                        @foreach($users as $user)
+                        <option value="{{$user->id}}" {{$companyDetails[0]->owner == $user->id ? 'selected' : ''}}>
+                            {{$user->user_name}}</option>
+                        @endforeach
+                    </select>
+                    <span class="fax_number_error errors"></span>
                 </div>
 
                 <div class="form-group">
@@ -118,9 +139,39 @@
     </form>
 </div>
 @endsection
+<!-- <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" /> -->
 @push('scripts')
-
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 <script>
+$(document).ready(function() {
+    $('#department_name').select2({
+        placeholder: 'Please select a department',
+        allowClear: true
+        // Add any other options you need here
+    });
+
+    $('#department_name').on('select2:unselecting', function(e) {
+        var departmentId = e.params.args.data.id;
+        // alert(departmentId);
+        if (confirm('Are you sure you want to delete this department?')) {
+
+            $.ajax({
+                url: "/department/delete/" + departmentId,
+                type: 'GET',
+                success: function(response) {
+                    console.log(response);
+                },
+                error: function(error) {
+                    console.log(error);
+                }
+            });
+
+        }
+    });
+});
+
+
+
 $("#updateCompany").click(function() {
     //var company_name = document.getElementById("company_name").value;
     var id = document.getElementById("id").value;
