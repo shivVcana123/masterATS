@@ -152,7 +152,7 @@ class JoborderController extends Controller
 public function profiledetails($id){
     $jobDetails = JobOrder::with('attachments')->where('id',$id)
       ->get();
-      dd($jobDetails);
+    //   dd($jobDetails);
     return view('joborders.show',compact('jobDetails'));
 }
 
