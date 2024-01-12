@@ -106,7 +106,7 @@ form.example button {
                                 <td>{{ $data->state }}</td>
                                 <td>{{ $data->primary_phone }}</td>
 
-                                <td>dsdas</td>
+                                <td>{{$data['ownerUser']->user_name}}</td>
                                 <td>{{ $data->created_at }}</td>
                                 <td>{{ $data->updated_at }}</td>
                                 <td>

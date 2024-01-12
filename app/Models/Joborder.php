@@ -36,6 +36,11 @@ class Joborder extends Model
         return $this->belongsTo(User::class, 'recruiter');
     }
 
+   public function attachments()
+    {
+        return $this->morphMany(Attachment::class, 'attachable');
+    }
+
     public function documents()
     {
         return $this->hasMany(Attachment::class,'company_id','id');

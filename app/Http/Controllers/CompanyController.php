@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\DataTables\FacilitiesDataTable;
 use App\Facades\UtilityFacades;
-
+use App\Models\Attachment;
 use App\Models\Company;
 use App\Models\User;
 use DateTime;
@@ -22,7 +22,7 @@ class CompanyController extends Controller
     {  
 
       // $query = Company::with('user');
-      $query = Company::with(['jobDetails.ownerUser', 'jobDetails'])
+      $query = Company::with(['ownerUser', 'jobDetails'])
       ->withCount('jobDetails');
           // Check if 'letter' parameter is present and apply the filter
           if ($request->has('letter')) {
@@ -87,18 +87,31 @@ class CompanyController extends Controller
       $ageDays = '';
       $currentDate = new DateTime();
 
-      $companyDetails = Company::with('jobDetails.candidateJoborder','jobDetails','jobDetails.contacts','jobDetails.ownerUser','jobDetails.recruiterUser','jobDetails.documents')->where('id',$id)->get();
-      // dd($companyDetails);
+      // $companyDetails = Company::with('jobDetails.candidateJoborder','jobDetails','jobDetails.contacts','jobDetails.ownerUser','jobDetails.recruiterUser','jobDetails.documents','ownerUser')->where('id',$id)->get();
+      $companyDetails = Company::with('jobDetails.candidateJoborder','jobDetails','jobDetails.contacts','jobDetails.ownerUser','jobDetails.recruiterUser','ownerUser')->where('id',$id)->get();
 
-        foreach ($companyDetails[0]['jobDetails'] as $key => $jobDetail) {
+      $attachments = Attachment::with('attachable')
+      ->where('attachable_id',$id)
+      ->where('attachable_type', Company::class)
+      ->get();
+      // dd($attachments);
+
+      // Initialize $key before the loop
+      $key = null;
+
+      foreach ($companyDetails[0]['jobDetails'] as $key => $jobDetail) {
           $startDate = new DateTime($jobDetail->start_date);
           $daysDifference = $startDate->diff($currentDate)->format('%a');
           $ageDays[$jobDetail->id] = $daysDifference;
-        }
-      $companyDetails[0]['jobDetails'][ $key]['ageDays'] = $ageDays;
+      }
+
+      // Make sure $key is defined even if the loop doesn't run
+      if (!is_null($key)) {
+          $companyDetails[0]['jobDetails'][$key]['ageDays'] = $ageDays;
+      }
 
 
-      return view('companies.show',compact('companyDetails'));
+      return view('companies.show',compact('companyDetails','attachments'));
       
     }
 

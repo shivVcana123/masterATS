@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\Attachment;
+use App\Models\Company;
+use App\Models\Contact;
 use App\Models\Document;
+use App\Models\Joborder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -86,122 +89,140 @@ class DocumentController extends Controller
     }
 
 
-    public function documentUpload(Request $request){
-        try {
+    // public function documentUpload(Request $request){
+    //     try {
 
-            $file = $request->file('document_file');
+    //         dd($request->all());
+    //         $file = $request->file('document_file');
 
-            $allowedFileTypes = ['pdf', 'doc', 'docx', 'txt'];
-            $extension = $file->getClientOriginalExtension();
+    //         $allowedFileTypes = ['pdf', 'doc', 'docx', 'txt'];
+    //         $extension = $file->getClientOriginalExtension();
 
-            if (!in_array($extension, $allowedFileTypes)) {
-                return response()->json(['status' => false, 'message' => 'Invalid file. Please select a file with format pdf, doc, docx, or txt.']);
-            }
+    //         if (!in_array($extension, $allowedFileTypes)) {
+    //             return response()->json(['status' => false, 'message' => 'Invalid file. Please select a file with format pdf, doc, docx, or txt.']);
+    //         }
 
-            // Ensure the destination directory exists
-            $destinationPath = public_path('documents');
-            if (!is_dir($destinationPath)) {
-                mkdir($destinationPath, 0755, true);
-            }
-            // dd( $destinationPath);
+    //         // Ensure the destination directory exists
+    //         $destinationPath = public_path('documents');
+    //         if (!is_dir($destinationPath)) {
+    //             mkdir($destinationPath, 0755, true);
+    //         }
+    //         // dd( $destinationPath);
 
-            // Move and store the file in the 'documents' directory
-            $originalFileName = $file->getClientOriginalName();
-            $file->move($destinationPath, $originalFileName);
+    //         // Move and store the file in the 'documents' directory
+    //         $originalFileName = $file->getClientOriginalName();
+    //         $file->move($destinationPath, $originalFileName);
 
-            $document = new Attachment();
+    //         $document = new Attachment();
 
-            // Store information in the database columns
-            $document->joborder_id = $request->joborder_id;
-            $document->company_id = $request->company_id;
-            $document->owner_id = Auth::user()->id;
+    //         // Store information in the database columns
+    //         $document->joborder_id = $request->joborder_id;
+    //         $document->company_id = $request->company_id;
+    //         $document->owner_id = Auth::user()->id;
 
-            $document->title = $originalFileName;  // Original file name
-            $document->original_filename = $originalFileName;
-            $document->content_type = $file->getClientMimeType();  // MIME type of the file
-            // $document->file_size_kb = $file->getSize() / 1024;
+    //         $document->title = $originalFileName;  // Original file name
+    //         $document->original_filename = $originalFileName;
+    //         $document->content_type = $file->getClientMimeType();  // MIME type of the file
+    //         // $document->file_size_kb = $file->getSize() / 1024;
             
 
-            // Add other columns as needed
+    //         // Add other columns as needed
 
-            $document->save();
+    //         $document->save();
 
-            if ($document) {
-                return response()->json(['status' => true, 'message' => 'Document uploaded successfully.']);
-            } else {
-                return response()->json(['status' => false, 'message' => 'Document not uploaded.']);
-            }
+    //         if ($document) {
+    //             return response()->json(['status' => true, 'message' => 'Document uploaded successfully.']);
+    //         } else {
+    //             return response()->json(['status' => false, 'message' => 'Document not uploaded.']);
+    //         }
 
-            // $upload_file = new Document();
-            // $upload_file->joborder_id = $request->joborder_id;
-            // $upload_file->company_id = $request->company_id;
-            // $upload_file->owner_id = Auth::user()->id;
-    
-            // if ($request->hasFile('document_file')) {
-            //     $file = $request->file('document_file');
-    
-            //     // Validate file type (you can customize the allowed types)
-            //     $allowedFileTypes = ['pdf', 'doc', 'docx', 'txt'];
-            //     $extension = $file->getClientOriginalExtension();
-    
-            //     if (!in_array($extension, $allowedFileTypes)) {
-            //         return response()->json(['status' => false, 'message' => 'Invalid file plase select this format pdf, doc, docx, txt.']);
-            //     }
-    
-            //     $originalFileName = $file->getClientOriginalName();
-    
-            //     // Store the file with a unique name
-            //     $name = time() . '-' . $originalFileName;
-            //     $file->storeAs('public/documents', $name);
-    
-            //     $upload_file->document_file = $name;
-            //     $upload_file->document_file = $originalFileName;
-            //     $upload_file->save();
-    
-            //     return response()->json(['status' => true, 'message' => 'Document uploaded successfully.']);
-            // } else {
-            //     return response()->json(['status' => false, 'message' => 'No file uploaded.']);
-            // }
+    //     } catch (\Exception $e) {
+    //         dd($e);
+    //         return response()->json(['status' => false, 'message' => 'Something went wrong.']);
+    //     }
+    // }
 
+    public function documentUpload(Request $request)
+{
+    try {
 
-            // $file = $request->file('document_file');
+        // dd($request->all());
+        $file = $request->file('document_file');
 
-            // $allowedFileTypes = ['pdf', 'doc', 'docx', 'txt'];
-            //     $extension = $file->getClientOriginalExtension();
-    
-            // if (!in_array($extension, $allowedFileTypes)) {
-            //     return response()->json(['status' => false, 'message' => 'Invalid file plase select this format pdf, doc, docx, txt.']);
-            // }
-            // // dd($request->all());
+        $allowedFileTypes = ['pdf', 'doc', 'docx', 'txt'];
+        $extension = $file->getClientOriginalExtension();
 
-            // $document = new Attachment();
-
-            // // Store information in the database columns
-            // $document->joborder_id = $request->joborder_id;
-            // $document->company_id = $request->company_id;
-            // $document->owner_id = Auth::user()->id;
-    
-            // $document->title = $file->getClientOriginalName();  // Original file name
-            // $document->original_filename = $file->getClientOriginalName(); 
-            // $request->file->move(public_path('documents'), $document->original_filename); // Original file name
-            // // $document->stored_filename = $file->store('documents');  // Storage path returned by store method
-            // $document->content_type = $file->getClientMimeType();  // MIME type of the file
-            // $document->file_size_kb = $file->getSize() / 1024; 
-        
-            // // Add other columns as needed
-        
-            // $document->save();
-
-            // if($document){
-            //     return response()->json(['status' => true, 'message' => 'Document uploaded successfully.']);
-            // }else{
-            //     return response()->json(['status' => false, 'message' => 'Document not upload.']);
-            // }
-        } catch (\Exception $e) {
-            dd($e);
-            return response()->json(['status' => false, 'message' => 'Something went wrong.']);
+        if (!in_array($extension, $allowedFileTypes)) {
+            return response()->json(['status' => false, 'message' => 'Invalid file. Please select a file with format pdf, doc, docx, or txt.']);
         }
+
+        // Ensure the destination directory exists
+        $destinationPath = public_path('documents');
+        if (!is_dir($destinationPath)) {
+            mkdir($destinationPath, 0755, true);
+        }
+
+        // Move and store the file in the 'documents' directory
+        $originalFileName = $file->getClientOriginalName();
+        $file->move($destinationPath, $originalFileName);
+
+        // Create a new Attachment model
+        $document = new Attachment([
+            'title' => $originalFileName,
+            'original_filename' => $originalFileName,
+            'content_type' => $file->getClientMimeType(),
+            'owner_id' => Auth::user()->id,
+        ]);
+
+       if($request->input('company_id')){
+           $attachableType = Company::class;
+           $attachableId = $request->input('company_id');
+       }elseif($request->input('joborder_id')){
+            $attachableType = JobOrder::class;
+            $attachableId = $request->input('joborder_id');
+       }elseif($request->input('contact_id')){
+            $attachableType = Contact::class;
+            $attachableId = $request->input('contact_id');
+       }else{
+            $attachableType = null;
+            $attachableId = null;
+       }
+              
+        $document->attachable_id = $attachableId;
+        $document->attachable_type = $attachableType;
+        $document->save();
+
+        if ($document) {
+            return response()->json(['status' => true, 'message' => 'Document uploaded successfully.']);
+        } else {
+            return response()->json(['status' => false, 'message' => 'Document not uploaded.']);
+        }
+    } catch (\Exception $e) {
+        return response()->json(['status' => false, 'message' => 'Something went wrong.']);
     }
+}
+
+// private function getAttachableType(Request $request)
+// {
+//     // dd($request->input('document_type'));
+//     switch ($request->input('document_type')) {
+//         case 'company_id':
+//             return Company::class;
+//         case 'joborder_id':
+//             return Joborder::class;
+//         case 'contact_id':
+//             return Contact::class;
+//         // Add more cases as needed
+//         default:
+//             return Company::class; // Default to Company if document_type is not specified or unknown
+//     }
+// }
+
+// private function getAttachableId(Request $request, $attachableType)
+// {
+//     $idField = strtolower(class_basename($attachableType)) . '_id';
+//     return $request->input($idField);
+// }
 
     public function documentDelete($id){
         $documentDelete = Attachment::find($id)->delete();

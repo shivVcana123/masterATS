@@ -23,4 +23,8 @@ class Contact extends Model
     {
         return $this->belongsTo(User::class, 'owner');
     }
+    public function attachments()
+    {
+        return $this->morphMany(Attachment::class, 'attachable');
+    }
 }

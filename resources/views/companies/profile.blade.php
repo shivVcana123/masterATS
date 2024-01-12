@@ -55,17 +55,17 @@
                         @foreach($companyDetails[0]['companyDepartment'] as $department)
                         <option value="{{$department->id}}">{{$department->name}}</option>
                         @endforeach -->
-                    </select>
-                    <!-- <select name="department_name" id="department_name"
+                </select>
+                <!-- <select name="department_name" id="department_name"
                         class="form-control">
                         @foreach($companyDetails[0]['companyDepartment'] as $department)
                         <option value="{{$department->id}}">{{$department->name}}</option>
                         @endforeach
                     </select> -->
-                    <!-- <span class="department_name_error errors"></span>
+                <!-- <span class="department_name_error errors"></span>
                 </div> -->
 
-                <div class="form-group">
+                <!-- <div class="form-group">
                     <label for="fax_number">Owner</label>
                     <select name="user_name" id="user_name" class="form-control">
                         @foreach($users as $user)
@@ -74,11 +74,21 @@
                         @endforeach
                     </select>
                     <span class="fax_number_error errors"></span>
+                </div> -->
+
+
+                <div class="form-group">
+                    <label for="notes">Misc. Notes</label>
+                    <input type="text" name="notes" id="notes" class="form-control"
+                        value="{{ $companyDetails[0]->notes }}">
+                    <span class="notes_error errors"></span>
                 </div>
+
 
                 <div class="form-group">
                     <label for="is_hot">Hot Company</label>
-                    <input type="checkbox" name="is_hot" id="is_hot" value="1" value="{{ $companyDetails[0]->is_hot }}">
+                    <input type="checkbox" name="is_hot" id="is_hot" value="1"
+                        {{($companyDetails[0]->is_hot == '1') ? 'checked' : ''}}>
                     <span class="is_hot_error errors"></span>
                 </div>
 
@@ -127,12 +137,6 @@
                 </div>
             </div>
 
-            <div class="form-group">
-                <label for="notes">Misc. Notes</label>
-                <input type="text" name="notes" id="notes" class="form-control" value="{{ $companyDetails[0]->notes }}">
-                <span class="notes_error errors"></span>
-            </div>
-
 
             <button type="button" id="updateCompany" class="btn btn-primary">Update Company</button>
         </div>
@@ -141,8 +145,21 @@
 @endsection
 <!-- <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" /> -->
 @push('scripts')
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<!-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> -->
 <script>
+//set the value of ckeditor
+CKEDITOR.replace('key_technologies');
+var editor_key = CKEDITOR.instances.key_technologies;
+var key_value = "{!! $companyDetails[0]->key_technologies !!}";
+editor_key.setData(key_value);
+
+// Set the value of CKEditor
+CKEDITOR.replace('notes');
+var editor_note = CKEDITOR.instances.notes;
+var newValue = "{!! $companyDetails[0]->notes !!}";
+editor_note.setData(newValue);
+
+
 $(document).ready(function() {
     $('#department_name').select2({
         placeholder: 'Please select a department',
@@ -184,8 +201,10 @@ $("#updateCompany").click(function() {
     var state = document.getElementById("state").value;
     var zip = document.getElementById("zip").value;
     var web_url = document.getElementById("web_url").value;
-    var key_technologies = document.getElementById("key_technologies").value;
-    var notes = document.getElementById("notes").value;
+    var is_hot = $("#is_hot").is(':checked') ? 1 : 0;
+    var key_technologies = editor_key.getData();
+    var notes = editor_note.getData();
+
 
     let errors = [];
     $(".errors").html("");
@@ -284,6 +303,7 @@ $("#updateCompany").click(function() {
         formData_submit.append("web_url", web_url.trim());
         formData_submit.append("key_technologies", key_technologies.trim());
         formData_submit.append("notes", notes.trim());
+        formData_submit.append("is_hot", is_hot);
 
         $.ajaxSetup({
             headers: {

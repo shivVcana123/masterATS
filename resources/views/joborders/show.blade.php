@@ -155,7 +155,7 @@
             <td valign="top" class="data">
                 <table class="attachmentsTable">
                     <tbody>
-                        @foreach($jobDetails[0]['documents'] as $value)
+                        @foreach($jobDetails[0]['attachments'] as $value)
                         <tr>
                             <td><a href="javascript:;" id="documentDownload"
                                     data-id="{{$value->id}}">{{$value->title}}</a></td>
@@ -233,7 +233,6 @@
 $(document).on('click', '#submit_file', function(e) {
     e.preventDefault();
     var joborder_id = $('#joborder_id').val();
-    var company_id = $('#company_id').val();
 
     const formData = new FormData();
     const fileInput = $('#document_file')[0];
@@ -244,7 +243,6 @@ $(document).on('click', '#submit_file', function(e) {
     if (fileInput.files.length > 0) {
         const file = fileInput.files[0];
         formData.append('joborder_id', joborder_id);
-        formData.append('company_id', company_id);
         formData.append('document_file', file);
     } else {
         errors.push('document_file');

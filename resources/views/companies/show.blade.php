@@ -94,7 +94,7 @@
                 <table class="detailsInside" height="100%">
                     <tbody>
                         <tr>
-                            <td class="vertical">Name:</td>
+                            <td class="vertical">Name</td>
                             <td class="data">
                                 <span class="jobTitleCold">{{ $companyDetails[0]->company_name }}</span>
                                 <a href="javascript:void(0);"></a>
@@ -102,24 +102,24 @@
                         </tr>
                         <!-- CONTACT INFO -->
                         <tr>
-                            <td class="vertical">Primary Phone:</td>
+                            <td class="vertical">Primary Phone</td>
                             <td class="data">{{ $companyDetails[0]->primary_phone }}</td>
                         </tr>
                         <tr>
-                            <td class="vertical">Secondary Phone:</td>
+                            <td class="vertical">Secondary Phone</td>
                             <td class="data">{{ $companyDetails[0]->secondary_phone }}</td>
                         </tr>
                         <tr>
-                            <td class="vertical">Fax Number:</td>
+                            <td class="vertical">Fax Number</td>
                             <td class="data">{{ $companyDetails[0]->fax_number }}</td>
                         </tr>
                         <tr>
-                            <td class="vertical">Address:</td>
-                            <td class="data">{{ $companyDetails[0]->address }}></a>
+                            <td class="vertical">Address</td>
+                            <td class="data">{{ $companyDetails[0]->address }}</a>
                             </td>
                         </tr>
                         <tr>
-                            <td class="vertical">&nbsp;</td>
+                            <td class="vertical">City</td>
                             <td class="data">
                                 {{ $companyDetails[0]->city }}</td>
                         </tr>
@@ -132,28 +132,29 @@
                     <!-- CONTACT INFO -->
                     <tbody>
                         <tr>
-                            <td class="vertical">Billing Contact:</td>
+                            <td class="vertical">Billing Contact</td>
                             <td class="data">
                                 {{ $companyDetails[0]->billing_contact }}
                             </td>
                         </tr>
                         <tr>
-                            <td class="vertical">Web Site:</td>
+                            <td class="vertical">Web Site</td>
                             <td class="data">
                                 <{{ $companyDetails[0]->web_url }} </td>
                         </tr>
                         <!-- /CONTACT INFO -->
                         <tr>
-                            <td class="vertical">Key Technologies:</td>
-                            <td class="data">{{ $companyDetails[0]->key_technologies }}</td>
+                            <td class="vertical">Key Technologies</td>
+                            <td class="data">&nbsp; {!! $companyDetails[0]->key_technologies !!}</td>
                         </tr>
                         <tr>
-                            <td class="vertical">Created:</td>
-                            <td class="data">{{ $companyDetails[0]->created_at }}</td>
+                            <td class="vertical">Created</td>
+                            
+                            <td class="data">{{date("d-m-Y (h:i A)", strtotime($companyDetails[0]->created_at))}}</td>
                         </tr>
                         <tr>
-                            <td class="vertical">Owner:</td>
-                            <td class="data">{{ $companyDetails[0]->owner }}</td>
+                            <td class="vertical">Owner</td>
+                            <td class="data">{{$companyDetails[0]['ownerUser']->user_name }}</td>
                         </tr>
                         <tr>
                             <td class="vertical">&nbsp;</td>
@@ -170,26 +171,30 @@
 <table class="detailsInside">
     <tbody>
         <tr>
-            <td valign="top" class="vertical">Attachments:</td>
+            <td valign="top" class="vertical">Attachments</td>
             <td valign="top" class="data">
                 <table class="attachmentsTable">
                     <tbody>
-                       @foreach($companyDetails[0]['jobDetails'][0]['documents'] as $details)
-                       <tr>
-                           <td><a href="javascript:;" id="documentDownload" data-id="{{$details->id}}">{{$details->original_filename}}</a></td>
-                           <td>&nbsp; &nbsp;{{date("d/m/Y (h:i A)", strtotime($details->date_created))}}</td>
-                           <td>&nbsp; &nbsp;<i class="fa fa-trash" id="document_delete_id" data-value="{{$details->id}}"></i></td>
+                   
+                        @foreach($attachments as $details)
+                        <tr>
+                            <td><a href="javascript:;" id="documentDownload"
+                                    data-id="{{$details->id}}">{{$details->original_filename}}</a></td>
+                            <td>&nbsp; &nbsp;{{date("d-m-Y (h:i A)", strtotime($details->date_created))}}</td>
+                            <td>&nbsp; &nbsp;<i class="fa fa-trash" id="document_delete_id"
+                                    data-value="{{$details->id}}"></i></td>
                         </tr>
                         @endforeach
-
+                      
                     </tbody>
+
                 </table><br>
                 <form id="document_form" enctype="multipart/form-data" method="POST" style="margin-left: -101px;">
 
                     <!-- <input type="text" name="joborder_id" id="joborder_id" value="{{$companyDetails[0]->id}}"> -->
                     <input type="hidden" name="company_id" id="company_id" value="{{$companyDetails[0]->id}}">
 
-                    <label for="document_file"> Add Attachment:</label>&nbsp;
+                    <label for="document_file"> Add Attachment</label>&nbsp;
                     <input type="file" name="document_file" id="document_file" accept=".pdf, .doc, .docx, .txt">
                     <button type="button" class="btn btn-sm btn-primary" id="submit_file">Submit</button>
                     <br><span class="document_file_error errors"></span>
@@ -226,7 +231,8 @@
                 </tr>
             </thead>
             <tbody id="container" class="no-border-x no-border-y ui-sortable">
-
+                @if(isset($companyDetails[0]['jobDetails']) &&
+                !empty($companyDetails[0]['jobDetails']))
                 @foreach($companyDetails[0]['jobDetails'] as $key => $details)
                 <tr>
                     <td>{{$details->id}}</td>
@@ -253,12 +259,12 @@
                         @endswitch
                     </td>
                     <td>{{$details->status}}</td>
-                    <td>{{$details->date_created}}</td>
-                    <td>{{$details->date_modified}}</td>
-                    <td>{{$details->start_date}}</td>
+                    <td>{{date("d-m-Y", strtotime($details->date_created))}}</td>
+                    <td>{{date("d-m-Y", strtotime($details->date_modified))}}</td>
+                    <td>{{date("d-m-Y", strtotime($details->start_date))}}</td>
                     <td>{{ isset($details->ageDays) ? number_format(intval($details->ageDays)) : '' }}</td>
 
-                    <td>{{$details->title}}</td>
+                    <td>{{$details->end_date}}</td>
                     <td>{{$details->p}} </td>
                     <td>{{$details['recruiterUser']->user_name}}</td>
                     <td>{{$details['ownerUser']->user_name}} </td>
@@ -267,6 +273,9 @@
                     </td>
                 </tr>
                 @endforeach
+                @else
+                <td colspan="12">No job order available.</td>
+                @endif
             </tbody>
         </table>
         <i class="fa fa-plus"></i><a href="{{ url('/joborders/create', ['company_id' => $companyDetails[0]->id]) }}">
@@ -296,6 +305,8 @@
                 </tr>
             </thead>
             <tbody id="container" class="no-border-x no-border-y ui-sortable">
+                @if(isset($companyDetails[0]['jobDetails'][0]['contacts']) &&
+                !empty($companyDetails[0]['jobDetails'][0]['contacts']))
                 @foreach($companyDetails[0]['jobDetails'][0]['contacts'] as $detailss)
                 <tr>
                     <td>{{$detailss->id}}</td>
@@ -305,13 +316,16 @@
                     <td>{{$detailss->company_department_id}}</td>
                     <td>{{$detailss->phone_work}}</td>
                     <td>{{$detailss->phone_cell}}</td>
-                    <td>{{$detailss->date_created}}</td>
-                    <td>{{$details->user_name}} </td>
+                    <td>{{date("d-m-Y", strtotime($details->date_created))}}</td>
+                    <td>{{$details['ownerUser']->user_name}} </td>
                     <td>
                         <a href="{{url('/contacts/'.$details->id.'/edit')}}"><i class="fa fa-pencil"></i></a>
                     </td>
                 </tr>
                 @endforeach
+                @else
+                <td colspan="12">No contacts available.</td>
+                @endif
             </tbody>
         </table>
         <i class="fa fa-plus"></i><a href="{{ url('/contacts/create', ['company_id' => $companyDetails[0]->id]) }}">Add
@@ -426,9 +440,7 @@ $(document).on('click', '#documentDownload', function() {
     var documentDownload = $(this).data('id');
 
     var url = '/document/download/' + documentDownload;
-    window.open(url, '_blank');  // Open the download link in a new tab
+    window.open(url, '_blank'); // Open the download link in a new tab
 });
-
-
 </script>
 @endpush

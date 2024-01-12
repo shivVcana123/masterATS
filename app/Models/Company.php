@@ -25,5 +25,18 @@ class Company extends Model
     {
         return $this->hasMany(CompanyDepartment::class,'company_id', 'id');
     }
-  
+    public function ownerUser()
+    {
+        return $this->belongsTo(User::class, 'owner');
+    }
+
+    public function recruiterUser()
+    {
+        return $this->belongsTo(User::class, 'recruiter');
+    }
+
+    public function attachments()
+    {
+        return $this->morphMany(Attachment::class, 'attachable');
+    }
 }
