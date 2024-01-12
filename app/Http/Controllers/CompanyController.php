@@ -84,18 +84,15 @@ class CompanyController extends Controller
 
     public  function profiledetails($id){
 
-      $ageDays = '';
+      $ageDays = [];
       $currentDate = new DateTime();
-
-      // $companyDetails = Company::with('jobDetails.candidateJoborder','jobDetails','jobDetails.contacts','jobDetails.ownerUser','jobDetails.recruiterUser','jobDetails.documents','ownerUser')->where('id',$id)->get();
-      $companyDetails = Company::with('jobDetails.candidateJoborder','jobDetails','jobDetails.contacts','jobDetails.ownerUser','jobDetails.recruiterUser','ownerUser')->where('id',$id)->get();
+      
+      $companyDetails = Company::with('jobDetails.candidateJoborder','jobDetails','contacts','jobDetails.ownerUser','jobDetails.recruiterUser','ownerUser')->where('id',$id)->get();
 
       $attachments = Attachment::with('attachable')
       ->where('attachable_id',$id)
       ->where('attachable_type', Company::class)
       ->get();
-      // dd($attachments);
-
       // Initialize $key before the loop
       $key = null;
 

@@ -236,7 +236,9 @@
 <script>
 $(document).on('click', '#add_jobOrder_btn', function(e) {
     e.preventDefault(); // Prevent the default form submission
-
+    var companyId = '';
+    var companyId = <?php echo json_encode($company_id); ?>;
+   
     var is_hot = $('#is_hot').is(':checked') ? 1 : 0
     var is_public = $('#public').is(':checked') ? 1 : 0
 
@@ -298,7 +300,11 @@ $(document).on('click', '#add_jobOrder_btn', function(e) {
                 icon: title,
             }).then(function(result) {
                 if (result.isConfirmed && response.status) {
-                    window.location.href = "{{route('joborders.index')}}";
+                    if(companyId){
+                        window.location.href ="{{ route('companies.details')}}"+'/'+companyId
+                    }else{
+                        window.location.href = "{{route('joborders.index')}}";
+                    }
                 }
             });
         },
@@ -375,21 +381,47 @@ document.getElementById("start_date").addEventListener("change", calculateDurati
 document.getElementById("end_date").addEventListener("change", calculateDuration);
 
 
-$(document).on('click', '#checkbox_company_value', function() {
-    // Get the Select2 instance for the company_id dropdown
-    var companySelect = $('#company_id').select2();
+$(document).on('change', '#checkbox_company_value', function() {
+    var companySelect = $('#company_id');
 
-    // Check if the checkbox is checked
     if ($(this).prop('checked')) {
-        companySelect.empty();
-        companySelect.append('<option value="0">Internal Postings</option>').trigger('change');
-        companySelect.prop('disabled', true);
+        // Checkbox is checked, show "Internal Contact" option in the dropdown
+        companySelect.append('<option value="0">Internal Contact</option>');
+        companySelect.val('0').trigger('change');
     } else {
-        $('#company_id option[value="0"]').remove();
-        $(this).prop('disabled', false);
-        companySelect.prop('disabled', false);
-        companySelect.select2();
+        // Checkbox is unchecked, remove the "Internal Contact" option
+        companySelect.find('option[value="0"]').remove();
+        companySelect.trigger('change');
     }
+
+    // Enable/disable the dropdown based on checkbox state
+    companySelect.prop('disabled', $(this).prop('checked'));
 });
+
+// Function to fetch company data (replace this with your actual fetching logic)
+function fetchCompanyData() {
+    // Example: assuming an AJAX call to fetch company data
+    $.ajax({
+        url: '/fetch/company/data', // Replace with your actual route
+        method: 'GET',
+        success: function(response) {
+            if (response.status) {
+                // Update the company_id dropdown options based on the fetched data
+                companySelect.empty();
+                companySelect.append('<option selected disabled>Select Company</option>');
+                $.each(response.data, function(index, company) {
+                    companySelect.append('<option value="' + company.id + '">' +
+                        company.company_name + '</option>');
+                });
+                companySelect.trigger('change');
+            } else {
+                console.error('Error fetching company data:', response.message);
+            }
+        },
+        error: function(error) {
+            console.error('Error fetching company data:', error);
+        }
+    });
+}
 </script>
 @endpush

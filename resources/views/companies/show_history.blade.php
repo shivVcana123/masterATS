@@ -91,18 +91,18 @@
                         <tr>
                             <td class="vertical">dateCreated:</td>
                             <td class="data">
-                                <a href="javascript"> {{$companyHistory[0]->created_at}}</a>
+                                <a href="javascript">{{date("d-m-Y", strtotime($companyHistory[0]->created_at))}}</a>
                             </td>
                         </tr>
                         <tr>
                             <td class="vertical">ownerFullName:</td>
                             <td class="data">
-                                <a href="javascript:;"> {{$companyHistory[0]->owner}}</a>
+                                <a href="javascript:;"> {{$companyHistory[0]['ownerUser']->first_name}} {{$companyHistory[0]['ownerUser']->last_name}}</a>
                             </td>
                         </tr>
                         <tr>
                             <td class="vertical"> owner:</td>
-                            <td class="data"> {{$companyHistory[0]->owner}}</td>
+                            <td class="data"> {{$companyHistory[0]['ownerUser']->user_name}}</td>
                         </tr>
                         <tr>
                             <td class="vertical"> isHot</td>

@@ -89,6 +89,7 @@ form.example button {
                             <tr>
                                 <th>Name</th>
                                 <th>Jobs</th>
+                                <th>Address</th>
                                 <th>City</th>
                                 <th>State</th>
                                 <th>Phone</th>
@@ -102,13 +103,14 @@ form.example button {
                                 <td><a href="{{route('companies.details',$data->id )}}">{{ $data->company_name }}</a>
                                 </td>
                                 <td>{{$data['jobDetails']->count() }} </td>
+                                <td>{{ $data->address }}</td>
                                 <td>{{ $data->city }}</td>
                                 <td>{{ $data->state }}</td>
                                 <td>{{ $data->primary_phone }}</td>
 
                                 <td>{{$data['ownerUser']->user_name}}</td>
-                                <td>{{ $data->created_at }}</td>
-                                <td>{{ $data->updated_at }}</td>
+                                <td>{{date("d-m-Y", strtotime($data->created_at))}}</td>
+                                <td>{{date("d-m-Y", strtotime($data->updated_at))}}</td>
                                 <td>
                                     <a href="{{route('companies.details',$data->id )}}"><i class="fa fa-eye"></i></a>
                                     <a href="{{ url('/companies/update',$data->id )}}"><i class="fa fa-pencil"></i></a>
@@ -154,7 +156,7 @@ $('#companiesDelete').click(function() {
         showCancelButton: true,
         confirmButtonColor: '#d33',
         cancelButtonColor: '#3085d6',
-        confirmButtonText: 'Yes, delete it!'
+        confirmButtonText: 'Yes'
     }).then((result) => {
         if (result.isConfirmed) {
             // If the user confirms, trigger the deletion

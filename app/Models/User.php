@@ -22,7 +22,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password','type'
+        'id', 'site_id', 'user_name', 'email', 'password', 'access_level', 'can_change_password', 'is_test_user', 'last_name', 'first_name', 'is_demo', 'categories', 'session_cookie', 'pipeline_entries_per_page', 'column_preferences', 'force_logout', 'title', 'phone_work', 'phone_cell', 'phone_other', 'address', 'notes', 'company', 'city', 'state', 'zip_code', 'country', 'can_see_eeo_info'
     ];
 
     /**

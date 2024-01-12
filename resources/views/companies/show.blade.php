@@ -149,7 +149,7 @@
                         </tr>
                         <tr>
                             <td class="vertical">Created</td>
-                            
+
                             <td class="data">{{date("d-m-Y (h:i A)", strtotime($companyDetails[0]->created_at))}}</td>
                         </tr>
                         <tr>
@@ -175,7 +175,7 @@
             <td valign="top" class="data">
                 <table class="attachmentsTable">
                     <tbody>
-                   
+
                         @foreach($attachments as $details)
                         <tr>
                             <td><a href="javascript:;" id="documentDownload"
@@ -185,7 +185,7 @@
                                     data-value="{{$details->id}}"></i></td>
                         </tr>
                         @endforeach
-                      
+
                     </tbody>
 
                 </table><br>
@@ -231,8 +231,7 @@
                 </tr>
             </thead>
             <tbody id="container" class="no-border-x no-border-y ui-sortable">
-                @if(isset($companyDetails[0]['jobDetails']) &&
-                !empty($companyDetails[0]['jobDetails']))
+            @if(count($companyDetails[0]['jobDetails']) > 0)
                 @foreach($companyDetails[0]['jobDetails'] as $key => $details)
                 <tr>
                     <td>{{$details->id}}</td>
@@ -296,7 +295,7 @@
                     <th>First Name </th>
                     <th>Last Name</th>
                     <th>Title</th>
-                    <th>Department</th>
+                    <!-- <th>Department</th> -->
                     <th>Work Phone</th>
                     <th>Cell Phone</th>
                     <th>Created</th>
@@ -305,21 +304,20 @@
                 </tr>
             </thead>
             <tbody id="container" class="no-border-x no-border-y ui-sortable">
-                @if(isset($companyDetails[0]['jobDetails'][0]['contacts']) &&
-                !empty($companyDetails[0]['jobDetails'][0]['contacts']))
-                @foreach($companyDetails[0]['jobDetails'][0]['contacts'] as $detailss)
+                @if(count($companyDetails[0]['contacts']) > 0)
+                @foreach($companyDetails[0]['contacts'] as $detailss)
                 <tr>
                     <td>{{$detailss->id}}</td>
                     <td><a href="{{url('contacts',$detailss->id)}}">{{$detailss->first_name}}</a></td>
                     <td><a href="{{url('contacts',$detailss->id)}}">{{$detailss->last_name}}</a></td>
                     <td>{{$detailss->title}}</td>
-                    <td>{{$detailss->company_department_id}}</td>
+                    <!-- <td>{{$detailss->company_department_id}}</td> -->
                     <td>{{$detailss->phone_work}}</td>
                     <td>{{$detailss->phone_cell}}</td>
                     <td>{{date("d-m-Y", strtotime($details->date_created))}}</td>
                     <td>{{$details['ownerUser']->user_name}} </td>
                     <td>
-                        <a href="{{url('/contacts/'.$details->id.'/edit')}}"><i class="fa fa-pencil"></i></a>
+                        <a href="{{url('/contacts/'.$detailss->id.'/edit')}}"><i class="fa fa-pencil"></i></a>
                     </td>
                 </tr>
                 @endforeach

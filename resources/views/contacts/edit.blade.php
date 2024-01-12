@@ -144,7 +144,8 @@
 <script>
 $("#update_btn").click(function() {
 
- 
+ var company_id = '';
+ var company_id = <?php echo json_encode($contactEditDetails->company_id); ?>
 
     const formData = new FormData();
     const fields = [
@@ -200,7 +201,12 @@ $("#update_btn").click(function() {
                 icon: title,
             }).then(function(result) {
                 if (result.isConfirmed && response.status) {
-                    window.location.href = "{{route('contacts.index')}}";
+                    if(company_id){
+                        window.location.href = "{{route('companies.details')}}"+'/'+company_id;
+                    }else{
+                        window.location.href = "{{route('contacts.index')}}";
+                    }
+                    
                 }
             });
         },

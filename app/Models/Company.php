@@ -39,4 +39,8 @@ class Company extends Model
     {
         return $this->morphMany(Attachment::class, 'attachable');
     }
+    public function contacts()
+    {
+        return $this->hasMany(Contact::class,'company_id','id');
+    }
 }

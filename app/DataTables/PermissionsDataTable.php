@@ -106,7 +106,7 @@ class PermissionsDataTable extends DataTable
         return [
 
             Column::make('id'),
-            Column::make('name'),
+            Column::make('user_name'),
             Column::computed('action')
                 ->exportable(false)
                 ->printable(false)

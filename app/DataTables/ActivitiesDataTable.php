@@ -117,7 +117,7 @@ class UsersDataTable extends DataTable
         return [
 
             Column::make('id'),
-            Column::make('name'),
+            Column::make('user_name'),
             Column::make('email'),
             Column::make('role')->searchable(false)->orderable(false),
             Column::make('created_at'),

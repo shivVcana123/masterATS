@@ -49,11 +49,11 @@
                     </div>
                 </div>
 
-                <div class="form-group">
+                <!-- <div class="form-group">
                     <label for="company_department_id">Departments</label>
                     <input type="text" name="company_department_id" id="company_department_id" class="form-control">
                     <span class="company_department_id_error errors"></span>
-                </div>
+                </div> -->
 
                 <div class="form-group">
                     <label for="phone_work">Work Phone:</label>
@@ -151,22 +151,48 @@ $(document).ready(function() {
 
 });
 
-$(document).on('click', '#checkbox_company_value', function() {
-    // Get the Select2 instance for the company_id dropdown
-    var companySelect = $('#company_id').select2();
-
-    // Check if the checkbox is checked
+$(document).on('change', '#checkbox_company_value', function() {
+    var companySelect = $('#company_id');
+    
     if ($(this).prop('checked')) {
-        companySelect.empty();
-        companySelect.append('<option value="0">Internal Postings</option>').trigger('change');
-        companySelect.prop('disabled', true);
+        // Checkbox is checked, show "Internal Contact" option in the dropdown
+        companySelect.append('<option value="0">Internal Contact</option>');
+        companySelect.val('0').trigger('change');
     } else {
-        $('#company_id option[value="0"]').remove();
-        $(this).prop('disabled', false);
-        companySelect.prop('disabled', false);
-        companySelect.select2();
+        // Checkbox is unchecked, remove the "Internal Contact" option
+        companySelect.find('option[value="0"]').remove();
+        companySelect.trigger('change');
     }
+
+    // Enable/disable the dropdown based on checkbox state
+    companySelect.prop('disabled', $(this).prop('checked'));
 });
+
+// Function to fetch company data (replace this with your actual fetching logic)
+function fetchCompanyData() {
+    // Example: assuming an AJAX call to fetch company data
+    $.ajax({
+        url: '/fetch/company/data', // Replace with your actual route
+        method: 'GET',
+        success: function(response) {
+            if (response.status) {
+                // Update the company_id dropdown options based on the fetched data
+                companySelect.empty();
+                companySelect.append('<option selected disabled>Select Company</option>');
+                $.each(response.data, function(index, company) {
+                    companySelect.append('<option value="' + company.id + '">' +
+                        company.company_name + '</option>');
+                });
+                companySelect.trigger('change');
+            } else {
+                console.error('Error fetching company data:', response.message);
+            }
+        },
+        error: function(error) {
+            console.error('Error fetching company data:', error);
+        }
+    });
+}
 
 
 
@@ -216,13 +242,15 @@ $(document).ready(function() {
 
 
 
-$("#addNewContact").click(function() {
+$(document).on('click','#addNewContact',function() {
+    var companyId = '';
+    var companyId = <?php echo json_encode($company_id); ?>;
 
     const formData = new FormData();
     const fields = [
         'company_id', 'last_name', 'first_name', 'title', 'email1', 'email2', 'phone_work',
         'phone_cell', 'phone_other', 'address', 'city', 'state', 'zip', 'is_hot', 'notes',
-        'company_department_id', 'reports_to'
+        
     ];
 
     let errors = [];
@@ -272,7 +300,11 @@ $("#addNewContact").click(function() {
                 icon: title,
             }).then(function(result) {
                 if (result.isConfirmed && response.status) {
-                    window.location.href = "{{route('contacts.index')}}";
+                    if(companyId){
+                        window.location.href ="{{ route('companies.details')}}"+'/'+companyId
+                    }else{
+                        window.location.href = "{{route('contacts.index')}}";
+                    }
                 }
             });
         },

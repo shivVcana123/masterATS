@@ -63,7 +63,8 @@
 
                                 <div class="form-group">
                                     <label for="client_job_id">Client Job ID</label>
-                                    <input type="text" name="client_job_id" id="client_job_id" class="form-control">
+                                    <input type="text" name="client_job_id" id="client_job_id" class="form-control"
+                                        value="{{$jobDetails[0]->client_job_id}}">
                                     <span class="client_job_id_error errors"></span>
                                 </div>
 
@@ -314,6 +315,8 @@
 <script>
 $(document).on('click', '#update_jobOrder_btn', function(e) {
     e.preventDefault(); // Prevent the default form submission
+    var companyId = '';
+    var companyId = <?php echo json_encode($jobDetails[0]->company_id); ?>;
 
     const formData = new FormData();
     const fields = [
@@ -370,7 +373,12 @@ $(document).on('click', '#update_jobOrder_btn', function(e) {
                 icon: title,
             }).then(function(result) {
                 if (result.isConfirmed && response.status) {
-                    window.location.href = "{{route('joborders.index')}}";
+                    if(companyId){
+                        window.location.href = "{{route('companies.details')}}"+'/'+companyId;
+                    }else{
+                        window.location.href = "{{route('joborders.index')}}";
+                    }
+                   
                 }
             });
         },
