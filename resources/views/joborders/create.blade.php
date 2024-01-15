@@ -16,17 +16,6 @@
                     <span class="title_error errors"></span>
                 </div>
 
-                <!-- <div class="form-group">
-                    <label for="company_id">Company Id</label>
-                    <input type="text" name="company_id" id="company_id" class="form-control">
-                    <span class="company_id_error errors"></span>
-                </div> -->
-                <div class="form-group">
-                    <label for="client_job_id">Client Job ID</label>
-                    <input type="text" name="client_job_id" id="client_job_id" class="form-control">
-                    <span class="client_job_id_error errors"></span>
-                </div>
-
                 <div class="form-group">
                     <label for="company_id">Company</label>
                     <div class="row company-area" style="display: flex; align-items: center;">
@@ -52,6 +41,11 @@
                         </div>
                         @endif
                     </div>
+                </div>
+                <div class="form-group">
+                    <label for="client_job_id">Client Job ID</label>
+                    <input type="text" name="client_job_id" id="client_job_id" class="form-control">
+                    <span class="client_job_id_error errors"></span>
                 </div>
 
 
@@ -131,6 +125,12 @@
                     <label for="actual_rate">Actual Rate</label>
                     <input type="text" name="actual_rate" id="actual_rate" class="form-control">
                     <span class="actual_rate_error errors"></span>
+                </div>
+
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <input type="text" name="description" id="description" class="form-control">
+                    <span class="description_error errors"></span>
                 </div>
 
             </div>
@@ -214,19 +214,15 @@
                     <input type="checkbox" name="public" id="public" value="1">
                     <span class="public_error errors"></span>
                 </div>
+                
+                <div class="form-group">
+                    <label for="notes">Notes</label>
+                    <input type="text" name="notes" id="notes" class="form-control">
+                    <span class="notes_error errors"></span>
+                </div>
             </div>
 
-            <div class="form-group">
-                <label for="description">Description</label>
-                <input type="text" name="description" id="description" class="form-control">
-                <span class="description_error errors"></span>
-            </div>
 
-            <div class="form-group">
-                <label for="notes">Notes</label>
-                <input type="text" name="notes" id="notes" class="form-control">
-                <span class="notes_error errors"></span>
-            </div>
             <button type="button" class="btn btn-primary" id="add_jobOrder_btn">Create Job Order
             </button>
     </form>
@@ -234,13 +230,24 @@
 @endsection
 @push('scripts')
 <script>
+CKEDITOR.replace('description');
+var editor_description = CKEDITOR.instances.description;
+
+CKEDITOR.replace('notes');
+var editor_notes = CKEDITOR.instances.notes;
+
+
 $(document).on('click', '#add_jobOrder_btn', function(e) {
     e.preventDefault(); // Prevent the default form submission
     var companyId = '';
     var companyId = <?php echo json_encode($company_id); ?>;
-   
+
     var is_hot = $('#is_hot').is(':checked') ? 1 : 0
     var is_public = $('#public').is(':checked') ? 1 : 0
+
+    var description = editor_description.getData();
+    var notes = editor_notes.getData();
+   
 
     const formData = new FormData();
     const fields = [
@@ -255,6 +262,8 @@ $(document).on('click', '#add_jobOrder_btn', function(e) {
 
     formData.append('is_hot', is_hot);
     formData.append('is_public', is_public);
+    formData.append('description', description);
+    formData.append('notes', notes);
     let errors = [];
 
     $(".errors").html("");
@@ -300,9 +309,10 @@ $(document).on('click', '#add_jobOrder_btn', function(e) {
                 icon: title,
             }).then(function(result) {
                 if (result.isConfirmed && response.status) {
-                    if(companyId){
-                        window.location.href ="{{ route('companies.details')}}"+'/'+companyId
-                    }else{
+                    if (companyId) {
+                        window.location.href = "{{ route('companies.details')}}" + '/' +
+                            companyId
+                    } else {
                         window.location.href = "{{route('joborders.index')}}";
                     }
                 }

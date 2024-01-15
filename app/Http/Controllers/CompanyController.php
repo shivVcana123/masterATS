@@ -15,6 +15,7 @@ use Illuminate\Support\Facades\Hash;
 use File;
 use Illuminate\Support\Facades\Auth;
 use Laracasts\Flash\Flash;
+use Symfony\Component\Console\Input\Input;
 
 class CompanyController extends Controller
 {
@@ -67,6 +68,12 @@ class CompanyController extends Controller
         'notes' => 'required',
         'fax_number' => 'required',
     ]);
+
+
+    $existMail = Company::where('email', '=', $request->email)->first();
+      if ($existMail) {
+        return response()->json(['status' => false,'message' => 'This email already exits with us.']);
+      }
 
     $data = array_merge($request->all(),[
       'owner' => Auth::user()->id,

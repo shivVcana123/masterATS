@@ -27,19 +27,22 @@
 
                 <div class="form-group">
                     <label for="primary_phone">Primary Phone</label>
-                    <input type="text" name="primary_phone" id="primary_phone" class="form-control">
+                    <input type="text" name="primary_phone" id="primary_phone" class="form-control"
+                        onkeypress="return (event.charCode !=8 && event.charCode ==0 || ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57)))">
                     <span class="primary_phone_error errors"></span>
                 </div>
 
                 <div class="form-group">
                     <label for="secondary_phone">Secondary Phone</label>
-                    <input type="text" name="secondary_phone" id="secondary_phone" class="form-control">
+                    <input type="text" name="secondary_phone" id="secondary_phone" class="form-control"
+                        onkeypress="return (event.charCode !=8 && event.charCode ==0 || ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57)))">
                     <span class="secondary_phone_error errors"></span>
                 </div>
 
                 <div class="form-group">
                     <label for="fax_number">Fax Number</label>
-                    <input type="text" name="fax_number" id="fax_number" class="form-control">
+                    <input type="text" name="fax_number" id="fax_number" class="form-control"
+                        onkeypress="return (event.charCode !=8 && event.charCode ==0 || ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57)))">
                     <span class="fax_number_error errors"></span>
                 </div>
                 <div class="form-group">
@@ -82,7 +85,7 @@
                 <div class="form-group">
                     <label for="web_url">Web Site</label>
                     <input type="text" name="web_url" id="web_url" class="form-control">
-                    <span class="web_url_error errors"></span>
+                    <span class="web_url_error web_url_invalid_error errors"></span>
                 </div>
                 <div class="form-group">
                     <label for="key_technologies">Key Technologies</label>
@@ -185,7 +188,13 @@ $("#addNewCompany").click(function() {
         errors.push("web_url");
         $(".web_url_error").html("web url field can't be empty.");
     }
-
+    // if (/^(http:\/\/www\.|https:\/\/www\.)[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}(:[0-9]{1,5})?(\/.*)?$/
+    //     .test(web_url)) {
+    //    return true;
+    // } else {
+    //     errors.push("web_url");
+    //     $(".web_url_invalid_error").html("web url is invalid.");
+    // }
     if (key_technologies === "") {
         errors.push("key_technologies");
         $(".key_technologies_error").html(

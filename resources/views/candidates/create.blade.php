@@ -16,166 +16,179 @@
                 <div class="card-header">
                     <h5>{{ __('Add Candidate') }}</h5>
                 </div>
-                {!! Form::open(['route' => 'candidates.store', 'method' => 'POST']) !!}
-                <div class="card-body col-md-12">
 
-                    {!! Form::hidden('job_id', $job_id, ['placeholder' => __('First Name'), 'class' =>
+                <form method="POST">
+                    <div class="card-body col-md-12">
+
+                        {!! Form::hidden('job_id', $job_id, ['placeholder' => __('First Name'), 'class' =>
                         'form-control','id' => 'job_id']) !!}
 
-                    <div class="form-group col-md-6" style="float:left" ;>
-                        {{ Form::label('first_name', __('First Name'),['class' => 'col-form-label']) }}
-                        {!! Form::text('first_name', null, ['placeholder' => __('First Name'), 'class' =>
-                        'form-control','id' => 'first_name']) !!}
-                        <span class="first_name_error errors"></span>
+                        <div class="form-group col-md-6" style="float:left" ;>
+                            {{ Form::label('first_name', __('First Name'),['class' => 'col-form-label']) }}
+                            {!! Form::text('first_name', null, ['placeholder' => __('First Name'), 'class' =>
+                            'form-control','id' => 'first_name']) !!}
+                            <span class="first_name_error errors"></span>
+                        </div>
+                        <div class="form-group col-md-6" style="float:right" ;>
+                            {{ Form::label('middle_name', __('Middle Name'),['class' => 'col-form-label']) }}
+                            {!! Form::text('middle_name', null, ['placeholder' => __('Middle Name'), 'class' =>
+                            'form-control','id' => 'middle_name']) !!}
+                            <span class="middle_name_error errors"></span>
+                        </div>
+
+                        <div class="form-group col-md-6" style="float:left" ;>
+                            {{ Form::label('last_name', __('Last Name'),['class' => 'col-form-label']) }}
+                            {!! Form::text('last_name', null, ['placeholder' => __('Last Name'), 'class' =>
+                            'form-control','id' => 'last_name']) !!}
+                            <span class="last_name_error errors"></span>
+                        </div>
+                        <div class="form-group col-md-6" style="float:right" ;>
+                            {{ Form::label('email1', __('Email'),['class' => 'col-form-label']) }}
+                            {!! Form::text('email1', null, ['placeholder' => __('Email'), 'class' => 'form-control','id'
+                            =>
+                            'email1']) !!}
+                            <span class="email1_error errors"></span>
+                            <span class="email_notvalid_address_error errors"></span>
+                        </div>
+                        <div class="form-group col-md-6" style="float:left" ;>
+                            {{ Form::label('email2', __('2Email'),['class' => 'col-form-label']) }}
+                            {!! Form::text('email2', null, ['placeholder' => __('2Email'), 'class' =>
+                            'form-control','id' =>
+                            'email2']) !!}
+                            <span class="email2_error errors"></span>
+                            <span class="email2_notvalid_address_error errors"></span>
+                        </div>
+                        <div class="form-group col-md-6" style="float:right" ;>
+                            {{ Form::label('web_site', __('Website'),['class' => 'col-form-label']) }}
+                            {!! Form::text('web_site', null, ['placeholder' => __('Website'), 'class' =>
+                            'form-control','id'
+                            => 'web_site']) !!}
+                            <span class="web_site_error errors"></span>
+                        </div>
+                        <div class="form-group col-md-6" style="float:left" ;>
+                            {{ Form::label('phone_home', __('Home Phone'),['class' => 'col-form-label']) }}
+                            {!! Form::text('phone_home', null, ['placeholder' => __('Home Phone'), 'class' =>
+                            'form-control','id' => 'phone_home']) !!}
+                            <span class="phone_home_error errors"></span>
+                        </div>
+                        <div class="form-group col-md-6" style="float:right" ;>
+                            {{ Form::label('phone_cell', __('Cell Phone'),['class' => 'col-form-label']) }}
+                            {!! Form::text('phone_cell', null, ['placeholder' => __('Cell Phone'), 'class' =>
+                            'form-control','id' => 'phone_cell']) !!}
+                            <span class="phone_cell_error errors"></span>
+                        </div>
+                        <div class="form-group col-md-6" style="float:left" ;>
+                            {{ Form::label('phone_work', __('Work Phone'),['class' => 'col-form-label']) }}
+                            {!! Form::text('phone_work', null, ['placeholder' => __('Work Phone'), 'class' =>
+                            'form-control','id' => 'phone_work']) !!}
+                            <span class="phone_work_error errors"></span>
+                        </div>
+                        <div class="form-group col-md-6" style="float:right" ;>
+                            {{ Form::label('address', __('Address'),['class' => 'col-form-label']) }}
+                            {!! Form::text('address', null, ['placeholder' => __('Address'), 'class' =>
+                            'form-control','id'
+                            => 'address']) !!}
+                            <span class="address_error errors"></span>
+                        </div>
+                        <div class="form-group col-md-6" style="float:left" ;>
+                            {{ Form::label('city', __('City'),['class' => 'col-form-label']) }}
+                            {!! Form::text('city', null, ['placeholder' => __('City'), 'class' => 'form-control','id' =>
+                            'city']) !!}
+                            <span class="city_error errors"></span>
+                        </div>
+                        <div class="form-group col-md-6" style="float:right" ;>
+                            {{ Form::label('state', __('State'),['class' => 'col-form-label']) }}
+                            {!! Form::text('state', null, ['placeholder' => __('State'), 'class' =>
+                            'form-control','state'
+                            =>'state']) !!}
+                            <span class="state_error errors"></span>
+                        </div>
+                        <div class="form-group col-md-6" style="float:left" ;>
+                            {{ Form::label('zip', __('Postel Code'),['class' => 'col-form-label']) }}
+                            {!! Form::text('zip', null, ['placeholder' => __('Postel Code'), 'class' =>
+                            'form-control','id'
+                            => 'zip']) !!}
+                            <span class="zip_error errors"></span>
+                        </div>
+                        <div class="form-group col-md-6" style="float:right" ;>
+                            {{ Form::label('best_time_to_call', __('Best Time to call'),['class' => 'col-form-label']) }}
+                            {!! Form::text('best_time_to_call', null, ['placeholder' => __('Best Time to call'), 'class'
+                            =>
+                            'form-control','id' => 'best_time_to_call']) !!}
+                            <span class="best_time_to_call_error errors"></span>
+                        </div>
+                        <!--////////////            Other Information   //////////////-->
+                        <div class="card-body form-group col-md-6 m-auto">
+                            <h4>{{ __('Other') }}</h4>
+                        </div>
+                        <div class="form-group">
+                            {{ Form::label('can_relocate', __('Can Relocate'),['class' => 'col-form-label']) }}
+                            {!! Form::text('can_relocate', null, ['placeholder' => __('Can Relocate'), 'class' =>
+                            'form-control','id' => 'can_relocate']) !!}
+                            <span class="can_relocate_error errors"></span>
+                        </div>
+                        <div class="form-group">
+                            {{ Form::label('date_available', __('Date Available'),['class' => 'col-form-label']) }}
+                            {!! Form::date('date_available', null, ['placeholder' => __('Date Available'), 'class' =>
+                            'form-control','id' => 'date_available']) !!}
+                            <span class="date_available_error errors"></span>
+                        </div>
+                        <div class="form-group">
+                            {{ Form::label('current_employer', __('Current Employer'),['class' => 'col-form-label']) }}
+                            {!! Form::text('current_employer', null, ['placeholder' => __('Current Employer'), 'class'
+                            =>
+                            'form-control','id' => 'current_employer']) !!}
+                            <span class="current_employer_error errors"></span>
+                        </div>
+                        <div class="form-group">
+                            {{ Form::label('current_pay', __('Current Pay'),['class' => 'col-form-label']) }}
+                            {!! Form::text('current_pay', null, ['placeholder' => __('Current Pay'), 'class' =>
+                            'form-control','id' => 'current_pay']) !!}
+                            <span class="current_pay_error errors"></span>
+                        </div>
+                        <div class="form-group">
+                            {{ Form::label('desired_pay', __('Desire Pay'),['class' => 'col-form-label']) }}
+                            {!! Form::text('desired_pay', null, ['placeholder' => __('Desire Pay'), 'class' =>
+                            'form-control','id' => 'desired_pay']) !!}
+                            <span class="desired_pay_error errors"></span>
+                        </div>
+                        <div class="form-group">
+                            {{ Form::label('source', __('Source'),['class' => 'col-form-label']) }}
+                            {!! Form::text('source', null, ['placeholder' => __('source'), 'class' =>
+                            'form-control','id' =>
+                            'source']) !!}
+                            <span class="source_error errors"></span>
+                        </div>
+                        <div class="form-group">
+                            {{ Form::label('key_skills', __('Key Skills'),['class' => 'col-form-label']) }}
+                            {!! Form::text('key_skills', null, ['placeholder' => __('Key Skills'), 'class' =>
+                            'form-control','id' => 'key_skills']) !!}
+                            <span class="key_skills_error errors"></span>
+                        </div>
+                        <div class="form-group">
+                            {{ Form::label('notes', __('Misc Notes'),['class' => 'col-form-label']) }}
+                            {!! Form::text('notes', null, ['placeholder' => __('Misc Notes'), 'class' =>
+                            'form-control','id'
+                            => 'notes']) !!}
+                            <span class="notes_error errors"></span>
+                        </div>
+                        <div class="form-group ">
+                            {{ Form::label('role', __('Role'),['class' => 'col-form-label']) }}
+                            {!! Form::text('desired_pay', null, ['placeholder' => __('Desire Pay'), 'class' =>
+                            'form-control','id' => 'role']) !!}
+                            <span class="role_error errors"></span>
+                        </div>
                     </div>
-                    <div class="form-group col-md-6" style="float:right" ;>
-                        {{ Form::label('middle_name', __('Middle Name'),['class' => 'col-form-label']) }}
-                        {!! Form::text('middle_name', null, ['placeholder' => __('Middle Name'), 'class' =>
-                        'form-control','id' => 'middle_name']) !!}
-                        <span class="middle_name_error errors"></span>
+                    <div class="card-footer">
+                        <div class="float-end">
+                            <a href="{{ route('candidates.index') }}"
+                                class="btn btn-secondary mb-3">{{ __('Cancel') }}</a>
+                            <button type="button" id="addCandidate"
+                                class="btn btn-primary mb-3">Save</button>
+                        </div>
                     </div>
 
-                    <div class="form-group col-md-6" style="float:left" ;>
-                        {{ Form::label('last_name', __('Last Name'),['class' => 'col-form-label']) }}
-                        {!! Form::text('last_name', null, ['placeholder' => __('Last Name'), 'class' =>
-                        'form-control','id' => 'last_name']) !!}
-                        <span class="last_name_error errors"></span>
-                    </div>
-                    <div class="form-group col-md-6" style="float:right" ;>
-                        {{ Form::label('email1', __('Email'),['class' => 'col-form-label']) }}
-                        {!! Form::text('email1', null, ['placeholder' => __('Email'), 'class' => 'form-control','id' =>
-                        'email1']) !!}
-                        <span class="email1_error errors"></span>
-                        <span class="email_notvalid_address_error errors"></span>
-                    </div>
-                    <div class="form-group col-md-6" style="float:left" ;>
-                        {{ Form::label('email2', __('2Email'),['class' => 'col-form-label']) }}
-                        {!! Form::text('email2', null, ['placeholder' => __('2Email'), 'class' => 'form-control','id' =>
-                        'email2']) !!}
-                        <span class="email2_error errors"></span>
-                        <span class="email2_notvalid_address_error errors"></span>
-                    </div>
-                    <div class="form-group col-md-6" style="float:right" ;>
-                        {{ Form::label('web_site', __('Website'),['class' => 'col-form-label']) }}
-                        {!! Form::text('web_site', null, ['placeholder' => __('Website'), 'class' => 'form-control','id'
-                        => 'web_site']) !!}
-                        <span class="web_site_error errors"></span>
-                    </div>
-                    <div class="form-group col-md-6" style="float:left" ;>
-                        {{ Form::label('phone_home', __('Home Phone'),['class' => 'col-form-label']) }}
-                        {!! Form::text('phone_home', null, ['placeholder' => __('Home Phone'), 'class' =>
-                        'form-control','id' => 'phone_home']) !!}
-                        <span class="phone_home_error errors"></span>
-                    </div>
-                    <div class="form-group col-md-6" style="float:right" ;>
-                        {{ Form::label('phone_cell', __('Cell Phone'),['class' => 'col-form-label']) }}
-                        {!! Form::text('phone_cell', null, ['placeholder' => __('Cell Phone'), 'class' =>
-                        'form-control','id' => 'phone_cell']) !!}
-                        <span class="phone_cell_error errors"></span>
-                    </div>
-                    <div class="form-group col-md-6" style="float:left" ;>
-                        {{ Form::label('phone_work', __('Work Phone'),['class' => 'col-form-label']) }}
-                        {!! Form::text('phone_work', null, ['placeholder' => __('Work Phone'), 'class' =>
-                        'form-control','id' => 'phone_work']) !!}
-                        <span class="phone_work_error errors"></span>
-                    </div>
-                    <div class="form-group col-md-6" style="float:right" ;>
-                        {{ Form::label('address', __('Address'),['class' => 'col-form-label']) }}
-                        {!! Form::text('address', null, ['placeholder' => __('Address'), 'class' => 'form-control','id'
-                        => 'address']) !!}
-                        <span class="address_error errors"></span>
-                    </div>
-                    <div class="form-group col-md-6" style="float:left" ;>
-                        {{ Form::label('city', __('City'),['class' => 'col-form-label']) }}
-                        {!! Form::text('city', null, ['placeholder' => __('City'), 'class' => 'form-control','id' =>
-                        'city']) !!}
-                        <span class="city_error errors"></span>
-                    </div>
-                    <div class="form-group col-md-6" style="float:right" ;>
-                        {{ Form::label('state', __('State'),['class' => 'col-form-label']) }}
-                        {!! Form::text('state', null, ['placeholder' => __('State'), 'class' => 'form-control','state'
-                        =>'state']) !!}
-                        <span class="state_error errors"></span>
-                    </div>
-                    <div class="form-group col-md-6" style="float:left" ;>
-                        {{ Form::label('zip', __('Postel Code'),['class' => 'col-form-label']) }}
-                        {!! Form::text('zip', null, ['placeholder' => __('Postel Code'), 'class' => 'form-control','id'
-                        => 'zip']) !!}
-                        <span class="zip_error errors"></span>
-                    </div>
-                    <div class="form-group col-md-6" style="float:right" ;>
-                        {{ Form::label('best_time_to_call', __('Best Time to call'),['class' => 'col-form-label']) }}
-                        {!! Form::text('best_time_to_call', null, ['placeholder' => __('Best Time to call'), 'class' =>
-                        'form-control','id' => 'best_time_to_call']) !!}
-                        <span class="best_time_to_call_error errors"></span>
-                    </div>
-                    <!--////////////            Other Information   //////////////-->
-                    <div class="card-body form-group col-md-6 m-auto">
-                        <h4>{{ __('Other') }}</h4>
-                    </div>
-                    <div class="form-group">
-                        {{ Form::label('can_relocate', __('Can Relocate'),['class' => 'col-form-label']) }}
-                        {!! Form::text('can_relocate', null, ['placeholder' => __('Can Relocate'), 'class' =>
-                        'form-control','id' => 'can_relocate']) !!}
-                        <span class="can_relocate_error errors"></span>
-                    </div>
-                    <div class="form-group">
-                        {{ Form::label('date_available', __('Date Available'),['class' => 'col-form-label']) }}
-                        {!! Form::date('date_available', null, ['placeholder' => __('Date Available'), 'class' =>
-                        'form-control','id' => 'date_available']) !!}
-                        <span class="date_available_error errors"></span>
-                    </div>
-                    <div class="form-group">
-                        {{ Form::label('current_employer', __('Current Employer'),['class' => 'col-form-label']) }}
-                        {!! Form::text('current_employer', null, ['placeholder' => __('Current Employer'), 'class' =>
-                        'form-control','id' => 'current_employer']) !!}
-                        <span class="current_employer_error errors"></span>
-                    </div>
-                    <div class="form-group">
-                        {{ Form::label('current_pay', __('Current Pay'),['class' => 'col-form-label']) }}
-                        {!! Form::text('current_pay', null, ['placeholder' => __('Current Pay'), 'class' =>
-                        'form-control','id' => 'current_pay']) !!}
-                        <span class="current_pay_error errors"></span>
-                    </div>
-                    <div class="form-group">
-                        {{ Form::label('desired_pay', __('Desire Pay'),['class' => 'col-form-label']) }}
-                        {!! Form::text('desired_pay', null, ['placeholder' => __('Desire Pay'), 'class' =>
-                        'form-control','id' => 'desired_pay']) !!}
-                        <span class="desired_pay_error errors"></span>
-                    </div>
-                    <div class="form-group">
-                        {{ Form::label('source', __('Source'),['class' => 'col-form-label']) }}
-                        {!! Form::text('source', null, ['placeholder' => __('source'), 'class' => 'form-control','id' =>
-                        'source']) !!}
-                        <span class="source_error errors"></span>
-                    </div>
-                    <div class="form-group">
-                        {{ Form::label('key_skills', __('Key Skills'),['class' => 'col-form-label']) }}
-                        {!! Form::text('key_skills', null, ['placeholder' => __('Key Skills'), 'class' =>
-                        'form-control','id' => 'key_skills']) !!}
-                        <span class="key_skills_error errors"></span>
-                    </div>
-                    <div class="form-group">
-                        {{ Form::label('notes', __('Misc Notes'),['class' => 'col-form-label']) }}
-                        {!! Form::text('notes', null, ['placeholder' => __('Misc Notes'), 'class' => 'form-control','id'
-                        => 'notes']) !!}
-                        <span class="notes_error errors"></span>
-                    </div>
-                    <div class="form-group ">
-                        {{ Form::label('role', __('Role'),['class' => 'col-form-label']) }}
-                        {!! Form::text('desired_pay', null, ['placeholder' => __('Desire Pay'), 'class' =>
-                        'form-control','id' => 'role']) !!}
-                        <span class="role_error errors"></span>
-                    </div>
-                </div>
-                <div class="card-footer">
-                    <div class="float-end">
-                        <a href="{{ route('candidates.index') }}" class="btn btn-secondary mb-3">{{ __('Cancel') }}</a>
-                        <button type="submit" id="addCandidate" class="btn btn-primary mb-3">{{ __('Save') }}</button>
-                    </div>
-                </div>
-
-                {!! Form::close() !!}
+                </form>
             </div>
         </div>
     </div>
@@ -201,7 +214,9 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 });
-$('#addCandidate').click(function() {
+$(document).on('click', '#addCandidate', function() {
+    var jobOrder_id = $('#job_id').val();
+    // alert(jobOrder_id);
     const formData = new FormData();
     const fields = [
         'first_name', 'middle_name', 'last_name', 'email1', 'email2',
@@ -237,8 +252,8 @@ $('#addCandidate').click(function() {
         return false;
     }
 
-var jobOrder_id = $('#job_id').val();
-    formData.append('jobOrder_id','jobOrder_id');
+
+    formData.append('jobOrder_id',  jobOrder_id);
     $.ajaxSetup({
         headers: {
             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
@@ -247,22 +262,37 @@ var jobOrder_id = $('#job_id').val();
 
     $.ajax({
         type: "POST",
-        url: "{{ route('companies.store') }}",
+        url: "{{route('candidates.store')}}",
         dataType: "json",
         data: formData,
         contentType: false,
         processData: false,
         success: function(response) {
-            const title = response.status ? "success" : "warning";
-            Swal.fire({
-                title: response.message,
-                type: title,
-                icon: title,
-            }).then(function(result) {
-                if (result.isConfirmed && response.status) {
-                    window.location.href = "{{route('companies.index')}}";
-                }
-            });
+            if (response.status == true) {
+                Swal.fire({
+                    title: response.message,
+                    type: "success",
+                    icon: "success",
+                }).then(function(result) {
+                    if (result.isConfirmed) {
+                        if(jobOrder_id){
+                            window.location.href = "{{route('joborders.details')}}"+'/'+jobOrder_id;
+                        }else{
+                            window.location.href = "{{route('candidates.index')}}";
+                        }
+                        
+                    }
+                });
+            } else {
+                Swal.fire({
+                    title: response.message,
+                    icon: "warning",
+                }).then(function(result) {
+                    if (result.isConfirmed) {
+
+                    }
+                });
+            }
         },
         error: function(xhr, status, error) {
             console.error('Error:', error);

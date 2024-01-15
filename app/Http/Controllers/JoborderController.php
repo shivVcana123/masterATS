@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\DataTables\FacilitiesDataTable;
 use App\Facades\UtilityFacades;
+use App\Models\CandidateJoborder;
 use App\Models\Joborder;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\DB;
@@ -150,10 +151,11 @@ class JoborderController extends Controller
 }
 
 public function profiledetails($id){
-    $jobDetails = JobOrder::with('attachments')->where('id',$id)
+    $jobDetails = JobOrder::with('attachments','companies')->where('id',$id)
       ->get();
-  
-    return view('joborders.show',compact('jobDetails'));
+      $candidateDetails = CandidateJoborder::with('candidates','ownerUser','candidateJoborderStatus')->where('joborder_id',$id)->get();
+//   dd( $candidateDetails );
+    return view('joborders.show',compact('jobDetails','candidateDetails'));
 }
 
 public function joborderUpdate($id){

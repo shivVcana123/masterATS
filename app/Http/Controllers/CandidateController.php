@@ -52,7 +52,11 @@ class CandidateController extends Controller
 
 
     public function store(Request $request)
-    {    
+    {   
+
+
+
+        // dd($request->all()); 
         $this->validate($request, [
             'first_name' => 'required',
             'last_name' => 'required',
@@ -61,8 +65,10 @@ class CandidateController extends Controller
             // 'password' => 'required|same:confirm-password',
             // 'roles' => 'required'
         ]);
+
+      
         // $role_r = Role::findByName($request->roles);
-        $user = DB::table('candidates')->insert(
+        $result = DB::table('candidates')->insertGetId(
             [
                 'first_name' => $request['first_name'],
                 'middle_name' => $request['middle_name'],
@@ -89,8 +95,22 @@ class CandidateController extends Controller
                 'notes' => $request['notes']
            ]
         );
-       return redirect()->route('candidates.index')
-            ->with('success', __('Candidate created successfully'));
+        if($request['jobOrder_id'] != null){
+
+            $result = CandidateJoborder::create([
+                'candidate_id' =>  $result,
+                'joborder_id' => intval($request['jobOrder_id']),
+                'status' =>  1,
+                'date_submitted ' => $request['date_available'],
+                'added_by' =>  Auth::user()->id,
+            ]);
+        }
+        if( $result){
+            return response()->json(['status' => true, 'message' => 'Data create successfully.', 'data' => $result]);
+        }else{
+            return response()->json(['status' =>false, 'massage' => 'Something went wrong.']);
+        }
+      
     }
 
     public function candidatesDetails($id){

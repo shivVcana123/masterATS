@@ -23,9 +23,9 @@
                     <tbody>
                         <tr>
                             <td class="vertical">Company Name:</td>
-                            <td class="data" id="" data-id="{{$jobDetails[0]['id']}}">
-                                <a href="{{route('companies.index')}}">
-                                    {{$jobDetails[0]['title']}} </a>
+                            <td class="data" id="" data-id="{{$jobDetails[0]['companies']->id}}">
+                                <a href="{{route('companies.details',$jobDetails[0]['companies']->id)}}">
+                                    {{$jobDetails[0]['companies']->company_name}} </a>
                             </td>
                         </tr>
                         <tr>
@@ -35,7 +35,7 @@
                         </tr>
                         <tr>
                             <td class="vertical">CATS Job ID:</td>
-                            <td class="data" width="300">{{$jobDetails[0]['client_job_id']}}</td>
+                            <td class="data" width="300">{{$jobDetails[0]->id}}</td>
                         </tr>
                         <tr>
                             <td class="vertical">Company Job ID:</td>
@@ -185,6 +185,7 @@
         <label style="font-size: 18px">Candidate in Job Order</label>
     </div>
     <div class="table-responsive col-md-12">
+
         <table class="table table-striped table-bordered" id="job_orders_for_candidates">
             <thead class="no-border">
                 <tr>
@@ -200,30 +201,37 @@
                 </tr>
             </thead>
             <tbody id="container" class="no-border-x no-border-y ui-sortable">
-                @foreach($jobDetails as $details)
+                @if(count($candidateDetails) > 0)
+                @foreach($candidateDetails as $details)
                 <tr>
-                    <td>{{$details->id}}</td>
-                    <td>3232</td>
-                    <td data-id="" id="joborderDetails_id"><a href=""></a>
-                    </td>
-                    <td><a href=""></a>
+                    <td>{{$details['candidates']->id}}</td>
+                    <td>{{$details['candidates']->first_name}}</td>
+                    <td>{{$details['candidates']->last_name}}</td>
+                    <td>{{$details['candidates']->address}}</td>
+                    <td>
+                        {{$details->date_created}}
                     </td>
                     <td>
+                        {{$details['ownerUser']->user_name}}
                     </td>
-                    <td>
-
+                    <td>{{isset($details['candidateJoborderStatus']->short_description) ? $details['candidateJoborderStatus']->short_description : ''}}
                     </td>
-                    <td></td>
-                    <td></td>
+                    <td>{{$details['candidates']->id}}</td>
                     <td>
-                        <i class="fa fa-pencil" id="Activity" value="Activity"></i>
-                        <i class="fa fa-trash" id="candidate_joborders_delete" data-value="{{$details->id}}"></i>
+                        <a href="{{url('/candidates/update',$details['candidates']->id)}}"><i
+                                class="fa fa-pencil"></i></a>
+                        <a href="javascript:;"> <i class="fa fa-trash" id="candidate_joborders_delete"
+                                data-value="{{$details->id}}"></i></a>
                     </td>
                 </tr>
                 @endforeach
+                @else
+                <td colspan="12">No data available</td>
+                @endif
             </tbody>
         </table>
-        <i class="fa fa-plus"></i><a href="{{ url('/candidates/create', ['job_id' => $jobDetails[0]['id']]) }}">Add Candidate to This Job Order</a>
+        <i class="fa fa-plus"></i><a href="{{ url('/candidates/create', ['job_id' => $jobDetails[0]['id']]) }}">Add
+            Candidate to This Job Order</a>
     </div>
 </div>
 @endsection
@@ -349,6 +357,47 @@ $(document).on('click', '#documentDownload', function() {
         error: function(xhr, status, error) {
             console.error('Error:', error);
         },
+    });
+});
+
+$(document).on('click', '#candidate_joborders_delete', function() {
+
+    var candidate_joborder_id = $(this).data('value');
+    Swal.fire({
+        title: 'Are you sure?',
+        text: 'You won\'t to delete this record!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: "Yes",
+        cancelButtonText: "No",
+        closeOnConfirm: false,
+        closeOnCancel: false
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '/candidate/joborder/delete/' + candidate_joborder_id,
+                type: 'GET',
+                success: function(response) {
+                    console.log(response);
+                    const title = response.status ? "success" : "warning";
+                    Swal.fire({
+                        title: response.message,
+                        type: title,
+                        icon: title,
+                    }).then(function(result) {
+                        if (result.isConfirmed && response.status) {
+                            window.location.href =
+                                "{{ url('/joborders/details',$jobDetails[0]->id ) }}";
+                        }
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error);
+                },
+            });
+        }
     });
 });
 </script>

@@ -43,6 +43,7 @@ button {
     margin-left: 53%;
     display: flex;
     margin-top: -40px;
+    margin-bottom: 20px;
 }
 
 body {

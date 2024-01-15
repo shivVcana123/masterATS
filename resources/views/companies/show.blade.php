@@ -263,8 +263,8 @@
                     <td>{{date("d-m-Y", strtotime($details->start_date))}}</td>
                     <td>{{ isset($details->ageDays) ? number_format(intval($details->ageDays)) : '' }}</td>
 
-                    <td>{{$details->end_date}}</td>
-                    <td>{{$details->p}} </td>
+                    <td>NAN</td>
+                    <td>NAN</td>
                     <td>{{$details['recruiterUser']->user_name}}</td>
                     <td>{{$details['ownerUser']->user_name}} </td>
                     <td>
@@ -335,6 +335,8 @@
 @endsection
 @push('scripts')
 <script>
+     const fileInput = $('#document_file')[0];
+    console.log(fileInput);
 $(document).on('click', '#submit_file', function(e) {
     e.preventDefault();
     // var joborder_id = $('#joborder_id').val();
