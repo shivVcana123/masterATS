@@ -13,6 +13,10 @@
         <div class="pull-right">
             <a class="btn btn-primary" href="{{ route('joborders.index') }}"> Back</a>
         </div>
+        <div class="pull-right">
+            <a class="btn btn-primary" style="margin-right: 5px;"
+                href="{{ url('/companies/update',$jobDetails[0]['companies']->id ) }}"> Edit</a>
+        </div>
     </div>
 </div>
 <table class="detailsOutside" width="100%" height="319">
@@ -205,9 +209,13 @@
                 @foreach($candidateDetails as $details)
                 <tr>
                     <td>{{$details['candidates']->id}}</td>
-                    <td>{{$details['candidates']->first_name}}</td>
-                    <td>{{$details['candidates']->last_name}}</td>
-                    <td>{{$details['candidates']->address}}</td>
+                    <td><a
+                            href="{{url('/candidates/details',$details['candidates']->id)}}">{{$details['candidates']->first_name}}</a>
+                    </td>
+                    <td><a
+                            href="{{url('/candidates/details',$details['candidates']->id)}}">{{$details['candidates']->last_name}}</a>
+                    </td>
+                    <td>{{$details['candidates']->state}}</td>
                     <td>
                         {{$details->date_created}}
                     </td>
@@ -230,14 +238,179 @@
                 @endif
             </tbody>
         </table>
-        <i class="fa fa-plus"></i><a href="{{ url('/candidates/create', ['job_id' => $jobDetails[0]['id']]) }}">Add
+        <i class="fa fa-plus"></i><a data-toggle="modal" data-target="#addJobOrderModal" href="javascript:;">Add
             Candidate to This Job Order</a>
+    </div>
+    <div class="modal fade" id="addJobOrderModal" tabindex="-1" role="dialog" aria-labelledby="addJobOrderModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addJobOrderModalLabel">Add Candidate to This Job Order</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-check">
+
+                        <input class="form-check-input" type="radio" name="flexRadioDefault" id="add_new_candidates"
+                            onclick="addNewCandidate(this)" checked>
+                        <label class="form-check-label" for="flexRadioDefault1" onclick="addNewCandidate(this)">
+                            Add New Candidate
+                        </label>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input " type="radio" name="flexRadioDefault">
+                        <label class="form-check-label" for="flexRadioDefault2" data-toggle="modal"
+                            data-target=".bd-example-modal-lg">
+                            Add Existing Candidate
+                        </label>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="width: 150%; margin-left: -22%;">
+            <div class="form-group col-md-12" style="margin-top: -15px; margin-left: -5px; padding: 2%;">
+                <div class="form-control" style="border-color: transparent;padding-left: 0px">
+                    <label style="font-size: 18px">Add Candidate to This Job Order</label>
+                </div>
+                <div class="buttn-area">
+                    <form class="example" action="{{ route('joborders.index') }}">
+                        <label for="">Search by Job Title:</label>
+                        <input type="text" placeholder="Search.." name="search" value="">
+                        <button type="submit"><i class="fa fa-search"></i></button>
+                    </form>
+
+                    <form class="example" action="{{ route('joborders.index') }}" style="margin-left: 48px;">
+                        <label for="">Search by Company Name:</label>
+                        <input type="text" placeholder="Search.." name="search" value="">
+                        <button type="submit"><i class="fa fa-search"></i></button>
+                    </form>
+                    <input type="hidden" id="job_id" value="{{$jobDetails[0]->id}}">
+
+                </div><br>
+                <div class="table-responsive col-md-12">
+                    <table class="table table-striped table-bordered" id="add_candidates_to_job_order_list">
+                        <thead class="no-border">
+                            <tr>
+                                <th style="width: 67px">ID</th>
+                                <th style="width: 67px">First Name </th>
+                                <th style="width: 67px">Last Name</th>
+                                <th style="width: 67px">Key Skills</th>
+                                <th style="width: 67px">Created</th>
+                                <th style="width: 67px">Owner </th>
+                                <th style="width: 65px">Action</th>
+                                <!-- <th></th> -->
+                            </tr>
+                        </thead>
+                        <tbody id="container" class="no-border-x no-border-y ui-sortable">
+                            @foreach($candidateList as $value)
+                            <tr>
+                                <td>{{$value->id}}</td>
+                                <td>
+                                    @if(isset($details->candidate_id) && isset($value->id) && $details->candidate_id !=
+                                    $value->id)
+                                    <a href="javascript:;" onclick="addCandidateOnJobOrder(this)"
+                                        data-value="{{ $value->id }}">
+                                        {{ $value->first_name }}
+                                    </a>
+                                    @elseif(isset($value->first_name))
+                                    {{ $value->first_name }}
+                                    @else
+                                    <span>N/A</span>
+                                    @endif
+                                </td>
+                                <td>
+                                    @if(isset($details->candidate_id) && isset($value->id) && $details->candidate_id !=
+                                    $value->id)
+                                    <a href="javascript:;" onclick="addCandidateOnJobOrder(this)"
+                                        data-value="{{ $value->id }}">
+                                        {{ $value->last_name }}
+                                    </a>
+                                    @elseif(isset($value->last_name))
+                                    {{ $value->last_name }}
+                                    @else
+                                    <span>N/A</span>
+                                    @endif
+                                </td>
+                                <td>{{$value->key_skills}}</td>
+                                <td>
+                                    {{ date_format(DateTime::createFromFormat('Y-m-d H:i:s', $value->date_created), 'd m Y') }}
+                                </td>
+                                <td>@if($value['ownerUser'])
+                                    {{ $value['ownerUser']->user_name }}
+                                    @else
+                                    No associated company
+                                    @endif
+                                </td>
+                                <td>
+                                    <i class="fa fa-pencil" data-toggle="modal" data-target="#activityModal"></i>
+                                    <i class="fa fa-trash" id="candidate_delete" data-value="{{$value->id}}"></i>
+                                </td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 @endsection
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 @push('scripts')
 <script>
+function addCandidateOnJobOrder(that) {
+    $('#addJobOrderModal').modal('hide');
+    var job_id = $('#job_id').val();
+    var candidate_id = $(that).data('value');
+    $.ajaxSetup({
+        headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        },
+    });
+
+    $.ajax({
+        url: '/candidates/add/candidate/joborder',
+        type: 'POST',
+        data: {
+            jobID: job_id,
+            candidate_id: candidate_id,
+        },
+        success: function(response) {
+            const title = response.status ? "success" : "warning";
+            Swal.fire({
+                title: response.message,
+                type: title,
+                icon: title,
+            }).then(function(result) {
+                if (result.isConfirmed && response.status) {
+                    window.location.href =
+                        "{{ url('/joborders/details',$jobDetails[0]->id ) }}";
+                }
+            });
+        },
+        error: function(xhr, status, error) {
+            console.error('Error:', error);
+        },
+    });
+}
+
+function addNewCandidate(that) {
+    window.location.href = "{{ url('/candidates/create', ['job_id' => $jobDetails[0]['id']]) }}";
+
+    $('#addJobOrderModal').modal('hide');
+}
 $(document).on('click', '#submit_file', function(e) {
     e.preventDefault();
     var joborder_id = $('#joborder_id').val();

@@ -27,7 +27,7 @@
         </div>
         <div class="pull-right">
             <a class="btn btn-primary" style="margin-right: 5px;"
-                href="{{ url('/candidates/update',$candidatesDetails[0]->id ) }}"> Edit</a>
+                href="{{ url('/candidates/update',$candidatesJobOrderDetails[0]['candidates']->id ) }}"> Edit</a>
         </div>
     </div>
 </div>
@@ -44,11 +44,11 @@
                                 <td class="vertical">Name:</td>
                                 <td class="data">
                                     <div class="btn-group">
-                                        <input type="hidden" id="candidate_id" value="{{ $candidatesDetails[0]->id }}">
+                                        <input type="hidden" id="candidate_id" value="{{ $candidatesJobOrderDetails[0]['candidates']->id }}">
                                         <button type="button" class="btn btn-secondary ">
-                                            {{ $candidatesDetails[0]->first_name }}
-                                            {{ $candidatesDetails[0]->middle_name }}
-                                            {{ $candidatesDetails[0]->last_name }}</button>
+                                            {{ $candidatesJobOrderDetails[0]['candidates']->first_name }}
+                                            {{ $candidatesJobOrderDetails[0]['candidates']->middle_name }}
+                                            {{ $candidatesJobOrderDetails[0]['candidates']->last_name }}</button>
                                         <button type="button"
                                             class="btn btn-secondary  dropdown-toggle dropdown-toggle-split"
                                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -68,36 +68,36 @@
                                 <td class="vertical">E-Mail:</td>
                                 <td class="data">
                                     <a href="#">
-                                        {{ $candidatesDetails[0]->email1 }} </a>
+                                        {{ $candidatesJobOrderDetails[0]['candidates']->email1 }} </a>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="vertical">2nd E-Mail:</td>
                                 <td class="data">
                                     <a href="mailto:">
-                                        {{ $candidatesDetails[0]->email2 }}
+                                        {{ $candidatesJobOrderDetails[0]['candidates']->email2 }}
                                     </a>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="vertical">Home Phone:</td>
-                                <td class="data">{{ $candidatesDetails[0]->phone_home}}</td>
+                                <td class="data">{{ $candidatesJobOrderDetails[0]['candidates']->phone_home}}</td>
                             </tr>
                             <tr>
                                 <td class="vertical">Cell Phone:</td>
-                                <td class="data">{{ $candidatesDetails[0]->phone_cell  }}</td>
+                                <td class="data">{{ $candidatesJobOrderDetails[0]['candidates']->phone_cell  }}</td>
                             </tr>
                             <tr>
                                 <td class="vertical">Work Phone:</td>
-                                <td class="data">{{ $candidatesDetails[0]->phone_work  }}</td>
+                                <td class="data">{{ $candidatesJobOrderDetails[0]['candidates']->phone_work  }}</td>
                             </tr>
                             <tr>
                                 <td class="vertical">Best Time To Call:</td>
-                                <td class="data">{{ $candidatesDetails[0]->best_time_to_call }}</td>
+                                <td class="data">{{ $candidatesJobOrderDetails[0]['candidates']->best_time_to_call }}</td>
                             </tr>
                             <tr>
                                 <td class="vertical">Address:</td>
-                                <td class="data">{{ $candidatesDetails[0]->address }}</td>
+                                <td class="data">{{ $candidatesJobOrderDetails[0]['candidates']->address }}</td>
                             </tr>
                             <tr>
                                 <td class="vertical">&nbsp;</td>
@@ -106,12 +106,12 @@
                             </tr>
                             <tr>
                                 <td class="vertical">Web Site:</td>
-                                <td class="data">{{ $candidatesDetails[0]->web_site }}
+                                <td class="data">{{ $candidatesJobOrderDetails[0]['candidates']->web_site }}
                                 </td>
                             </tr>
                             <tr>
                                 <td class="vertical">Source:</td>
-                                <td class="data">{{ $candidatesDetails[0]->source }}</td>
+                                <td class="data">{{ $candidatesJobOrderDetails[0]['candidates']->source }}</td>
                             </tr>
                             <tr>
                                 <td class="vertical"></td>
@@ -125,27 +125,27 @@
                         <tbody>
                             <tr>
                                 <td class="vertical">Date Available:</td>
-                                <td class="data">{{ $candidatesDetails[0]->date_available }}</td>
+                                <td class="data">{{ $candidatesJobOrderDetails[0]['candidates']->date_available }}</td>
                             </tr>
                             <tr>
                                 <td class="vertical">Current Employer:</td>
-                                <td class="data">{{ $candidatesDetails[0]->current_employer }}</td>
+                                <td class="data">{{ $candidatesJobOrderDetails[0]['candidates']->current_employer }}</td>
                             </tr>
                             <tr>
                                 <td class="vertical">Key Skills:</td>
-                                <td class="data">{{ $candidatesDetails[0]->key_skills }}</td>
+                                <td class="data">{{ $candidatesJobOrderDetails[0]['candidates']->key_skills }}</td>
                             </tr>
                             <tr>
                                 <td class="vertical">Can Relocate:</td>
-                                <td class="data">{{ $candidatesDetails[0]->can_relocate }}</td>
+                                <td class="data">{{ $candidatesJobOrderDetails[0]['candidates']->can_relocate }}</td>
                             </tr>
                             <tr>
                                 <td class="vertical">Current Pay:</td>
-                                <td class="data">{{ $candidatesDetails[0]->current_pay }}</td>
+                                <td class="data">{{ $candidatesJobOrderDetails[0]['candidates']->current_pay }}</td>
                             </tr>
                             <tr>
                                 <td class="vertical">Desired Pay:</td>
-                                <td class="data">{{ $candidatesDetails[0]->desired_pay }}</td>
+                                <td class="data">{{ $candidatesJobOrderDetails[0]['candidates']->desired_pay }}</td>
                             </tr>
                             <tr>
                                 <td class="vertical">Pipeline:</td>
@@ -157,11 +157,11 @@
                             </tr>
                             <tr>
                                 <td class="vertical">Created:</td>
-                                <td class="data">{{ $candidatesDetails[0]->date_created  }}</td>
+                                <td class="data">{{ $candidatesJobOrderDetails[0]['candidates']->date_created  }}</td>
                             </tr>
                             <tr>
                                 <td class="vertical">Owner:</td>
-                                <td class="data">{{ $candidatesDetails[0]->owner  }}</td>
+                                <td class="data">{{ $candidatesJobOrderDetails[0]['candidates']->owner  }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -359,16 +359,13 @@
                         <td><a
                                 href="{{route('companies.details',$details['joborderDetails']['companies']->id)}}">{{ $details['joborderDetails']['companies']->company_name}}</a>
                         </td>
-                        <td>@if($details['ownerUser'])
-                            {{ $details['ownerUser']->user_name }}
-                            @else
-                            No associated company
-                            @endif
+                        <td>
+                            {{$details['candidates']['ownerUser']->user_name}}
                         </td>
                         <td>
                             {{ date_format(DateTime::createFromFormat('Y-m-d H:i:s', $details->date_submitted), 'd m Y') }}
                         </td>
-                        <td>{{$details['users']->user_name}}</td>
+                        <td></td>
                         <td>{{$details->status}}</td>
                         <td>
                             <i class="fa fa-pencil" id="Activity" value="Activity"></i>
@@ -418,7 +415,7 @@
     <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-lg">
-            <div class="modal-content" style="width: 210%; margin-left: -45%;">
+            <div class="modal-content" style="width: 150%; margin-left: -22%;">
                 <div class="form-group col-md-12" style="margin-top: -15px; margin-left: -5px; padding: 2%;">
                     <div class="form-control" style="border-color: transparent;padding-left: 0px">
                         <label style="font-size: 18px">Add Candidates to Job Order</label>
@@ -761,7 +758,7 @@
                     $details['activities'] != null &&
                     $details['joborderDetails'] != null &&
                     $details['users'] != null &&
-                    $details['candidatesDetails'] != null
+                    $details['candidatesJobOrderDetails'] != null
                     )
                     <tr>
                         <td>{{$details->id}}</td>
@@ -828,7 +825,7 @@ $(document).on('click', '#add_candidates_to_job_order_list tbody td#joborder_id'
             }).then(function(result) {
                 if (result.isConfirmed && response.status) {
                     window.location.href =
-                        "{{ url('/candidates/details',$candidatesDetails[0]->id ) }}";
+                        "{{ url('/candidates/details',$candidatesJobOrderDetails[0]['candidates']->id ) }}";
                 }
             });
         },
@@ -927,7 +924,7 @@ $(document).on('click', '#save_activity_btn', function() {
                 if (result.isConfirmed && response.status) {
                     $('#exampleModal').modal('hide');
                     window.location.href =
-                        "{{ url('/candidates/details',$candidatesDetails[0]->id ) }}";
+                        "{{ url('/candidates/details',$candidatesJobOrderDetails[0]['candidates']->id ) }}";
                 }
             });
         },
@@ -1000,7 +997,7 @@ $(document).on('click', '.remove_field', function() {
                 window.location.href = '/candidates/list/delete/' + list_id; // Adjust the URL as needed
             }
             window.location.href =
-                "{{ url('/candidates/details',$candidatesDetails[0]->id ) }}";
+                "{{ url('/candidates/details',$candidatesJobOrderDetails[0]['candidates']->id ) }}";
         });
     }
 
@@ -1056,7 +1053,7 @@ $(document).on("click", ".save-btn", function(e) {
                 if (result.isConfirmed && response.status) {
                     $('#exampleModal').modal('hide');
                     window.location.href =
-                        "{{ url('/candidates/details',$candidatesDetails[0]->id ) }}";
+                        "{{ url('/candidates/details',$candidatesJobOrderDetails[0]['candidates']->id ) }}";
                 }
             });
         },
@@ -1107,7 +1104,7 @@ $(document).ready(function() {
                     if (result.isConfirmed && response.status) {
                         $('#exampleModal').modal('hide');
                         window.location.href =
-                            "{{ url('/candidates/details',$candidatesDetails[0]->id ) }}";
+                            "{{ url('/candidates/details',$candidatesJobOrderDetails[0]['candidates']->id ) }}";
                     }
                 });
             },
@@ -1148,7 +1145,7 @@ $(document).on('click', '#delete_activity', function() {
                     }).then(function(result) {
                         if (result.isConfirmed && response.status) {
                             window.location.href =
-                                "{{ url('/candidates/details',$candidatesDetails[0]->id ) }}";
+                                "{{ url('/candidates/details',$candidatesJobOrderDetails[0]['candidates']->id ) }}";
                         }
                     });
                 },
@@ -1189,7 +1186,7 @@ $(document).on('click', '#candidate_joborders_delete', function() {
                     }).then(function(result) {
                         if (result.isConfirmed && response.status) {
                             window.location.href =
-                                "{{ url('/candidates/details',$candidatesDetails[0]->id ) }}";
+                                "{{ url('/candidates/details',$candidatesJobOrderDetails[0]['candidates']->id ) }}";
                         }
                     });
                 },
@@ -1231,7 +1228,7 @@ $(document).on('click', '#joborders_delete', function() {
                     }).then(function(result) {
                         if (result.isConfirmed && response.status) {
                             window.location.href =
-                                "{{ url('/candidates/details',$candidatesDetails[0]->id ) }}";
+                                "{{ url('/candidates/details',$candidatesJobOrderDetails[0]['candidates']->id ) }}";
                         }
                     });
                 },

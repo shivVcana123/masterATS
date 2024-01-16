@@ -18,7 +18,7 @@ class CandidateJoborder extends Model
         return $this->belongsTo(Candidate::class, 'candidate_id', 'id');
     }
     public function joborderDetails(){
-        return $this->hasMany(Joborder::class, 'joborder_id', 'id');
+        return $this->belongsTo(Joborder::class, 'joborder_id', 'id');
     }
     public function candidateJoborderStatus()
     {

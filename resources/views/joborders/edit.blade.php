@@ -186,6 +186,11 @@
                                         value="{{$jobDetails[0]->actual_rate}}">
                                     <span class="actual_rate_error errors"></span>
                                 </div>
+                                <div class="form-group">
+                                    <label for="description">Description</label>
+                                    <input type="text" name="description" id="description" class="form-control">
+                                    <span class="description_error errors"></span>
+                                </div>
 
                             </div>
                             <div class="col-md-6">
@@ -273,30 +278,24 @@
 
                                 <div class="form-group">
                                     <label for="is_hot">Is Hot</label>
-                                    <input type="checkbox" name="is_hot" id="is_hot">
+                                    <input type="checkbox" name="is_hot" id="is_hot" value="1"
+                                        {{$jobDetails[0]->is_hot == '1' ? 'checked' : ''}}>
                                     <span class="is_hot_error errors"></span>
                                 </div>
                                 <div class="form-group">
                                     <label for="public">Public</label>
-                                    <input type="checkbox" name="public" id="public">
+                                    <input type="checkbox" name="public" id="public" value="1"
+                                        {{$jobDetails[0]->public == '1' ? 'checked' : ''}}>
                                     <span class="public_error errors"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label for="notes">Notes</label>
+                                    <input type="text" name="notes" id="notes" class="form-control">
+                                    <span class="notes_error errors"></span>
                                 </div>
 
                             </div>
 
-                            <div class="form-group">
-                                <label for="description">Description</label>
-                                <input type="text" name="description" id="description" class="form-control"
-                                    value="{{$jobDetails[0]->description}}">
-                                <span class="description_error errors"></span>
-                            </div>
-
-                            <div class="form-group">
-                                <label for="notes">Notes</label>
-                                <input type="text" name="notes" id="notes" class="form-control"
-                                    value="{{$jobDetails[0]->notes}}">
-                                <span class="notes_error errors"></span>
-                            </div>
                             <button type="button" class="btn btn-primary" id="update_jobOrder_btn">Update Job Order
                                 Details</button>
                     </form>
@@ -313,15 +312,34 @@
 @endsection
 @push('scripts')
 <script>
+CKEDITOR.replace('description');
+var editor_description = CKEDITOR.instances.description;
+
+var value_description = "{!! $jobDetails[0]->description !!}";
+editor_description.setData(value_description);
+
+CKEDITOR.replace('notes');
+var editor_notes = CKEDITOR.instances.notes;
+var value_notes = "{!! $jobDetails[0]->notes !!}";
+editor_notes.setData(value_notes);
+
+
 $(document).on('click', '#update_jobOrder_btn', function(e) {
     e.preventDefault(); // Prevent the default form submission
     var companyId = '';
     var companyId = <?php echo json_encode($jobDetails[0]->company_id); ?>;
 
+    var is_hot = $('#is_hot').is(':checked') ? 1 : 0
+    var is_public = $('#public').is(':checked') ? 1 : 0
+
+    var description = editor_description.getData();
+    var notes = editor_notes.getData();
+
+
     const formData = new FormData();
     const fields = [
         'jobOrder_id', 'recruiter', 'company_id', 'entered_by', 'owner', 'site_id',
-        'client_job_id', 'title', 'description', 'notes', 'type', 'duration', 'rate_max', 'salary',
+        'client_job_id', 'title', 'type', 'duration', 'rate_max', 'salary',
         'status', 'openings', 'city', 'state', 'start_date', 'end_date', 'date_created',
         'date_modified', 'company_department_id', 'is_admin_hidden', 'openings_available',
         'questionnaire_id', 'import_id', 'actualrate', 'actual_rate', 'gross_margin', 'expected_rate',
@@ -354,6 +372,10 @@ $(document).on('click', '#update_jobOrder_btn', function(e) {
         return false;
     }
 
+    formData.append('is_hot', is_hot);
+    formData.append('is_public', is_public);
+    formData.append('description', description);
+    formData.append('notes', notes);
     $.ajaxSetup({
         headers: {
             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
@@ -373,12 +395,13 @@ $(document).on('click', '#update_jobOrder_btn', function(e) {
                 icon: title,
             }).then(function(result) {
                 if (result.isConfirmed && response.status) {
-                    if(companyId){
-                        window.location.href = "{{route('companies.details')}}"+'/'+companyId;
-                    }else{
+                    if (companyId) {
+                        window.location.href = "{{route('companies.details')}}" + '/' +
+                            companyId;
+                    } else {
                         window.location.href = "{{route('joborders.index')}}";
                     }
-                   
+
                 }
             });
         },

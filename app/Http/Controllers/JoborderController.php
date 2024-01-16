@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\DataTables\FacilitiesDataTable;
 use App\Facades\UtilityFacades;
+use App\Models\Candidate;
 use App\Models\CandidateJoborder;
 use App\Models\Joborder;
 use Spatie\Permission\Models\Role;
@@ -101,6 +102,8 @@ class JoborderController extends Controller
         $data = $request->all();
         $data['entered_by'] = Auth::user()->id;
         $data['owner'] = Auth::user()->id;
+        $data['is_hot'] = $data['is_hot'];
+        $data['public'] = $data['is_public'];
        $jobCreate = JobOrder::create($data);
 
         if ($jobCreate) {
@@ -153,9 +156,11 @@ class JoborderController extends Controller
 public function profiledetails($id){
     $jobDetails = JobOrder::with('attachments','companies')->where('id',$id)
       ->get();
+      $candidateList = Candidate::with('ownerUser','recruiterUser')->get();
+    //   dd($candidateList);
       $candidateDetails = CandidateJoborder::with('candidates','ownerUser','candidateJoborderStatus')->where('joborder_id',$id)->get();
 //   dd( $candidateDetails );
-    return view('joborders.show',compact('jobDetails','candidateDetails'));
+    return view('joborders.show',compact('jobDetails','candidateDetails','candidateList'));
 }
 
 public function joborderUpdate($id){
@@ -178,6 +183,7 @@ public function joborderDelete($id){
 
 
 public function joborderUpdateSave(Request $request){
+    // dd($request->all());
     // $request->validate([
     //     'title' => 'required',
     //     'start_date' => 'required|date',
@@ -189,8 +195,11 @@ public function joborderUpdateSave(Request $request){
     //     'interview_type' => 'required',
     //     'submission_deadline' => 'required|date',
     // ]);
+    $data = $request->all();
+    $data['is_hot'] = $data['is_hot'];
+    $data['public'] = $data['is_public'];
 
-    $updateData = Joborder::find($request->jobOrder_id)->update($request->all());
+    $updateData = Joborder::find($request->jobOrder_id)->update($data);
 
     if ($updateData) {
         return response()->json(['status' => true, 'message' => 'Data updated successfully.','data' => $updateData]);

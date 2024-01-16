@@ -9,12 +9,13 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Spatie\Permission\Traits\HasRoles;
 use App\Models\Company;
 use App\Models\SavedList;
-
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class User extends Authenticatable
 {
     use Notifiable;
     use HasRoles;
+    // use SoftDeletes;
 
     /**
      * The attributes that are mass assignable.
@@ -72,9 +73,16 @@ class User extends Authenticatable
         return $this->belongsTo(Company::class);
     }
 
+    // public function candidates()
+    // {
+    //     return $this->hasMany(Candidate::class);
+    // }
+
     public function SavedList()
     {
         return $this->belongsTo(SavedList::class);
     }
+
+   
 
 }

@@ -29,10 +29,13 @@ class Candidate extends Model
     {
         return $this->hasMany(Joborder::class);
     }
-
-    public function users()
+    public function ownerUser()
     {
-        return $this->hasMany(User::class,'id');
+        return $this->belongsTo(User::class, 'owner');
+    }
+    public function recruiterUser()
+    {
+        return $this->belongsTo(User::class,'entered_by','id');
     }
 
     public function candidateJoborder(){

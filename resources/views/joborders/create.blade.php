@@ -115,16 +115,30 @@
                     <span class="salary_error errors"></span>
                 </div>
 
-                <div class="form-group">
+                <!-- <div class="form-group">
                     <label for="expected_rate">Expected Rate</label>
                     <input type="text" name="expected_rate" id="expected_rate" class="form-control">
                     <span class="expected_rate_error errors"></span>
-                </div>
+                </div> -->
 
                 <div class="form-group">
                     <label for="actual_rate">Actual Rate</label>
                     <input type="text" name="actual_rate" id="actual_rate" class="form-control">
                     <span class="actual_rate_error errors"></span>
+                </div>
+                <div class="form-group">
+                    <label for="max_submission">Max Submissions</label>
+                    <!-- <input type="text" name="max_submission" id="max_submission" class="form-control"> -->
+                    <select name="max_submission" id="max_submission"  class="form-control">
+                        <option selected disabled> Select From List</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="5 or more">5 or more</option>
+                    </select>
+                    <span class="max_submission_error errors"></span>
                 </div>
 
                 <div class="form-group">
@@ -153,11 +167,20 @@
                     <span class="submission_deadline_error errors"></span>
                 </div>
 
-                <div class="form-group">
+                <!-- <div class="form-group">
                     <label for="status">Status</label>
                     <input type="text" name="status" id="status" class="form-control">
+                    <select name="status" id="status"  class="form-control">
+                        <option selected disabled> Select From List</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="5 or more">5 or more</option>
+                    </select>
                     <span class="status_error errors"></span>
-                </div>
+                </div> -->
                 <div class="form-group">
                     <label for="openings">Openings</label>
                     <input type="text" name="openings" id="openings" class="form-control">
@@ -251,12 +274,11 @@ $(document).on('click', '#add_jobOrder_btn', function(e) {
 
     const formData = new FormData();
     const fields = [
-        'recruiter', 'company_id', 'entered_by', 'owner', 'site_id',
-        'client_job_id', 'title', 'description', 'notes', 'type', 'duration', 'rate_max', 'salary',
-        'status', 'openings', 'city', 'state', 'start_date', 'end_date', 'date_created',
-        'date_modified', 'company_department_id', 'is_admin_hidden', 'openings_available',
-        'questionnaire_id', 'import_id', 'actualrate', 'actual_rate', 'gross_margin', 'expected_rate',
-        'max_submission', 'interview_type', 'submission_deadline', 'work_arrangement', 'p', '_token',
+        'recruiter', 'company_id',
+        'client_job_id', 'title',  'type', 'duration', 'rate_max', 'salary',
+         'openings', 'city', 'state', 'start_date', 'end_date', 'openings_available',
+        'questionnaire_id', 'actual_rate', 'gross_margin', 'expected_rate',
+        'max_submission', 'interview_type', 'submission_deadline', 'work_arrangement', 
     ];
 
 

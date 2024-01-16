@@ -92,7 +92,7 @@ class CandidateController extends Controller
                 'desired_pay' => $request['desired_pay'],
                 'source' => $request['source'],
                 'key_skills' => $request['key_skills'],
-                'notes' => $request['notes']
+                'notes' => $request['notes'],
            ]
         );
         if($request['jobOrder_id'] != null){
@@ -115,7 +115,8 @@ class CandidateController extends Controller
 
     public function candidatesDetails($id){
         $candidatesDetails = Candidate::where('id',$id)->get();
-        $candidatesJobOrderDetails = CandidateJoborder::with('candidatesDetails','users','joborderDetails','joborderDetails.companies','activities','activities.activityTypes')->get();
+        // candidatesDetails','users','joborderDetails','joborderDetails.companies','activities','activities.activityTypes
+        $candidatesJobOrderDetails = CandidateJoborder::with('candidates','candidateJoborderStatus','joborderDetails','candidates.ownerUser','candidates.recruiterUser')->where('candidate_id',$id)->get();
 
         // dd($candidatesJobOrderDetails);
         $joborderList = Joborder::with('companies','ownerUser','recruiterUser')->get();
