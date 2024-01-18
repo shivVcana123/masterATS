@@ -4,6 +4,16 @@
 .errors {
     color: red;
 }
+
+.regarding-area {
+
+    display: flex;
+}
+
+.mail-area {
+
+    display: flex;
+}
 </style>
 <div class="row">
     <div class="col-lg-12 margin-tb">
@@ -27,7 +37,9 @@
                     <tbody>
                         <tr>
                             <td class="vertical">Company Name:</td>
-                            <td class="data" id="" data-id="{{$jobDetails[0]['companies']->id}}">
+                            <td class="data" id="companyName"
+                                data-details="{{$jobDetails[0]['companies']->company_name}}"
+                                data-id="{{$jobDetails[0]['companies']->id}}">
                                 <a href="{{route('companies.details',$jobDetails[0]['companies']->id)}}">
                                     {{$jobDetails[0]['companies']->company_name}} </a>
                             </td>
@@ -163,7 +175,7 @@
                         <tr>
                             <td><a href="javascript:;" id="documentDownload"
                                     data-id="{{$value->id}}">{{$value->title}}</a></td>
-                            <td>&nbsp; &nbsp;{{date("d/m/Y (h:i A)", strtotime($value->date_created))}}</td>
+                            <td>&nbsp; &nbsp;{{date("d-m-Y (h:i A)", strtotime($value->date_created))}}</td>
                             <td>&nbsp; &nbsp;<i class="fa fa-trash" id="document_delete_id"
                                     data-value="{{$value->id}}"></i></td>
                         </tr>
@@ -205,8 +217,9 @@
                 </tr>
             </thead>
             <tbody id="container" class="no-border-x no-border-y ui-sortable">
-                @if(count($candidateDetails) > 0)
-                @foreach($candidateDetails as $details)
+                @if(count($candidatesJobOrderDetails) > 0)
+                @foreach($candidatesJobOrderDetails as $details)
+
                 <tr>
                     <td>{{$details['candidates']->id}}</td>
                     <td><a
@@ -217,17 +230,20 @@
                     </td>
                     <td>{{$details['candidates']->state}}</td>
                     <td>
-                        {{$details->date_created}}
+                        {{ date_format(DateTime::createFromFormat('Y-m-d H:i:s', $details->date_created), 'd m Y') }}
                     </td>
                     <td>
                         {{$details['ownerUser']->user_name}}
                     </td>
                     <td>{{isset($details['candidateJoborderStatus']->short_description) ? $details['candidateJoborderStatus']->short_description : ''}}
                     </td>
-                    <td>{{$details['candidates']->id}}</td>
+                    <td>{{ date_format(DateTime::createFromFormat('Y-m-d H:i:s', $details->date_created), 'd m Y') }}
+                        ({{$details['ownerUser']->user_name}})</td>
                     <td>
-                        <a href="{{url('/candidates/update',$details['candidates']->id)}}"><i
-                                class="fa fa-pencil"></i></a>
+                        <!-- <a href="{{url('/candidates/update',$details['candidates']->id)}}"><i
+                                class="fa fa-pencil"></i></a> -->
+                        <a href="javascript:;"><i class="fa fa-pencil" data-toggle="modal"
+                                data-target="#activityModal"></i></a>
                         <a href="javascript:;"> <i class="fa fa-trash" id="candidate_joborders_delete"
                                 data-value="{{$details->id}}"></i></a>
                     </td>
@@ -315,47 +331,54 @@
                         </thead>
                         <tbody id="container" class="no-border-x no-border-y ui-sortable">
                             @foreach($candidateList as $value)
+                            @php
+                            $matchFound = false;
+                            @endphp
+                            @foreach($candidatesJobOrderDetails as $details)
+                            @if(isset($details->candidate_id) && isset($value->id) && $details->candidate_id ==
+                            $value->id)
+                            @php
+                            $matchFound = true;
+                            @endphp
+                            @endif
+                            @endforeach
                             <tr>
                                 <td>{{$value->id}}</td>
                                 <td>
-                                    @if(isset($details->candidate_id) && isset($value->id) && $details->candidate_id !=
-                                    $value->id)
+                                    @if($matchFound)
+                                    {{ $value->first_name }}
+                                    @else
                                     <a href="javascript:;" onclick="addCandidateOnJobOrder(this)"
                                         data-value="{{ $value->id }}">
                                         {{ $value->first_name }}
                                     </a>
-                                    @elseif(isset($value->first_name))
-                                    {{ $value->first_name }}
-                                    @else
-                                    <span>N/A</span>
                                     @endif
                                 </td>
                                 <td>
-                                    @if(isset($details->candidate_id) && isset($value->id) && $details->candidate_id !=
-                                    $value->id)
+                                    @if($matchFound)
+                                    {{ $value->last_name }}
+                                    @else
                                     <a href="javascript:;" onclick="addCandidateOnJobOrder(this)"
                                         data-value="{{ $value->id }}">
                                         {{ $value->last_name }}
                                     </a>
-                                    @elseif(isset($value->last_name))
-                                    {{ $value->last_name }}
-                                    @else
-                                    <span>N/A</span>
                                     @endif
                                 </td>
                                 <td>{{$value->key_skills}}</td>
                                 <td>
-                                    {{ date_format(DateTime::createFromFormat('Y-m-d H:i:s', $value->date_created), 'd m Y') }}
+                                    {{ date_format(DateTime::createFromFormat('Y-m-d H:i:s', $value->date_created), 'd-m-Y') }}
                                 </td>
-                                <td>@if($value['ownerUser'])
+                                <td>
+                                    @if($value['ownerUser'])
                                     {{ $value['ownerUser']->user_name }}
                                     @else
                                     No associated company
                                     @endif
                                 </td>
                                 <td>
-                                    <i class="fa fa-pencil" data-toggle="modal" data-target="#activityModal"></i>
-                                    <i class="fa fa-trash" id="candidate_delete" data-value="{{$value->id}}"></i>
+                                    <a href="{{url('/candidates/details',$value->id)}}"><i class="fa fa-eye"></i></a>
+                                    <!-- <i class="fa fa-pencil" data-toggle="modal" data-target="#activityModal"></i>
+                                    <i class="fa fa-trash" id="candidate_delete" data-value="{{$value->id}}"></i> -->
                                 </td>
                             </tr>
                             @endforeach
@@ -366,10 +389,346 @@
         </div>
     </div>
 </div>
+
+<div class="modal fade" id="activityModal" tabindex="-1" role="dialog" aria-labelledby="activityModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content" style="width: 149%; margin-left: -90px;">
+            <div class="modal-header">
+                <h5 class="modal-title" id="activityModalLabel">Candidates: Log Activity</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <fieldset class="form-group">
+                    <div class="container">
+                        <div class="activity-area">
+                            <div class="mail-area">
+                                <label for="">Regarding:</label>
+
+                                <input type="hidden" id="jobOrderTitle" value="{{$details['joborderDetails']->title}}">
+                                <input type="hidden" id="candidateName"
+                                    value="{{$candidatesJobOrderDetails[0]['candidates']->first_name}} {{$candidatesJobOrderDetails[0]['candidates']->last_name}}">
+                                <input type="hidden" id="candidateDateTime"
+                                    value="{{date('d/m/Y (h:i A)', strtotime($candidatesJobOrderDetails[0]->date_created))}}">
+                                <input type="hidden" id="candidateJoborderStatus"
+                                    value="{{$candidatesJobOrderDetails[0]['candidateJoborderStatus']->short_description }}">
+                                <input type="hidden" id="ownerName"
+                                    value="{{$candidatesJobOrderDetails[0]['ownerUser']->user_name}}">
+
+
+                                <p style="margin-left: 50px;"> {{$details['joborderDetails']->title}}</p>
+                                <div class="checkbox-mail-area">
+                                    <input class="form-check-input" type="checkbox" id="checkbox_mail_send_item"
+                                        name="checkbox_mail_send_item" style="margin-left: 30px;">
+                                    <label class="form-check-label" for="checkbox_mail_send_item">
+                                        Send E-Mail Notification to Candidate
+                                    </label>
+                                </div>
+                            </div>
+                            <br>
+                            <div class="form-group row">
+                                <div class="col-sm-2">Status:</div>
+                                <div class="col-sm-10">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="checkbox_status_change"
+                                            onchange="checkboxStatusChange(this)">
+                                        <label class="form-check-label" for="checkbox_status_change">
+                                            Change Status
+                                        </label>
+                                        <br>
+                                        <select id="change_status_item" name="change_status_item" class="inputbox"
+                                            style="width: 150px;" onchange="jobStatusChange(this)">
+                                            <option selected disabled>Select a Status</option>
+                                            @foreach($changeStatus as $details)
+                                            <option value="{{$details->id}}">{{$details->description}}</option>
+                                            @endforeach
+                                        </select>
+
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="regarding-area">
+                                <label for="">E-Mail</label>
+                                <div style="margin-left: 80px;">
+                                    <p> Custom Message</p>
+                                    <textarea style="height:135px; width:375px; margin-top: -14px;" name="customMessage"
+                                        id="customMessage" cols="50" class="inputbox"></textarea>
+                                </div>
+                            </div><br>
+
+                            <div class="form-group row">
+                                <div class="col-sm-2">Activity:</div>
+                                <div class="col-sm-10">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" id="checkbox_activity"
+                                            onchange="checkboxActivity(this)">
+                                        <label class="form-check-label" for="checkbox_activity">
+                                            Log an Activity
+                                        </label>
+                                        <br>
+
+                                        <label for="select_checkbox_activity">Activity Type:</label>
+                                        <br>
+                                        <select id="select_checkbox_activity" name="select_checkbox_activity">
+                                            <option selected disabled>Select Activity Type</option>
+                                            @foreach($activityType as $details)
+                                            <option value="{{$details->id}}">{{$details->short_description}}
+                                            </option>
+                                            @endforeach
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="form-group row">
+                                <div class="col-sm-10" style="margin-left: 115px;">
+                                    <label for="activity_type_description">Activity Type:</label>
+                                    <br>
+                                    <textarea name="activity_type_description" id="activity_type_description"
+                                        cols="30"></textarea>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <div class="col-sm-2">Schedule:</div>
+                            <div class="col-sm-10">
+                                <div class="form-check">
+                                    <input class="form-check-input" type="checkbox" id="checkbox_schedule"
+                                        onchange="checkboxScheduleEvent(this)">
+                                    <label class="form-check-label" for="checkbox_schedule">
+                                        Schedule Event
+                                    </label>
+                                    <br>
+                                    <!-- <label for="">Regarding:</label> -->
+                                    <div class="schedule-event-area">
+                                        <select id="schedule_event_type" name="schedule_event_type">
+                                            <option selected disabled>Select Event Type</option>
+                                            @foreach($calendarEvenType as $details)
+                                            <option value="{{$details->id}}">{{$details->short_description}}</option>
+                                            @endforeach
+                                        </select>
+                                        <br><br>
+                                        <div class="month-area"
+                                            style="display: flex; flex-direction: row; align-items: center;">
+                                            <div class="form-group">
+                                                <label for="monthPicker">Select Month:</label>
+                                                <div class="input-group">
+                                                    <select id="monthDropdown" name="month">
+                                                        @for ($month = 1; $month <= 12; $month++) <option
+                                                            value="{{ $month }}">
+                                                            {{ date('M', mktime(0, 0, 0, $month, 1)) }}
+                                                            </option>
+                                                            @endfor
+                                                    </select>
+
+                                                    <select name="date" id="dateDropdown"></select>
+
+                                                    <input type="text" name="year" id="year" style="width: 15%;"
+                                                        value="{{ substr(date('Y'), -2) }}" id="year">
+
+                                                    <input type="date" name="calander_date" id="calander_date"
+                                                        style="margin-left: 10px; padding: 0px; width: 6%;">
+                                                </div>
+                                            </div>
+                                            <div class="title-area">
+                                                <label for="title">Title</label>
+                                                <input type="text" id="title" name="title">
+                                            </div>
+                                            <input type="hidden" id="selectedDate" name="selected_date">
+                                        </div>
+                                        <!-- <br> -->
+                                        <div class="time-area" style="display: flex; flex-direction: row;">
+                                            <div class="form-group">
+                                                <fieldset class="form-group">
+                                                    <div class="row">
+                                                        <div class="col-sm-10">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="radio"
+                                                                    name="hoursRadios" id="hoursRadios1" value=""
+                                                                    checked>
+                                                                <div class="input-group"
+                                                                    style="display: flex; flex-direction: row; flex-wrap: nowrap;">
+                                                                    <select id="hours" name="hours">
+                                                                        @for ($hour = 1; $hour <= 12; $hour ++) <option
+                                                                            value="{{ $hour  }}">
+                                                                            {{$hour}}
+                                                                            </option>
+                                                                            @endfor
+                                                                    </select>
+
+                                                                    <select id="minutes" name="minutes">
+                                                                        <option value="00">00</option>
+                                                                        <option value="15">15</option>
+                                                                        <option value="30">30</option>
+                                                                        <option value="45">45</option>
+                                                                    </select>
+
+                                                                    <select id="day_am_pm" name="day_am_pm">
+                                                                        <option value="AM">AM</option>
+                                                                        <option value="PM">PM</option>
+                                                                    </select>
+
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </fieldset>
+                                            </div>
+                                            <div class="length-area"
+                                                style="margin-left: 190px; display: grid; align-items: center; align-content: center;">
+                                                <label for="">Length:</label>
+                                                <select id="length_hours" name="length_hours"
+                                                    style="width: 173px;  padding: 3px;">
+                                                    <option value="15">15 minuts</option>
+                                                    <option value="30">30 minuts</option>
+                                                    <option value="45">45 minuts</option>
+                                                    <option value="1">1 hours</option>
+                                                    <option value="1.5">1.5 hours</option>
+                                                    <option value="2">2 hours</option>
+                                                    <option value="3">3 hours</option>
+                                                    <option value="4">4 hours</option>
+                                                    <option value="more">More then 4 hours</option>
+
+                                                </select>
+                                            </div>
+                                        </div>
+
+                                        <!-- <br> -->
+                                        <div class="time-area" style="display: flex; flex-direction: row;">
+                                            <div class="form-group">
+                                                <fieldset class="form-group">
+                                                    <div class="row">
+                                                        <div class="col-sm-10">
+                                                            <div class="form-check">
+                                                                <input class="form-check-input" type="radio"
+                                                                    name="all_day_radios" id="all_day_radios" value=""
+                                                                    checked>
+                                                                <div class="input-group">
+                                                                    All Day / No Specific Time
+                                                                </div>
+                                                            </div>
+                                                            <input type="checkbox" name="public_entry"
+                                                                id="public_entry">
+                                                            Public Entry
+                                                        </div>
+                                                    </div>
+                                                </fieldset>
+                                            </div>
+                                            <div class="length-area"
+                                                style="margin-left: 205px; display: grid; align-items: center; align-content: center;">
+                                                <label for="">Description:</label>
+                                                <textarea name="length_description" id="length_description"
+                                                    cols="30"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="save_activity_btn">Save changes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 @endsection
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 @push('scripts')
 <script>
+$('#activityModal').modal('show');
+$('.checkbox-mail-area').hide();
+// $('.schedule-event-area').show();
+$('.regarding-area').hide();
+$('#change_status_item').prop('disabled', true);
+$('#select_checkbox_activity').prop('disabled', true)
+
+function checkboxStatusChange(element) {
+    if ($(element).prop('checked') === true) {
+        $('#change_status_item').prop('disabled', false).on('click');
+    } else {
+        $('#change_status_item').prop('disabled', true).off('click');
+    }
+}
+
+function jobStatusChange(element) {
+    $('#activity_type_description').html('');
+    var dataId = element.value;
+    var selectedText = element.options[dataId].text;
+    var html = '';
+
+    if (dataId == '1' || dataId == '8') {
+        $('.checkbox-mail-area').hide();
+    } else {
+        $('.checkbox-mail-area').show();
+    }
+    if (dataId == '5' || dataId == '6' || dataId == '7' || dataId == '10') {
+        $('.regarding-area').show();
+        emailTemplate(dataId, selectedText);
+        $('#checkbox_mail_send_item').prop('checked', true)
+    } else {
+        $('#checkbox_mail_send_item').prop('checked', false)
+        $('.regarding-area').hide();
+    }
+
+    html = "Change Status :" + selectedText;
+    $('#activity_type_description').append(html);
+}
+
+
+function emailTemplate(dataId, selectedText) {
+    var jobTitle = $('#jobOrderTitle').val();
+    var comoanyName = $('#companyName').data('details');
+    var candidateName = $('#candidateName').val();
+    var candidateDateTime = $('#candidateDateTime').val();
+    var oldStatus = $('#candidateJoborderStatus').val();
+    var newStatus = selectedText;
+    var owner = $('#ownerName').val();
+
+    var template = '* Auto-generated message. Please DO NOT reply *\n' +
+        '' + candidateDateTime + '\n\n' +
+        'Dear ' + candidateName + ',\n\n' +
+        'This E-Mail is a notification that your status in our database has been changed for the position ' + jobTitle +
+        ' ' + '(' + comoanyName + ').\n\n' +
+        'Your previous status was ' + oldStatus + '.\n' +
+        'Your new status is ' + newStatus + '.\n\n' +
+        'Take care,\n' +
+        '' + owner + '\n' +
+        'xyber-it.com';
+
+    // Append the template to the textarea value
+    $('#customMessage').val(function(index, currentValue) {
+        return currentValue + template;
+    });
+}
+
+
+function checkboxActivity(element) {
+    if ($(element).prop('checked') === true) {
+        $('#select_checkbox_activity').prop('disabled', false).on('click');
+    } else {
+        $('#select_checkbox_activity').prop('disabled', true).off('click');
+    }
+}
+
+function checkboxScheduleEvent(element) {
+    // alert('okk');
+    if ($(element).prop('checked') === true) {
+        $('.schedule-event-area').prop('disabled', true).on('click');
+    } else {
+        $('.schedule-event-area').prop('disabled', false).off('click');
+    }
+}
+
+
 function addCandidateOnJobOrder(that) {
     $('#addJobOrderModal').modal('hide');
     var job_id = $('#job_id').val();

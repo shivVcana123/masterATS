@@ -5,8 +5,11 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\DataTables\FacilitiesDataTable;
 use App\Facades\UtilityFacades;
+use App\Models\ActivityType;
+use App\Models\calendarEvenType;
 use App\Models\Candidate;
 use App\Models\CandidateJoborder;
+use App\Models\ChangeStatus;
 use App\Models\Joborder;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\DB;
@@ -15,6 +18,7 @@ use File;
 use Illuminate\Support\Facades\Auth;
 use Laracasts\Flash\Flash;
 use App\Models\Company;
+use App\Models\SavedList;
 use App\Models\User;
 
 class JoborderController extends Controller
@@ -158,9 +162,12 @@ public function profiledetails($id){
       ->get();
       $candidateList = Candidate::with('ownerUser','recruiterUser')->get();
     //   dd($candidateList);
-      $candidateDetails = CandidateJoborder::with('candidates','ownerUser','candidateJoborderStatus')->where('joborder_id',$id)->get();
-//   dd( $candidateDetails );
-    return view('joborders.show',compact('jobDetails','candidateDetails','candidateList'));
+      $candidatesJobOrderDetails = CandidateJoborder::with('candidates','ownerUser','candidateJoborderStatus')->where('joborder_id',$id)->get();
+
+    $activityType = ActivityType::get();
+    $calendarEvenType = calendarEvenType::get();
+    $changeStatus = ChangeStatus::get();
+    return view('joborders.show',compact('jobDetails','candidatesJobOrderDetails','candidateList','changeStatus','activityType','calendarEvenType'));
 }
 
 public function joborderUpdate($id){
