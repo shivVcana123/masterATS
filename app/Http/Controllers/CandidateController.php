@@ -114,9 +114,9 @@ class CandidateController extends Controller
     }
 
     public function candidatesDetails($id){
-        $candidatesDetails = Candidate::where('id',$id)->get();
+        $candidatesDetails = Candidate::with('attachments')->where('id',$id)->get();
         // candidatesDetails','users','joborderDetails','joborderDetails.companies','activities','activities.activityTypes
-        $candidatesJobOrderDetails = CandidateJoborder::with('candidates','candidateJoborderStatus','joborderDetails','candidates.ownerUser','candidates.recruiterUser')->where('candidate_id',$id)->get();
+        $candidatesJobOrderDetails = CandidateJoborder::with('candidates','candidateJoborderStatus','joborderDetails','ownerUser','recruiterUser')->where('candidate_id',$id)->get();
 
         // dd($candidatesJobOrderDetails);
         $joborderList = Joborder::with('companies','ownerUser','recruiterUser')->get();
@@ -256,7 +256,6 @@ public function candidatesListSave(Request $request){
 
     public function candidatesActivitySave(Request $request){
         $data = $request->all();
-
         $result = Activity::create([
             'data_item_id' =>$data['change_status_item'],
             'data_item_type' =>$data['schedule_event_type'],

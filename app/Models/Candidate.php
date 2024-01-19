@@ -41,4 +41,9 @@ class Candidate extends Model
     public function candidateJoborder(){
         return $this->hasMany(CandidateJobOrder::class, 'candidate_id', 'id');
     }
+
+    public function attachments()
+    {
+        return $this->morphMany(Attachment::class, 'attachable');
+    }
 }

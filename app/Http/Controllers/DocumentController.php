@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Attachment;
+use App\Models\Candidate;
 use App\Models\Company;
 use App\Models\Contact;
 use App\Models\Document;
@@ -183,6 +184,9 @@ class DocumentController extends Controller
        }elseif($request->input('contact_id')){
             $attachableType = Contact::class;
             $attachableId = $request->input('contact_id');
+       }elseif($request->input('candidate_id')){
+            $attachableType = Candidate::class;
+            $attachableId = $request->input('candidate_id');
        }else{
             $attachableType = null;
             $attachableId = null;
@@ -234,44 +238,26 @@ class DocumentController extends Controller
         }
     }
 
-    // public function documentDownload($id)
-    // {
-    //     $documentDownload = Attachment::find($id);
-    //     if (!$documentDownload) {
-    //         abort(404); // Document not found
-    //     }
     
-    //     $download_file = $documentDownload->title;
-    //     $file_path = asset('documents/' . $download_file);
-    //     if (!file_exists($file_path)) {
-    //         abort(404, 'File not found');
-    //     }
-    
-    //     $headers = [
-    //         'Content-Type' => mime_content_type($file_path),
-    //     ];
-    
-    //     return response()->download($file_path, $documentDownload->original_filename, $headers);
-    // }
 
     public function documentDownload($id)
-{
-    $documentDownload = Attachment::find($id);
-    if (!$documentDownload) {
-        abort(404); // Document not found
+    {
+        $documentDownload = Attachment::find($id);
+        if (!$documentDownload) {
+            abort(404); // Document not found
+        }
+
+        $download_file = $documentDownload->title;
+        $file_path = public_path('documents/' . $download_file);
+
+        if (!file_exists($file_path)) {
+            abort(404, 'File not found');
+        }
+
+        $headers = [
+            'Content-Type' => mime_content_type($file_path),
+        ];
+
+        return response()->download($file_path, $documentDownload->original_filename, $headers);
     }
-
-    $download_file = $documentDownload->title;
-    $file_path = public_path('documents/' . $download_file);
-
-    if (!file_exists($file_path)) {
-        abort(404, 'File not found');
-    }
-
-    $headers = [
-        'Content-Type' => mime_content_type($file_path),
-    ];
-
-    return response()->download($file_path, $documentDownload->original_filename, $headers);
-}
 }

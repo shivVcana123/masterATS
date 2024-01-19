@@ -30,10 +30,10 @@ class CandidateJoborder extends Model
         return $this->belongsTo(User::class, 'added_by');
     }
 
-    // public function recruiterUser()
-    // {
-    //     return $this->belongsTo(User::class, 'recruiter');
-    // }
+    public function recruiterUser()
+    {
+        return $this->belongsTo(User::class, 'recruiter');
+    }
 
     public function activities(){
         return $this->belongsTo(Activity::class,'id');

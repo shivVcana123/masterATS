@@ -162,7 +162,7 @@ public function profiledetails($id){
       ->get();
       $candidateList = Candidate::with('ownerUser','recruiterUser')->get();
     //   dd($candidateList);
-      $candidatesJobOrderDetails = CandidateJoborder::with('candidates','ownerUser','candidateJoborderStatus')->where('joborder_id',$id)->get();
+      $candidatesJobOrderDetails = CandidateJoborder::with('candidates','ownerUser','candidateJoborderStatus','recruiterUser')->where('joborder_id',$id)->get();
 
     $activityType = ActivityType::get();
     $calendarEvenType = calendarEvenType::get();

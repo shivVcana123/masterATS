@@ -14,6 +14,14 @@
 
     display: flex;
 }
+
+.hours-area {
+    position: relative;
+    display: flex;
+    flex-wrap: nowrap;
+    width: 100%;
+    flex-direction: row;
+}
 </style>
 <div class="row">
     <div class="col-lg-12 margin-tb">
@@ -90,16 +98,16 @@
                         </tr>
                         <tr>
                             <td class="vertical">Start Date:</td>
-                            <td class="data">{{$jobDetails[0]['start_date']}}</td>
+                            <td class="data">{{date("d-m-Y", strtotime($jobDetails[0]['start_date']))}}</td>
                         </tr>
                         <tr>
                             <td class="vertical">Expected Candidate Pay Rate:</td>
                             <td class="data">{{$jobDetails[0]['actual_rate']}}</td>
                         </tr>
-                        <tr>
+                        <!-- <tr>
                             <td class="vertical">Start Date:</td>
                             <td class="data">{{$jobDetails[0]['start_date']}}</td>
-                        </tr>
+                        </tr> -->
                     </tbody>
                 </table>
             </td>
@@ -136,23 +144,24 @@
                         </tr>
                         <tr>
                             <td class="vertical">Created:</td>
-                            <td class="data">{{$jobDetails[0]['created_at']}}</td>
+                            <td class="data">{{date("d-m-Y (h:i A)", strtotime($jobDetails[0]['created_at']))}}
+                                ({{$jobDetails[0]['ownerUser']->user_name}})</td>
                         </tr>
                         <tr>
                             <td class="vertical">Recruiter:</td>
-                            <td class="data">{{$jobDetails[0]['recruiter']}} </td>
+                            <td class="data">{{$jobDetails[0]['recruiterUser']->user_name}} </td>
                         </tr>
                         <tr>
                             <td class="vertical">Owner:</td>
-                            <td class="data">{{$jobDetails[0]['owner']}}</td>
+                            <td class="data">{{$jobDetails[0]['ownerUser']->user_name}}</td>
                         </tr>
                         <tr>
                             <td class="vertical">End Date:</td>
-                            <td class="data">{{$jobDetails[0]['end_date']}}</td>
+                            <td class="data">{{date("d-m-Y", strtotime($jobDetails[0]['end_date']))}}</td>
                         </tr>
                         <tr>
                             <td class="vertical">Submission Deadline:</td>
-                            <td class="data">{{$jobDetails[0]['submission_deadline']}}</td>
+                            <td class="data">{{date("d-m-Y", strtotime($jobDetails[0]['submission_deadline']))}}</td>
                         </tr>
                         <tr>
                             <td class="vertical">Max Submissions:</td>
@@ -196,6 +205,7 @@
         </tr>
     </tbody>
 </table>
+
 <div class="form-group col-md-12" style="margin-top: 7px">
     <div class="form-control" style="border-color: transparent;padding-left: 0px">
         <label style="font-size: 18px">Candidate in Job Order</label>
@@ -230,14 +240,14 @@
                     </td>
                     <td>{{$details['candidates']->state}}</td>
                     <td>
-                        {{ date_format(DateTime::createFromFormat('Y-m-d H:i:s', $details->date_created), 'd m Y') }}
+                        {{ date_format(DateTime::createFromFormat('Y-m-d H:i:s', $details->date_created), 'd-m-Y') }}
                     </td>
                     <td>
                         {{$details['ownerUser']->user_name}}
                     </td>
                     <td>{{isset($details['candidateJoborderStatus']->short_description) ? $details['candidateJoborderStatus']->short_description : ''}}
                     </td>
-                    <td>{{ date_format(DateTime::createFromFormat('Y-m-d H:i:s', $details->date_created), 'd m Y') }}
+                    <td>{{ date_format(DateTime::createFromFormat('Y-m-d H:i:s', $details->date_created), 'd-m-Y') }}
                         ({{$details['ownerUser']->user_name}})</td>
                     <td>
                         <!-- <a href="{{url('/candidates/update',$details['candidates']->id)}}"><i
@@ -408,6 +418,7 @@
                                 <label for="">Regarding:</label>
 
                                 <input type="hidden" id="jobOrderTitle" value="{{$details['joborderDetails']->title}}">
+                                <input type="hidden" id="jobOrderId" value="{{$details['joborderDetails']->id}}">
                                 <input type="hidden" id="candidateName"
                                     value="{{$candidatesJobOrderDetails[0]['candidates']->first_name}} {{$candidatesJobOrderDetails[0]['candidates']->last_name}}">
                                 <input type="hidden" id="candidateDateTime"
@@ -421,7 +432,7 @@
                                 <p style="margin-left: 50px;"> {{$details['joborderDetails']->title}}</p>
                                 <div class="checkbox-mail-area">
                                     <input class="form-check-input" type="checkbox" id="checkbox_mail_send_item"
-                                        name="checkbox_mail_send_item" style="margin-left: 30px;">
+                                        name="checkbox_mail_send_item" style="margin-left: 30px;" value="1">
                                     <label class="form-check-label" for="checkbox_mail_send_item">
                                         Send E-Mail Notification to Candidate
                                     </label>
@@ -524,20 +535,15 @@
                                                             @endfor
                                                     </select>
 
-                                                    <select name="date" id="dateDropdown"></select>
+                                                    <select name="date" id="dateDropdown" style="width: 50px;"></select>
 
                                                     <input type="text" name="year" id="year" style="width: 15%;"
                                                         value="{{ substr(date('Y'), -2) }}" id="year">
 
-                                                    <input type="date" name="calander_date" id="calander_date"
-                                                        style="margin-left: 10px; padding: 0px; width: 6%;">
+                                                    <input type="date" name="calendar_date" id="calendar_date"
+                                                        style="margin-left: 10px; padding: 0px; width: 5%;">
                                                 </div>
                                             </div>
-                                            <div class="title-area">
-                                                <label for="title">Title</label>
-                                                <input type="text" id="title" name="title">
-                                            </div>
-                                            <input type="hidden" id="selectedDate" name="selected_date">
                                         </div>
                                         <!-- <br> -->
                                         <div class="time-area" style="display: flex; flex-direction: row;">
@@ -547,10 +553,9 @@
                                                         <div class="col-sm-10">
                                                             <div class="form-check">
                                                                 <input class="form-check-input" type="radio"
-                                                                    name="hoursRadios" id="hoursRadios1" value=""
-                                                                    checked>
-                                                                <div class="input-group"
-                                                                    style="display: flex; flex-direction: row; flex-wrap: nowrap;">
+                                                                    name="hoursRadios" id="hoursRadios1" value="Hours"
+                                                                    onclick="hoursRadios1(this)" checked>
+                                                                <div class="input-group hours-area">
                                                                     <select id="hours" name="hours">
                                                                         @for ($hour = 1; $hour <= 12; $hour ++) <option
                                                                             value="{{ $hour  }}">
@@ -571,47 +576,50 @@
                                                                         <option value="PM">PM</option>
                                                                     </select>
 
+                                                                    <!-- <div class="length-area"> -->
+                                                                    <label for=""
+                                                                        style="margin-left: 141px;">Length:</label>
+                                                                    <select id="length_hours" name="length_hours">
+                                                                        <option value="15">15 minuts</option>
+                                                                        <option value="30">30 minuts</option>
+                                                                        <option value="45">45 minuts</option>
+                                                                        <option value="1" checked>1 hours</option>
+                                                                        <option value="1.5">1.5 hours</option>
+                                                                        <option value="2">2 hours</option>
+                                                                        <option value="3">3 hours</option>
+                                                                        <option value="4">4 hours</option>
+                                                                        <option value="more">More then 4 hours
+                                                                        </option>
+
+                                                                    </select>
+                                                                    <!-- </div> -->
+
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </fieldset>
                                             </div>
-                                            <div class="length-area"
-                                                style="margin-left: 190px; display: grid; align-items: center; align-content: center;">
-                                                <label for="">Length:</label>
-                                                <select id="length_hours" name="length_hours"
-                                                    style="width: 173px;  padding: 3px;">
-                                                    <option value="15">15 minuts</option>
-                                                    <option value="30">30 minuts</option>
-                                                    <option value="45">45 minuts</option>
-                                                    <option value="1">1 hours</option>
-                                                    <option value="1.5">1.5 hours</option>
-                                                    <option value="2">2 hours</option>
-                                                    <option value="3">3 hours</option>
-                                                    <option value="4">4 hours</option>
-                                                    <option value="more">More then 4 hours</option>
 
-                                                </select>
-                                            </div>
                                         </div>
 
                                         <!-- <br> -->
-                                        <div class="time-area" style="display: flex; flex-direction: row;">
+                                        <div class="time-area"
+                                            style="display: flex; flex-direction: row; margin-top: -23px;">
                                             <div class="form-group">
                                                 <fieldset class="form-group">
                                                     <div class="row">
                                                         <div class="col-sm-10">
                                                             <div class="form-check">
                                                                 <input class="form-check-input" type="radio"
-                                                                    name="all_day_radios" id="all_day_radios" value=""
-                                                                    checked>
+                                                                    name="all_day_radios" id="all_day_radios"
+                                                                    onclick="allDayRadios(this)" value="All Days">
                                                                 <div class="input-group">
                                                                     All Day / No Specific Time
                                                                 </div>
                                                             </div>
-                                                            <input type="checkbox" name="public_entry"
-                                                                id="public_entry">
+                                                            <input type="checkbox" name="public_entry" id="public_entry"
+                                                                value="1">
                                                             Public Entry
                                                         </div>
                                                     </div>
@@ -644,9 +652,9 @@
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 @push('scripts')
 <script>
-$('#activityModal').modal('show');
+// $('#activityModal').modal('show');
 $('.checkbox-mail-area').hide();
-// $('.schedule-event-area').show();
+$('.schedule-event-area').hide();
 $('.regarding-area').hide();
 $('#change_status_item').prop('disabled', true);
 $('#select_checkbox_activity').prop('disabled', true)
@@ -658,10 +666,11 @@ function checkboxStatusChange(element) {
         $('#change_status_item').prop('disabled', true).off('click');
     }
 }
+var dataId = '';
 
 function jobStatusChange(element) {
     $('#activity_type_description').html('');
-    var dataId = element.value;
+    dataId = element.value;
     var selectedText = element.options[dataId].text;
     var html = '';
 
@@ -720,11 +729,10 @@ function checkboxActivity(element) {
 }
 
 function checkboxScheduleEvent(element) {
-    // alert('okk');
     if ($(element).prop('checked') === true) {
-        $('.schedule-event-area').prop('disabled', true).on('click');
+        $('.schedule-event-area').show().on('click');
     } else {
-        $('.schedule-event-area').prop('disabled', false).off('click');
+        $('.schedule-event-area').hide().off('click');
     }
 }
 
@@ -866,30 +874,12 @@ $(document).on('click', '#document_delete_id', function() {
     });
 });
 
+// Document download
 $(document).on('click', '#documentDownload', function() {
     var documentDownload = $(this).data('id');
 
-    $.ajax({
-        url: '/document/download/' + documentDownload,
-        type: 'GET',
-        success: function(response) {
-            console.log(response);
-            const title = response.status ? "success" : "warning";
-            Swal.fire({
-                title: response.message,
-                type: title,
-                icon: title,
-            }).then(function(result) {
-                if (result.isConfirmed && response.status) {
-                    window.location.href =
-                        "{{ url('/joborders/details',$jobDetails[0]->id ) }}";
-                }
-            });
-        },
-        error: function(xhr, status, error) {
-            console.error('Error:', error);
-        },
-    });
+    var url = '/document/download/' + documentDownload;
+    window.open(url, '_blank'); // Open the download link in a new tab
 });
 
 $(document).on('click', '#candidate_joborders_delete', function() {
@@ -930,6 +920,126 @@ $(document).on('click', '#candidate_joborders_delete', function() {
                 },
             });
         }
+    });
+});
+
+
+function hoursRadios1(element) {
+    if ($(element).prop('checked') === true) {
+        $('#all_day_radios').prop('checked', false);
+        $('#hours').prop('disabled', false);
+        $('#minutes').prop('disabled', false);
+        $('#day_am_pm').prop('disabled', false);
+        $('#length_hours').prop('disabled', false);
+    }
+}
+
+function allDayRadios(element) {
+    if ($(element).prop('checked') === true) {
+        $('#hoursRadios1').prop('checked', false);
+        $('#hours').prop('disabled', true);
+        $('#minutes').prop('disabled', true);
+        $('#day_am_pm').prop('disabled', true);
+        $('#length_hours').prop('disabled', true);
+    }
+}
+
+function updateDateDropdown() {
+    var month = document.getElementById('monthDropdown').value;
+    var year = document.getElementById('year').value;
+    var daysInMonth = new Date(year, month, 0).getDate();
+
+    var dateDropdown = document.getElementById('dateDropdown');
+    dateDropdown.innerHTML = '';
+
+    for (var day = 1; day <= daysInMonth; day++) {
+        var option = document.createElement('option');
+        option.value = day;
+        option.text = day;
+        dateDropdown.add(option);
+    }
+}
+
+var currentDate = new Date();
+document.getElementById('monthDropdown').value = currentDate.getMonth() + 1;
+document.getElementById('year').value = currentDate.getFullYear();
+document.getElementById('calendar_date').valueAsDate = currentDate;
+
+// Set the initial value for the date dropdown to the current day
+var currentDay = currentDate.getDate();
+document.getElementById('dateDropdown').value = currentDay;
+
+document.getElementById('monthDropdown').addEventListener('change', updateDateDropdown);
+document.getElementById('year').addEventListener('input', updateDateDropdown);
+
+// Initialize date dropdown on page load
+updateDateDropdown();
+
+$(document).on('click', '#save_activity_btn', function() {
+    var jobOrderId = $('#jobOrderId').val();
+    // var joborder_item = $('#joborder_item').val();
+    var change_status_item = dataId;
+    var select_checkbox_activity = $('#select_checkbox_activity').val();
+    var activity_type_description = $('#activity_type_description').val();
+    var schedule_event_type = $('#schedule_event_type').val();
+    var monthDropdown = $('#monthDropdown').val();
+    var dateDropdown = $('#dateDropdown').val();
+    var year = $('#year').val();
+    var title = $('#title').val();
+    var hours = $('#hours').val();
+    var minutes = $('#minutes').val();
+    var day_am_pm = $('#day_am_pm').val();
+    var length_hours = $('#length_hours').val();
+    var length_description = $('#length_description').val();
+    var customMessage = $('#customMessage').val();
+    var checkbox_mail_send_item = $('#checkbox_mail_send_item').is(':checked') ? 1 : 0;
+    var public_entry = $('#public_entry').is(':checked') ? 1 : 0;
+    // alert(checkbox_mail_send_item);
+
+    $.ajaxSetup({
+        headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        },
+    });
+
+    $.ajax({
+        url: '/candidates/activity/save',
+        type: 'POST',
+        data: {
+            joborder_item: jobOrderId,
+            change_status_item: change_status_item,
+            select_checkbox_activity: select_checkbox_activity,
+            activity_type_description: activity_type_description,
+            schedule_event_type: schedule_event_type,
+            monthDropdown: monthDropdown,
+            dateDropdown: dateDropdown,
+            year: year,
+            title: title,
+            hours: hours,
+            minutes: minutes,
+            day_am_pm: day_am_pm,
+            length_hours: length_hours,
+            length_description: length_description,
+            customMessage: customMessage,
+            checkbox_mail_send_item: checkbox_mail_send_item,
+        },
+        success: function(response) {
+            const title = response.status ? "success" : "warning";
+            Swal.fire({
+                title: response.message,
+                type: title,
+                icon: title,
+            }).then(function(result) {
+                if (result.isConfirmed && response.status) {
+                    $('#exampleModal').modal('hide');
+                    window.location.href =
+                        "{{ url('/candidates/details',$candidatesJobOrderDetails[0]['candidates']->id ) }}";
+                }
+            });
+        },
+        error: function(xhr, status, error) {
+            console.error('Error:', error);
+        },
     });
 });
 </script>

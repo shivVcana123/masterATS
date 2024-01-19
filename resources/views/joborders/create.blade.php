@@ -72,6 +72,18 @@
                     </select>
                     <span class="recruiter_error errors"></span>
                 </div>
+                <div class="form-group">
+                    <label for="owner">Owner</label>
+                    <!-- <input type="text" name="owner" id="owner" class="form-control"> -->
+                    <select name="owner" id="owner" class="form-control">
+                        @foreach($users as $data)
+                        <option value="{{ $data->id }}">
+                            {{ $data->user_name }}
+                        </option>
+                        @endforeach
+                    </select>
+                    <span class="owner_error errors"></span>
+                </div>
 
                 <div class="form-group">
                     <label for="type">Type</label>

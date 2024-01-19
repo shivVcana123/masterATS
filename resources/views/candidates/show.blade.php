@@ -44,7 +44,8 @@
                                 <td class="vertical">Name:</td>
                                 <td class="data">
                                     <div class="btn-group">
-                                        <input type="hidden" id="candidate_id" value="{{ $candidatesJobOrderDetails[0]['candidates']->id }}">
+                                        <input type="hidden" id="candidate_id"
+                                            value="{{ $candidatesJobOrderDetails[0]['candidates']->id }}">
                                         <button type="button" class="btn btn-secondary ">
                                             {{ $candidatesJobOrderDetails[0]['candidates']->first_name }}
                                             {{ $candidatesJobOrderDetails[0]['candidates']->middle_name }}
@@ -93,16 +94,12 @@
                             </tr>
                             <tr>
                                 <td class="vertical">Best Time To Call:</td>
-                                <td class="data">{{ $candidatesJobOrderDetails[0]['candidates']->best_time_to_call }}</td>
+                                <td class="data">{{ $candidatesJobOrderDetails[0]['candidates']->best_time_to_call }}
+                                </td>
                             </tr>
                             <tr>
                                 <td class="vertical">Address:</td>
                                 <td class="data">{{ $candidatesJobOrderDetails[0]['candidates']->address }}</td>
-                            </tr>
-                            <tr>
-                                <td class="vertical">&nbsp;</td>
-                                <td class="data">
-                                    1 </td>
                             </tr>
                             <tr>
                                 <td class="vertical">Web Site:</td>
@@ -112,10 +109,6 @@
                             <tr>
                                 <td class="vertical">Source:</td>
                                 <td class="data">{{ $candidatesJobOrderDetails[0]['candidates']->source }}</td>
-                            </tr>
-                            <tr>
-                                <td class="vertical"></td>
-                                <td class="data">2</td>
                             </tr>
                         </tbody>
                     </table>
@@ -129,7 +122,8 @@
                             </tr>
                             <tr>
                                 <td class="vertical">Current Employer:</td>
-                                <td class="data">{{ $candidatesJobOrderDetails[0]['candidates']->current_employer }}</td>
+                                <td class="data">{{ $candidatesJobOrderDetails[0]['candidates']->current_employer }}
+                                </td>
                             </tr>
                             <tr>
                                 <td class="vertical">Key Skills:</td>
@@ -157,11 +151,13 @@
                             </tr>
                             <tr>
                                 <td class="vertical">Created:</td>
-                                <td class="data">{{ $candidatesJobOrderDetails[0]['candidates']->date_created  }}</td>
+                                <td class="data">
+                                    {{date("d-m-Y (h:i A)", strtotime($candidatesJobOrderDetails[0]['candidates']->date_created))}}
+                                    ({{ $candidatesJobOrderDetails[0]['ownerUser']->user_name}})</td>
                             </tr>
                             <tr>
                                 <td class="vertical">Owner:</td>
-                                <td class="data">{{ $candidatesJobOrderDetails[0]['candidates']->owner  }}</td>
+                                <td class="data">{{ $candidatesJobOrderDetails[0]['ownerUser']->user_name}}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -169,67 +165,35 @@
             </tr>
         </tbody>
     </table>
-    <table class="detailsOutside">
+
+    <table class="detailsInside">
         <tbody>
             <tr>
-                <td>
-                    <table class="detailsInside">
+                <td valign="top" class="vertical">Attachments:</td>
+                <td valign="top" class="data">
+                    <table class="attachmentsTable">
                         <tbody>
+                            @foreach($candidatesDetails[0]['attachments'] as $value)
                             <tr>
-                                <td valign="top" class="vertical">Misc. Notes:</td>
-                                <td id="shortNotes" style="display:block;" class="data">
-                                </td>
+                                <td><a href="javascript:;" id="documentDownload"
+                                        data-id="{{$value->id}}">{{$value->title}}</a></td>
+                                <td>&nbsp; &nbsp;{{date("d-m-Y (h:i A)", strtotime($value->date_created))}}</td>
+                                <td>&nbsp; &nbsp;<i class="fa fa-trash" id="document_delete_id"
+                                        data-value="{{$value->id}}"></i></td>
                             </tr>
-                            <tr>
-                                <td valign="top" class="vertical">Upcoming Events:</td>
-                                <td id="schedule_event" class="data" value="Schedule Event"><a
-                                        href="javascript:;">Schedule Event</a></td>
-                            </tr>
-                            <tr>
-                                <td valign="top" class="vertical">Attachments:</td>
-                                <td valign="top" class="data">
-                                    <table class="attachmentsTable">
-                                        <tbody>
-                                            <tr>
-                                                <td>
-                                                    <a href="javascript:;">
-                                                        <!-- <img src="images/attachment.gif" alt="" width="16" height="16"
-                                                            border="0"> -->
-
-                                                        Sirisha Kotha.DOCX
-                                                    </a>
-                                                </td>
-                                                <td><a href="javascript:;">
-                                                        <!-- <img width="15" height="15" style="border: none;"
-                                                            src="images/search.gif" alt="(Preview)"> -->
-                                                    </a></td>
-                                                <td> 01-03-24 (05:24:22 PM)</td>
-                                                <td>
-                                                    <a href="javascript:;">
-                                                        <!-- <img src="images/actions/delete.gif" alt="" width="16"
-                                                            height="16" border="0" title="Delete"> -->
-                                                    </a>
-                                                </td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                    <a href="javascript:;" data-toggle="modal" data-target="#attachmenModal">
-                                        <!-- <img src="images/paperclip_add.gif" width="16" height="16" border="0"
-                                            alt="Add Attachment" class="absmiddle"> -->
-                                        &nbsp;Add Attachment
-                                    </a>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td valign="top" class="vertical">Tags:
-                                    <a href="javascript:;">
-                                        Add/Remove
-                                    </a>
-                                </td>
-                                <td valign="top" class="data"> </td>
-                            </tr>
+                            @endforeach
                         </tbody>
-                    </table>
+                    </table><br>
+                    <form id="document_form" enctype="multipart/form-data" method="POST" style="margin-left: -101px;">
+
+                        <input type="hidden" name="candidate_id" id="candidate_id"
+                            value="{{$candidatesJobOrderDetails[0]['candidates']->id}}">
+
+                        <label for="document_file"> Add Attachment:</label>&nbsp;
+                        <input type="file" name="document_file" id="document_file" accept=".pdf, .doc, .docx, .txt">
+                        <button type="button" class="btn btn-sm btn-primary" id="submit_file">Submit</button>
+                        <br><span class="document_file_error errors"></span>
+                    </form>
                 </td>
             </tr>
         </tbody>
@@ -251,27 +215,26 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                        <form name="createAttachmentForm" id="createAttachmentForm"
-                            action="#" enctype="multipart/form-data" method="post">
-                            <input type="hidden" name="postback" id="postback" value="postback">
-                            <input type="hidden" id="candidateID" name="candidateID" value="76">
-                            <table class="editTable">
-                                <tbody>
-                                    <tr>
-                                        <td class="tdVertical">Attachment:</td>
-                                        <td class="tdData"><input type="file" id="file" name="file"></td>
-                                    </tr>
-                                    <tr>
-                                        <td class="tdVertical">Resume:</td>
-                                        <td>
-                                            <input type="radio" id="resume" name="resume" value="1"
-                                                checked="checked">Yes
-                                            <input type="radio" id="resume" name="resume" value="0">No
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </form>
+                    <form name="createAttachmentForm" id="createAttachmentForm" action="#" enctype="multipart/form-data"
+                        method="post">
+                        <input type="hidden" name="postback" id="postback" value="postback">
+                        <input type="hidden" id="candidateID" name="candidateID" value="76">
+                        <table class="editTable">
+                            <tbody>
+                                <tr>
+                                    <td class="tdVertical">Attachment:</td>
+                                    <td class="tdData"><input type="file" id="file" name="file"></td>
+                                </tr>
+                                <tr>
+                                    <td class="tdVertical">Resume:</td>
+                                    <td>
+                                        <input type="radio" id="resume" name="resume" value="1" checked="checked">Yes
+                                        <input type="radio" id="resume" name="resume" value="0">No
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </form>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -835,8 +798,110 @@ $(document).on('click', '#add_candidates_to_job_order_list tbody td#joborder_id'
     });
 });
 
+$(document).on('click', '#submit_file', function(e) {
+    e.preventDefault();
+    var candidate_id = $('#candidate_id').val();
+
+    const formData = new FormData();
+    const fileInput = $('#document_file')[0];
+
+    let errors = [];
+    $(".errors").html("");
+
+    if (fileInput.files.length > 0) {
+        const file = fileInput.files[0];
+        formData.append('candidate_id', candidate_id);
+        formData.append('document_file', file);
+    } else {
+        errors.push('document_file');
+        $(".document_file_error").html('Please select a document file');
+    }
+
+    if (errors.length > 0) {
+        return false;
+    }
 
 
+    $.ajaxSetup({
+        headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        },
+    });
+    $.ajax({
+        url: '/document/upload', // Adjust the URL as needed
+        type: 'POST',
+        data: formData,
+        contentType: false,
+        processData: false,
+        success: function(response) {
+            const title = response.status ? "success" : "warning";
+            Swal.fire({
+                title: response.message,
+                type: title,
+                icon: title,
+            }).then(function(result) {
+                if (result.isConfirmed && response.status) {
+                    window.location.href =
+                        "{{ url('/candidates/details',$candidatesJobOrderDetails[0]['candidates']->id ) }}";
+                }
+            });
+        },
+        error: function(xhr, status, error) {
+            console.error('Error:', error);
+        },
+    });
+});
+
+
+// Document download
+$(document).on('click', '#documentDownload', function() {
+    var documentDownload = $(this).data('id');
+
+    var url = '/document/download/' + documentDownload;
+    window.open(url, '_blank'); // Open the download link in a new tab
+});
+
+$(document).on('click', '#document_delete_id', function() {
+
+    var documentId = $(this).data('value');
+
+    Swal.fire({
+        title: 'Are you sure?',
+        text: 'You won\'t to delete this record!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#d33',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: "Yes",
+        cancelButtonText: "No",
+        closeOnConfirm: false,
+        closeOnCancel: false
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '/document/delete/' + documentId,
+                type: 'GET',
+                success: function(response) {
+                    console.log(response);
+                    const title = response.status ? "success" : "warning";
+                    Swal.fire({
+                        title: response.message,
+                        type: title,
+                        icon: title,
+                    }).then(function(result) {
+                        if (result.isConfirmed && response.status) {
+                            window.location.href =
+                        "{{ url('/candidates/details',$candidatesJobOrderDetails[0]['candidates']->id ) }}";
+                        }
+                    });
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error:', error);
+                },
+            });
+        }
+    });
+});
 
 
 $(document).ready(function() {
