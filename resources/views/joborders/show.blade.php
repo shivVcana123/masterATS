@@ -399,7 +399,6 @@
         </div>
     </div>
 </div>
-
 <div class="modal fade" id="activityModal" tabindex="-1" role="dialog" aria-labelledby="activityModalLabel"
     aria-hidden="true">
     <div class="modal-dialog" role="document">
@@ -410,6 +409,7 @@
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
+
             <div class="modal-body">
                 <fieldset class="form-group">
                     <div class="container">
@@ -417,19 +417,23 @@
                             <div class="mail-area">
                                 <label for="">Regarding:</label>
 
-                                <input type="hidden" id="jobOrderTitle" value="{{$details['joborderDetails']->title}}">
-                                <input type="hidden" id="jobOrderId" value="{{$details['joborderDetails']->id}}">
+                                <input type="hidden" id="jobOrderTitle"
+                                    value="{{(isset($details['joborderDetails']->title) ? $details['joborderDetails']->title : '')}}">
+                                <input type="hidden" id="jobOrderId"
+                                    value="{{(isset($details['joborderDetails']->id) ? $details['joborderDetails']->id : '')}}">
                                 <input type="hidden" id="candidateName"
-                                    value="{{$candidatesJobOrderDetails[0]['candidates']->first_name}} {{$candidatesJobOrderDetails[0]['candidates']->last_name}}">
+                                    value="{{isset($candidatesJobOrderDetails[0]['candidates']->first_name) ? $candidatesJobOrderDetails[0]['candidates']->first_name : ''}} {{isset($candidatesJobOrderDetails[0]['candidates']->last_name) ? $candidatesJobOrderDetails[0]['candidates']->last_name : ''}}">
                                 <input type="hidden" id="candidateDateTime"
-                                    value="{{date('d/m/Y (h:i A)', strtotime($candidatesJobOrderDetails[0]->date_created))}}">
-                                <input type="hidden" id="candidateJoborderStatus"
-                                    value="{{$candidatesJobOrderDetails[0]['candidateJoborderStatus']->short_description }}">
+                                    value="{{ isset($candidatesJobOrderDetails[0]->date_created) ? date('d-m-Y (h:i A)', strtotime($candidatesJobOrderDetails[0]->date_created)) : '' }}">
+
+                                <input type="hidden" id="candidateJoborderStatus" value="">
                                 <input type="hidden" id="ownerName"
-                                    value="{{$candidatesJobOrderDetails[0]['ownerUser']->user_name}}">
+                                    value="{{isset($candidatesJobOrderDetails[0]['ownerUser']->user_name) ? $candidatesJobOrderDetails[0]['ownerUser']->user_name : ''}}">
 
 
-                                <p style="margin-left: 50px;"> {{$details['joborderDetails']->title}}</p>
+                                <p style="margin-left: 50px;">
+                                    {{(isset($details['joborderDetails']->title) ? $details['joborderDetails']->title : '')}}
+                                </p>
                                 <div class="checkbox-mail-area">
                                     <input class="form-check-input" type="checkbox" id="checkbox_mail_send_item"
                                         name="checkbox_mail_send_item" style="margin-left: 30px;" value="1">
@@ -978,7 +982,7 @@ updateDateDropdown();
 $(document).on('click', '#save_activity_btn', function() {
     var jobOrderId = $('#jobOrderId').val();
     // var joborder_item = $('#joborder_item').val();
-    var change_status_item = dataId;
+    var candidate_joborder_status_type = dataId;
     var select_checkbox_activity = $('#select_checkbox_activity').val();
     var activity_type_description = $('#activity_type_description').val();
     var schedule_event_type = $('#schedule_event_type').val();
@@ -1033,7 +1037,7 @@ $(document).on('click', '#save_activity_btn', function() {
                 if (result.isConfirmed && response.status) {
                     $('#exampleModal').modal('hide');
                     window.location.href =
-                        "{{ url('/candidates/details',$candidatesJobOrderDetails[0]['candidates']->id ) }}";
+                        "{{ url('/joborders/details',$jobDetails[0]->id ) }}";
                 }
             });
         },

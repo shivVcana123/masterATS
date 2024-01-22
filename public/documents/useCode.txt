@@ -1,2 +1,0 @@
- <td>{{ date_format(DateTime::createFromFormat('Y-m-d H:i:s', $details->date_submitted), 'd m Y') }}</td>
- <td>{{date_format($data->date_created,'d m Y') }}</td>

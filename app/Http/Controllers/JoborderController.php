@@ -105,7 +105,8 @@ class JoborderController extends Controller
 
         $data = $request->all();
         $data['entered_by'] = Auth::user()->id;
-        $data['owner'] = Auth::user()->id;
+        $data['recruiter'] = $data['recruiter'];
+        $data['owner'] = $data['owner'];
         $data['is_hot'] = $data['is_hot'];
         $data['public'] = $data['is_public'];
        $jobCreate = JobOrder::create($data);

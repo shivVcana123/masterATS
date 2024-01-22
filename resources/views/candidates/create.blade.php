@@ -123,8 +123,8 @@
                         </div>
                         <div class="form-group">
                             {{ Form::label('can_relocate', __('Can Relocate'),['class' => 'col-form-label']) }}
-                            {!! Form::text('can_relocate', null, ['placeholder' => __('Can Relocate'), 'class' =>
-                            'form-control','id' => 'can_relocate']) !!}
+                            {!! Form::checkbox('can_relocate', null,false, ['placeholder' => __('Can Relocate'), 'id' =>
+                            'can_relocate', 'value' => '1']) !!}
                             <span class="can_relocate_error errors"></span>
                         </div>
                         <div class="form-group">
@@ -152,11 +152,24 @@
                             'form-control','id' => 'desired_pay']) !!}
                             <span class="desired_pay_error errors"></span>
                         </div>
-                        <div class="form-group">
+                        <!-- <div class="form-group">
                             {{ Form::label('source', __('Source'),['class' => 'col-form-label']) }}
                             {!! Form::text('source', null, ['placeholder' => __('source'), 'class' =>
                             'form-control','id' =>
                             'source']) !!}
+                            <span class="source_error errors"></span>
+                        </div> -->
+                        <div class="form-group">
+                            <label for="source">Source</label>
+                            <!-- <input type="text" name="source" id="source" class="form-control"> -->
+                            <select name="source" id="source" class="form-control">
+                                <option disabled selected>(None)</option>
+                                @foreach($candidateSource as $data)
+                                <option value="{{ $data->id }}">
+                                    {{ $data->name }}
+                                </option>
+                                @endforeach
+                            </select>
                             <span class="source_error errors"></span>
                         </div>
                         <div class="form-group">
@@ -172,19 +185,12 @@
                             => 'notes']) !!}
                             <span class="notes_error errors"></span>
                         </div>
-                        <div class="form-group ">
-                            {{ Form::label('role', __('Role'),['class' => 'col-form-label']) }}
-                            {!! Form::text('desired_pay', null, ['placeholder' => __('Desire Pay'), 'class' =>
-                            'form-control','id' => 'role']) !!}
-                            <span class="role_error errors"></span>
-                        </div>
                     </div>
                     <div class="card-footer">
                         <div class="float-end">
                             <a href="{{ route('candidates.index') }}"
                                 class="btn btn-secondary mb-3">{{ __('Cancel') }}</a>
-                            <button type="button" id="addCandidate"
-                                class="btn btn-primary mb-3">Save</button>
+                            <button type="button" id="addCandidate" class="btn btn-primary mb-3">Save</button>
                         </div>
                     </div>
 
@@ -216,6 +222,9 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 $(document).on('click', '#addCandidate', function() {
     var jobOrder_id = $('#job_id').val();
+    var source = $('#source').val();
+    var can_relocate = $('#can_relocate').is(':checked') ? 1:0;
+    // alert(can_relocate);
     // alert(jobOrder_id);
     const formData = new FormData();
     const fields = [
@@ -223,7 +232,7 @@ $(document).on('click', '#addCandidate', function() {
         'web_site', 'phone_home', 'phone_cell', 'phone_work', 'address',
         'city', 'state', 'zip', 'best_time_to_call', 'can_relocate',
         'date_available', 'current_employer', 'current_pay', 'desired_pay',
-        'source', 'notes', 'key_skills', 'role'
+        'notes', 'key_skills',
     ];
 
     let errors = [];
@@ -244,7 +253,7 @@ $(document).on('click', '#addCandidate', function() {
                 $(`.${field}_notvalid_address_error`).html("Please provide a valid email address.");
             }
         }
-
+        
         formData.append(field, value);
     });
 
@@ -253,7 +262,9 @@ $(document).on('click', '#addCandidate', function() {
     }
 
 
-    formData.append('jobOrder_id',  jobOrder_id);
+    formData.append('jobOrder_id', jobOrder_id);
+    formData.append('can_relocate', can_relocate);
+    formData.append('source', source);
     $.ajaxSetup({
         headers: {
             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
@@ -275,12 +286,13 @@ $(document).on('click', '#addCandidate', function() {
                     icon: "success",
                 }).then(function(result) {
                     if (result.isConfirmed) {
-                        if(jobOrder_id){
-                            window.location.href = "{{route('joborders.details')}}"+'/'+jobOrder_id;
-                        }else{
+                        if (jobOrder_id) {
+                            window.location.href = "{{route('joborders.details')}}" + '/' +
+                                jobOrder_id;
+                        } else {
                             window.location.href = "{{route('candidates.index')}}";
                         }
-                        
+
                     }
                 });
             } else {

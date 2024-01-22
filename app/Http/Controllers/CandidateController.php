@@ -11,6 +11,7 @@ use Carbon\Carbon;
 
 use App\Models\Candidate;
 use App\Models\CandidateJoborder;
+use App\Models\CandidateSource;
 use App\Models\ChangeStatus;
 use App\Models\Joborder;
 use App\Models\SavedList;
@@ -41,9 +42,11 @@ class CandidateController extends Controller
         // dd($job_id);
         // $id = $job_id ?? null;
 
+        $candidateSource = CandidateSource::get();
+
         if (\Auth::user()->can('create-user')) {  
             $roles = Role::pluck('name', 'name')->all();
-            return view('candidates.create', compact('roles','job_id'));
+            return view('candidates.create', compact('roles','job_id','candidateSource'));
         }
     
         return redirect()->back()->with('error', 'Permission denied.');
@@ -56,14 +59,17 @@ class CandidateController extends Controller
 
 
 
-        // dd($request->all()); 
+        dd($request->all()); 
         $this->validate($request, [
             'first_name' => 'required',
             'last_name' => 'required',
-            // 'email1' => 'required|email|unique:candidate,email1',
-            'phone_cell' => 'required|unique:candidates,phone_cell',
-            // 'password' => 'required|same:confirm-password',
-            // 'roles' => 'required'
+            'phone_cell' => 'required',
+            'web_site' => 'required',
+            'phone_home' => 'required',
+            'phone_work' => 'required',
+            'address' => 'required',
+            'city' => 'required',
+            'state' => 'required',
         ]);
 
       
@@ -87,6 +93,7 @@ class CandidateController extends Controller
                 'can_relocate' => $request['can_relocate'],
                 'date_available' => $request['date_available'],
                 'current_employer' => $request['current_employer'],
+                'entered_by ' => Auth::user()->id,
                 'owner' => Auth::user()->id,
                 'current_pay' => $request['current_pay'],
                 'desired_pay' => $request['desired_pay'],
@@ -116,9 +123,9 @@ class CandidateController extends Controller
     public function candidatesDetails($id){
         $candidatesDetails = Candidate::with('attachments')->where('id',$id)->get();
         // candidatesDetails','users','joborderDetails','joborderDetails.companies','activities','activities.activityTypes
-        $candidatesJobOrderDetails = CandidateJoborder::with('candidates','candidateJoborderStatus','joborderDetails','ownerUser','recruiterUser')->where('candidate_id',$id)->get();
+        $candidatesJobOrderDetails = CandidateJoborder::with('candidates','candidateJoborderStatus','joborderDetails','ownerUser','activities','activities.candidateJoborderStatus')->where('candidate_id',$id)->get();
 
-        // dd($candidatesJobOrderDetails);
+
         $joborderList = Joborder::with('companies','ownerUser','recruiterUser')->get();
         // dd($joborderList);
         $savedList = SavedList::where('number_entries','1')->get();
@@ -151,33 +158,7 @@ class CandidateController extends Controller
 
     }
 
-    // public function candidatesListSave(Request $request){
-        
-    //     $existsName = SavedList::where('description', $request->description)->get();
-
-    //     if ($existsName->isEmpty()) {
-    //         $savedList = SavedList::find($request->list_id);
-        
-    //         if ($savedList === null) {
-    //             SavedList::create([
-    //                 'description' => $request->description,
-    //                 'data_item_type' => $request->data_item_type,
-    //             ]);
-        
-    //             return response()->json(['status' => true, 'message' => 'Data created successfully.','data'=> $savedList]);
-    //         } else {
-    //             $savedList->update([
-    //                 'description' => $request->description,
-    //                 'data_item_type' => $request->data_item_type,
-    //             ]);
-        
-    //             return response()->json(['status' => true, 'message' => 'Data updated successfully.','data'=> $savedList]);
-    //         }
-    //     } else {
-    //         return response()->json(['status' => false, 'message' => 'That name is already in use, please try another.']);
-    //     }
-        
-    // }
+  
 public function candidatesListSave(Request $request){
 
     $savedList = SavedList::find($request->list_id);
@@ -256,21 +237,25 @@ public function candidatesListSave(Request $request){
 
     public function candidatesActivitySave(Request $request){
         $data = $request->all();
-        $result = Activity::create([
-            'data_item_id' =>$data['change_status_item'],
-            'data_item_type' =>$data['schedule_event_type'],
-            'joborder_id' =>$data['joborder_item'],
-            'site_id' => null, 
-            'entered_by' =>Auth::user()->id,
-            'type' =>$data['schedule_event_type'],
-            'notes' =>$data['length_description'], 
-        ]);
-
-        if($result){
-            return response()->json(['status' => true, 'message' => 'Data create successfully.','data' => $result]);
-        }else{
-            return response()->json(['status' => false, 'message' => 'Somthing went wrong.']);
+        // dd($data);
+        $result = Activity::updateOrCreate(
+            ['joborder_id' => $data['joborder_item']],
+            [
+                'data_item_id' => '1',
+                'data_item_type' => $data['schedule_event_type'],
+                'site_id' => null,
+                'entered_by' => Auth::user()->id,
+                'type' =>  $data['change_status_item'],
+                'notes' => $data['length_description'],
+            ]
+        );
+        
+        if ($result) {
+            return response()->json(['status' => true, 'message' => $result->wasRecentlyCreated ? 'Data created successfully.' : 'Data updated successfully.', 'data' => $result]);
+        } else {
+            return response()->json(['status' => false, 'message' => 'Something went wrong.']);
         }
+
     }
 
 

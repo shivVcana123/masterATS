@@ -286,7 +286,7 @@ $(document).on('click', '#add_jobOrder_btn', function(e) {
 
     const formData = new FormData();
     const fields = [
-        'recruiter', 'company_id',
+        'recruiter', 'company_id','owner',
         'client_job_id', 'title',  'type', 'duration', 'rate_max', 'salary',
          'openings', 'city', 'state', 'start_date', 'end_date', 'openings_available',
         'questionnaire_id', 'actual_rate', 'gross_margin', 'expected_rate',

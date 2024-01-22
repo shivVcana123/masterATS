@@ -316,8 +316,11 @@
                     <tr>
                         <td>{{$details->id}}</td>
                         <td>3232</td>
-                        <td data-id="{{$details['joborderDetails']->id}}" id="joborderDetails_id"><a
+                        <!-- <td data-id="{{$details['joborderDetails']->id}}" id="joborderDetails_id"><a
                                 href="{{route('joborders.update',$details['joborderDetails']->id)}}">{{ $details['joborderDetails']->title }}</a>
+                        </td> -->
+                        <td><a
+                                href="{{route('joborders.details',$details['joborderDetails']->id)}}">{{ $details['joborderDetails']->title }}</a>
                         </td>
                         <td><a
                                 href="{{route('companies.details',$details['joborderDetails']['companies']->id)}}">{{ $details['joborderDetails']['companies']->company_name}}</a>
@@ -716,22 +719,14 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($candidatesJobOrderDetails as $details)
-                    @if(
-                    $details['activities'] != null &&
-                    $details['joborderDetails'] != null &&
-                    $details['users'] != null &&
-                    $details['candidatesJobOrderDetails'] != null
-                    )
+                    @foreach($candidatesJobOrderDetails as $key => $details)
                     <tr>
                         <td>{{$details->id}}</td>
                         <td>
                             {{ date_format(DateTime::createFromFormat('Y-m-d H:i:s', $details->date_created), 'd m Y (h:iA)') }}
                         </td>
-
-
-                        <td>{{$details['activities']['activityTypes'][0]->short_description}} </td>
-                        <td>{{$details['users']->user_name}}</td>
+                        <td>{{ $details['activities']['candidateJoborderStatus'][$key]->short_description ?? 'N/A' }}</td>
+                        <td>{{$details['ownerUser']->user_name}}</td>
                         <td>{{$details['joborderDetails']->title}}
                             ({{$details['joborderDetails']['companies']->company_name}})</td>
                         <td>{{substr(optional($details['activities'])->notes, 0, 30)}}</td>
@@ -740,11 +735,6 @@
                             <i class="fa fa-trash" id="delete_activity" data-id="{{$details->id}}"></i>
                         </td>
                     </tr>
-                    @else
-                    <tr>
-                        <td colspan="7">No data found</td>
-                    </tr>
-                    @endif
                     @endforeach
                 </tbody>
 
@@ -891,7 +881,7 @@ $(document).on('click', '#document_delete_id', function() {
                     }).then(function(result) {
                         if (result.isConfirmed && response.status) {
                             window.location.href =
-                        "{{ url('/candidates/details',$candidatesJobOrderDetails[0]['candidates']->id ) }}";
+                                "{{ url('/candidates/details',$candidatesJobOrderDetails[0]['candidates']->id ) }}";
                         }
                     });
                 },

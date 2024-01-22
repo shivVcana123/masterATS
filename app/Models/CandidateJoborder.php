@@ -36,6 +36,6 @@ class CandidateJoborder extends Model
     }
 
     public function activities(){
-        return $this->belongsTo(Activity::class,'id');
+        return $this->belongsTo(Activity::class,'joborder_id','id');
     }
 }

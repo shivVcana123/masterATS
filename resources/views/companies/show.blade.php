@@ -231,7 +231,7 @@
                 </tr>
             </thead>
             <tbody id="container" class="no-border-x no-border-y ui-sortable">
-            @if(count($companyDetails[0]['jobDetails']) > 0)
+                @if(count($companyDetails[0]['jobDetails']) > 0)
                 @foreach($companyDetails[0]['jobDetails'] as $key => $details)
                 <tr>
                     <td>{{$details->id}}</td>
@@ -258,9 +258,12 @@
                         @endswitch
                     </td>
                     <td>{{$details->status}}</td>
-                    <td>{{date("d-m-Y", strtotime($details->date_created))}}</td>
-                    <td>{{date("d-m-Y", strtotime($details->date_modified))}}</td>
-                    <td>{{date("d-m-Y", strtotime($details->start_date))}}</td>
+                    <td>{{ isset($details->date_created) ? date('d-m-Y (h:i A)', strtotime($details->date_created)) : '' }}
+                    </td>
+                    <td>{{ isset($details->date_modified) ? date('d-m-Y (h:i A)', strtotime($details->date_modified)) : '' }}
+                    </td>
+                    <td>{{ isset($details->start_date) ? date('d-m-Y (h:i A)', strtotime($details->start_date)) : '' }}
+                    </td>
                     <td>{{ isset($details->ageDays) ? number_format(intval($details->ageDays)) : '' }}</td>
 
                     <td>NAN</td>
@@ -314,8 +317,9 @@
                     <!-- <td>{{$detailss->company_department_id}}</td> -->
                     <td>{{$detailss->phone_work}}</td>
                     <td>{{$detailss->phone_cell}}</td>
-                    <td>{{date("d-m-Y", strtotime($details->date_created))}}</td>
-                    <td>{{$details['ownerUser']->user_name}} </td>
+                    <td>{{ isset($details->date_created) ? date('d-m-Y (h:i A)', strtotime($details->date_created)) : '' }}
+                    </td>
+                    <td>{{isset($details['ownerUser']->user_name) ? $details['ownerUser']->user_name : ''}} </td>
                     <td>
                         <a href="{{url('/contacts/'.$detailss->id.'/edit')}}"><i class="fa fa-pencil"></i></a>
                     </td>
@@ -335,8 +339,8 @@
 @endsection
 @push('scripts')
 <script>
-     const fileInput = $('#document_file')[0];
-    console.log(fileInput);
+const fileInput = $('#document_file')[0];
+console.log(fileInput);
 $(document).on('click', '#submit_file', function(e) {
     e.preventDefault();
     // var joborder_id = $('#joborder_id').val();
