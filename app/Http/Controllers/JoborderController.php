@@ -109,6 +109,7 @@ class JoborderController extends Controller
         $data['owner'] = $data['owner'];
         $data['is_hot'] = $data['is_hot'];
         $data['public'] = $data['is_public'];
+        $data['contact_id'] = $data['contact_id'];
        $jobCreate = JobOrder::create($data);
 
         if ($jobCreate) {

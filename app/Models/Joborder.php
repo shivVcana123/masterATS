@@ -9,11 +9,7 @@ class Joborder extends Model
 {
     use HasFactory;
           protected $fillable = [
-        'title', 'start_date', 'end_date', 'age', 'perposal', 'company_id', 'recruiter', 'contact_id', 'entered_by', 'owner',
-        'client_job_id', 'description', 'notes', 'type', 'duration', 'rate_max', 'salary', 'status', 'openings', 'city', 'state',
-        'public', 'company_department_id', 'questionnaire_id', 'site_id', 'actual_rate', 'gross_margin', 'expected_rate', 'max_submission',
-        'interview_type', 'submission_deadline', 'work_arrangement', 'p', 'order', 'is_admin_hidden', 'questionnaire_id', 'openings_available',
-        'is_hot', 'date_created', 'date_modified','_token', // Add '_token' here
+            'id', 'recruiter', 'contact_id', 'company_id', 'entered_by', 'owner', 'site_id', 'client_job_id', 'title', 'description', 'expected_candidate', 'enter_bill_rate', 'pay_rate', 'notes', 'type', 'duration', 'rate_max', 'salary', 'status', 'is_hot', 'openings', 'city', 'state', 'start_date', 'end_date', 'date_created', 'date_modified', 'public', 'company_department_id', 'is_admin_hidden', 'openings_available', 'questionnaire_id', 'import_id', 'actualrate', 'actual_rate', 'gross_margin', 'expected_rate', 'max_submission', 'interview_type', 'submission_deadline', 'work_arrangement', 'p', '_token', 'updated_at', 'created_at',
 
     ];
 

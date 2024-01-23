@@ -17,6 +17,12 @@
                 </div>
 
                 <div class="form-group">
+                    <label for="client_job_id">Client Job ID</label>
+                    <input type="text" name="client_job_id" id="client_job_id" class="form-control">
+                    <span class="client_job_id_error errors"></span>
+                </div>
+
+                <div class="form-group">
                     <label for="company_id">Company</label>
                     <div class="row company-area" style="display: flex; align-items: center;">
                         <div class="col-6">
@@ -28,10 +34,6 @@
                                 </option>
                                 @endforeach
                             </select>
-
-
-                            <!-- <label for="company_id">Company Name</label>
-                            <input type="text" name="company_id" id="company_id" class="form-control"> -->
                             <span class="company_id_error errors"></span>
                         </div>
                         @if($company_id == null)
@@ -42,13 +44,6 @@
                         @endif
                     </div>
                 </div>
-                <div class="form-group">
-                    <label for="client_job_id">Client Job ID</label>
-                    <input type="text" name="client_job_id" id="client_job_id" class="form-control">
-                    <span class="client_job_id_error errors"></span>
-                </div>
-
-
 
                 <div class="form-group">
                     <label for="contact_id">Contact</label>
@@ -57,32 +52,6 @@
                         <!-- <option value="" class="contact_phone">(None)</option> -->
                     </select>
                     <span class="contact_id_error errors"></span>
-                </div>
-
-
-                <div class="form-group">
-                    <label for="recruiter">Recruiter</label>
-                    <!-- <input type="text" name="recruiter" id="recruiter" class="form-control"> -->
-                    <select name="recruiter" id="recruiter" class="form-control">
-                        @foreach($users as $data)
-                        <option value="{{ $data->id }}">
-                            {{ $data->user_name }}
-                        </option>
-                        @endforeach
-                    </select>
-                    <span class="recruiter_error errors"></span>
-                </div>
-                <div class="form-group">
-                    <label for="owner">Owner</label>
-                    <!-- <input type="text" name="owner" id="owner" class="form-control"> -->
-                    <select name="owner" id="owner" class="form-control">
-                        @foreach($users as $data)
-                        <option value="{{ $data->id }}">
-                            {{ $data->user_name }}
-                        </option>
-                        @endforeach
-                    </select>
-                    <span class="owner_error errors"></span>
                 </div>
 
                 <div class="form-group">
@@ -111,47 +80,35 @@
 
                 <div class="form-group">
                     <label for="duration">Duration</label>
-                    <input type="text" name="duration" id="duration" class="form-control">
+                    <input type="text" name="duration" id="duration" class="form-control" readonly>
                     <span class="duration_error errors"></span>
                 </div>
 
                 <div class="form-group">
-                    <label for="rate_max">Rate Max</label>
-                    <input type="text" name="rate_max" id="rate_max" class="form-control">
-                    <span class="rate_max_error errors"></span>
-                </div>
-
-                <div class="form-group">
-                    <label for="salary">salary</label>
-                    <input type="text" name="salary" id="salary" class="form-control">
-                    <span class="salary_error errors"></span>
-                </div>
-
-                <!-- <div class="form-group">
-                    <label for="expected_rate">Expected Rate</label>
-                    <input type="text" name="expected_rate" id="expected_rate" class="form-control">
-                    <span class="expected_rate_error errors"></span>
-                </div> -->
-
-                <div class="form-group">
-                    <label for="actual_rate">Actual Rate</label>
-                    <input type="text" name="actual_rate" id="actual_rate" class="form-control">
-                    <span class="actual_rate_error errors"></span>
-                </div>
-                <div class="form-group">
-                    <label for="max_submission">Max Submissions</label>
-                    <!-- <input type="text" name="max_submission" id="max_submission" class="form-control"> -->
-                    <select name="max_submission" id="max_submission"  class="form-control">
-                        <option selected disabled> Select From List</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="5 or more">5 or more</option>
+                    <label for="recruiter">Recruiter</label>
+                    <!-- <input type="text" name="recruiter" id="recruiter" class="form-control"> -->
+                    <select name="recruiter" id="recruiter" class="form-control">
+                        @foreach($users as $data)
+                        <option value="{{ $data->id }}">
+                            {{ $data->user_name }}
+                        </option>
+                        @endforeach
                     </select>
-                    <span class="max_submission_error errors"></span>
+                    <span class="recruiter_error errors"></span>
                 </div>
+                <div class="form-group">
+                    <label for="owner">Owner</label>
+                    <!-- <input type="text" name="owner" id="owner" class="form-control"> -->
+                    <select name="owner" id="owner" class="form-control">
+                        @foreach($users as $data)
+                        <option value="{{ $data->id }}">
+                            {{ $data->user_name }}
+                        </option>
+                        @endforeach
+                    </select>
+                    <span class="owner_error errors"></span>
+                </div>
+
 
                 <div class="form-group">
                     <label for="description">Description</label>
@@ -161,42 +118,37 @@
 
             </div>
             <div class="col-md-6">
+
                 <div class="form-group">
-                    <label for="expected_rate">Expected Rate</label>
-                    <input type="text" name="expected_rate" id="expected_rate" class="form-control">
-                    <span class="expected_rate_error errors"></span>
+                    <label for="actual_rate">Actual Rate</label>
+                    <input type="text" name="actual_rate" id="actual_rate" class="form-control">
+                    <span class="actual_rate_error errors"></span>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="expected_candidate">Expected Candidate</label>
+                    <input type="text" name="expected_candidate" id="expected_candidate" class="form-control">
+                    <span class="expected_candidate_error errors"></span>
                 </div>
 
                 <div class="form-group">
                     <label for="enter_bill_rate">Enter Bill Rate</label>
-                    <input type="text" name="enter_bill_rate" id="enter_bill_rate" class="form-control">
+                    <input type="text" name="enter_bill_rate" id="enter_bill_rate" class="form-control"
+                        onkeypress="return (event.charCode !=8 && event.charCode ==0 || ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57)))">
                     <span class="enter_bill_rate_error errors"></span>
                 </div>
 
                 <div class="form-group">
-                    <label for="submission_deadline">Submission Deadline</label>
-                    <input type="date" name="submission_deadline" id="submission_deadline" class="form-control">
-                    <span class="submission_deadline_error errors"></span>
+                    <label for="pay_rate">Pay Rate</label>
+                    <input type="text" name="pay_rate" id="pay_rate" class="form-control" readonly>
+                    <span class="pay_rate_error errors"></span>
                 </div>
 
-                <!-- <div class="form-group">
-                    <label for="status">Status</label>
-                    <input type="text" name="status" id="status" class="form-control">
-                    <select name="status" id="status"  class="form-control">
-                        <option selected disabled> Select From List</option>
-                        <option value="1">1</option>
-                        <option value="2">2</option>
-                        <option value="3">3</option>
-                        <option value="4">4</option>
-                        <option value="5">5</option>
-                        <option value="5 or more">5 or more</option>
-                    </select>
-                    <span class="status_error errors"></span>
-                </div> -->
                 <div class="form-group">
-                    <label for="openings">Openings</label>
-                    <input type="text" name="openings" id="openings" class="form-control">
-                    <span class="openings_error errors"></span>
+                    <label for="salary">salary</label>
+                    <input type="text" name="salary" id="salary" class="form-control">
+                    <span class="salary_error errors"></span>
                 </div>
 
                 <div class="form-group">
@@ -210,35 +162,32 @@
                     <input type="text" name="state" id="state" class="form-control">
                     <span class="state_error errors"></span>
                 </div>
-
                 <div class="form-group">
-                    <label for="openings_available">Openings Available</label>
-                    <input type="text" name="openings_available" id="openings_available" class="form-control">
-                    <span class="openings_available_error errors"></span>
+                    <label for="openings">Openings</label>
+                    <input type="text" name="openings" id="openings" class="form-control">
+                    <span class="openings_error errors"></span>
                 </div>
 
                 <div class="form-group">
-                    <label for="questionnaire_id">Questionnaire_id</label>
-                    <input type="text" name="questionnaire_id" id="questionnaire_id" class="form-control">
-                    <span class="questionnaire_id_error errors"></span>
+                    <label for="max_submission">Max Submissions</label>
+                    <!-- <input type="text" name="max_submission" id="max_submission" class="form-control"> -->
+                    <select name="max_submission" id="max_submission" class="form-control">
+                        <option selected disabled> Select From List</option>
+                        <option value="1">1</option>
+                        <option value="2">2</option>
+                        <option value="3">3</option>
+                        <option value="4">4</option>
+                        <option value="5">5</option>
+                        <option value="5 or more">5 or more</option>
+                    </select>
+                    <span class="max_submission_error errors"></span>
+                </div>
+                <div class="form-group">
+                    <label for="submission_deadline">Submission Deadline</label>
+                    <input type="date" name="submission_deadline" id="submission_deadline" class="form-control">
+                    <span class="submission_deadline_error errors"></span>
                 </div>
 
-                <div class="form-group">
-                    <label for="interview_type">Interview Type</label>
-                    <input type="text" name="interview_type" id="interview_type" class="form-control">
-                    <span class="interview_type_error errors"></span>
-                </div>
-
-                <div class="form-group">
-                    <label for="work_arrangement">Work Arrangement</label>
-                    <input type="text" name="work_arrangement" id="work_arrangement" class="form-control">
-                    <span class="work_arrangement_error errors"></span>
-                </div>
-                <div class="form-group">
-                    <label for="gross_margin">Gross Margin</label>
-                    <input type="text" name="gross_margin" id="gross_margin" class="form-control">
-                    <span class="gross_margin_error errors"></span>
-                </div>
                 <div class="form-group">
                     <label for="is_hot">Is Hot</label>
                     <input type="checkbox" name="is_hot" id="is_hot" value="1">
@@ -249,7 +198,7 @@
                     <input type="checkbox" name="public" id="public" value="1">
                     <span class="public_error errors"></span>
                 </div>
-                
+
                 <div class="form-group">
                     <label for="notes">Notes</label>
                     <input type="text" name="notes" id="notes" class="form-control">
@@ -279,18 +228,19 @@ $(document).on('click', '#add_jobOrder_btn', function(e) {
 
     var is_hot = $('#is_hot').is(':checked') ? 1 : 0
     var is_public = $('#public').is(':checked') ? 1 : 0
+    var contact_id = $('#contact_id').val();
 
     var description = editor_description.getData();
     var notes = editor_notes.getData();
-   
+
 
     const formData = new FormData();
     const fields = [
-        'recruiter', 'company_id','owner',
-        'client_job_id', 'title',  'type', 'duration', 'rate_max', 'salary',
-         'openings', 'city', 'state', 'start_date', 'end_date', 'openings_available',
-        'questionnaire_id', 'actual_rate', 'gross_margin', 'expected_rate',
-        'max_submission', 'interview_type', 'submission_deadline', 'work_arrangement', 
+        'recruiter', 'company_id', 'owner', 'client_job_id',
+        'title', 'expected_candidate', 'enter_bill_rate', 'type',
+        'salary', 'is_hot', 'openings', 'city', 'state', 'start_date',
+        'end_date', 'public', 'actual_rate', 'max_submission',
+        'submission_deadline',
     ];
 
 
@@ -298,6 +248,7 @@ $(document).on('click', '#add_jobOrder_btn', function(e) {
     formData.append('is_public', is_public);
     formData.append('description', description);
     formData.append('notes', notes);
+    formData.append('contact_id', contact_id);
     let errors = [];
 
     $(".errors").html("");

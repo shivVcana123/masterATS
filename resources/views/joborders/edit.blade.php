@@ -26,41 +26,6 @@
                                     <span class="title_error errors"></span>
                                 </div>
 
-                                <!-- <div class="form-group">
-                                    <label for="contact_id">Contact Id</label>
-                                    <input type="text" name="contact_id" id="contact_id" class="form-control"
-                                        value="{{$jobDetails[0]->contact_id}}">
-                                    <span class="contact_id_error errors"></span>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="company_id">Company Id</label>
-                                    <input type="text" name="company_id" id="company_id" class="form-control"
-                                        value="{{$jobDetails[0]->company_id}}">
-                                    <span class="company_id_error errors"></span>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="client_job_id">Client Job ID</label>
-                                    <input type="text" name="client_job_id" id="client_job_id" class="form-control"
-                                        value="{{$jobDetails[0]->client_job_id}}">
-                                    <span class="client_job_id_error errors"></span>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="recruiter">Recruiter</label>
-                                    <input type="text" name="recruiter" id="recruiter" class="form-control"
-                                        value="{{$jobDetails[0]->recruiter}}">
-                                    <span class="recruiter_error errors"></span>
-                                </div>
-
-                                <div class="form-group">
-                                    <label for="type">Type</label>
-                                    <input type="text" name="type" id="type" class="form-control"
-                                        value="{{$jobDetails[0]->type}}">
-                                    <span class="type_error errors"></span>
-                                </div> -->
-
                                 <div class="form-group">
                                     <label for="client_job_id">Client Job ID</label>
                                     <input type="text" name="client_job_id" id="client_job_id" class="form-control"
@@ -159,12 +124,12 @@
                                     <span class="duration_error errors"></span>
                                 </div>
 
-                                <div class="form-group">
+                                <!-- <div class="form-group">
                                     <label for="rate_max">Rate Max</label>
                                     <input type="text" name="rate_max" id="rate_max" class="form-control"
                                         value="{{$jobDetails[0]->rate_max}}">
                                     <span class="rate_max_error errors"></span>
-                                </div>
+                                </div> -->
 
                                 <div class="form-group">
                                     <label for="salary">salary</label>
@@ -173,12 +138,12 @@
                                     <span class="salary_error errors"></span>
                                 </div>
 
-                                <div class="form-group">
+                                <!-- <div class="form-group">
                                     <label for="expected_rate">Expected Rate</label>
                                     <input type="text" name="expected_rate" id="expected_rate" class="form-control"
                                         value="{{$jobDetails[0]->expected_rate}}">
                                     <span class="expected_rate_error errors"></span>
-                                </div>
+                                </div> -->
 
                                 <div class="form-group">
                                     <label for="actual_rate">Actual Rate</label>
@@ -195,18 +160,18 @@
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group">
-                                    <label for="expected_rate">Expected Rate</label>
-                                    <input type="text" name="expected_rate" id="expected_rate" class="form-control"
-                                        value="{{$jobDetails[0]->expected_rate}}">
-                                    <span class="expected_rate_error errors"></span>
+                                    <label for="expected_candidate">Expected Candidate</label>
+                                    <input type="text" name="expected_candidate" id="expected_candidate" class="form-control"
+                                        value="{{$jobDetails[0]->expected_candidate}}">
+                                    <span class="expected_candidate_error errors"></span>
                                 </div>
 
-                                <div class="form-group">
+                                <!-- <div class="form-group">
                                     <label for="interview_type">Interview Type</label>
                                     <input type="text" name="interview_type" id="interview_type" class="form-control"
                                         value="{{$jobDetails[0]->interview_type}}">
                                     <span class="interview_type_error errors"></span>
-                                </div>
+                                </div> -->
 
                                 <div class="form-group">
                                     <label for="submission_deadline">Submission Deadline</label>
@@ -215,12 +180,12 @@
                                     <span class="submission_deadline_error errors"></span>
                                 </div>
 
-                                <div class="form-group">
+                                <!-- <div class="form-group">
                                     <label for="status">Status</label>
                                     <input type="text" name="status" id="status" class="form-control"
                                         value="{{$jobDetails[0]->status}}">
                                     <span class="status_error errors"></span>
-                                </div>
+                                </div> -->
                                 <div class="form-group">
                                     <label for="openings">Openings</label>
                                     <input type="text" name="openings" id="openings" class="form-control"
@@ -242,7 +207,7 @@
                                     <span class="state_error errors"></span>
                                 </div>
 
-                                <div class="form-group">
+                                <!-- <div class="form-group">
                                     <label for="openings_available">Openings Available</label>
                                     <input type="text" name="openings_available" id="openings_available"
                                         class="form-control" value="{{$jobDetails[0]->openings_available}}">
@@ -274,7 +239,7 @@
                                     <input type="text" name="gross_margin" id="gross_margin" class="form-control"
                                         value="{{$jobDetails[0]->gross_margin}}">
                                     <span class="gross_margin_error errors"></span>
-                                </div>
+                                </div> -->
 
                                 <div class="form-group">
                                     <label for="is_hot">Is Hot</label>

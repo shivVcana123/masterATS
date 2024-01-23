@@ -59,7 +59,7 @@ class CandidateController extends Controller
 
 
 
-        dd($request->all()); 
+        // dd($request->all()); 
         $this->validate($request, [
             'first_name' => 'required',
             'last_name' => 'required',
@@ -93,7 +93,7 @@ class CandidateController extends Controller
                 'can_relocate' => $request['can_relocate'],
                 'date_available' => $request['date_available'],
                 'current_employer' => $request['current_employer'],
-                'entered_by ' => Auth::user()->id,
+                // 'entered_by ' => ,
                 'owner' => Auth::user()->id,
                 'current_pay' => $request['current_pay'],
                 'desired_pay' => $request['desired_pay'],
@@ -241,7 +241,7 @@ public function candidatesListSave(Request $request){
         $result = Activity::updateOrCreate(
             ['joborder_id' => $data['joborder_item']],
             [
-                'data_item_id' => '1',
+                'data_item_id' => $data['data_item_id'],
                 'data_item_type' => $data['schedule_event_type'],
                 'site_id' => null,
                 'entered_by' => Auth::user()->id,
