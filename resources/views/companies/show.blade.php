@@ -446,5 +446,6 @@ $(document).on('click', '#documentDownload', function() {
     var url = '/document/download/' + documentDownload;
     window.open(url, '_blank'); // Open the download link in a new tab
 });
+
 </script>
 @endpush

@@ -245,7 +245,7 @@
                     <td>
                         {{$details['ownerUser']->user_name}}
                     </td>
-                    <td>{{isset($details['candidateJoborderStatus']->short_description) ? $details['candidateJoborderStatus']->short_description : ''}}
+                    <td>{{isset($details['candidateJoborderStatus']->short_description) ? $details['candidateJoborderStatus']->short_description : 'No Contact'}}
                     </td>
                     <td>{{ date_format(DateTime::createFromFormat('Y-m-d H:i:s', $details->date_created), 'd-m-Y') }}
                         ({{$details['ownerUser']->user_name}})</td>
@@ -410,243 +410,250 @@
                 </button>
             </div>
 
-            <div class="modal-body">
-                <fieldset class="form-group">
-                    <div class="container">
-                        <div class="activity-area">
-                            <div class="mail-area">
-                                <label for="">Regarding:</label>
+            <form method="post">
+                <div class="modal-body">
+                    <fieldset class="form-group">
+                        <div class="container">
+                            <div class="activity-area">
+                                <div class="mail-area">
+                                    <label for="">Regarding:</label>
 
-                                <input type="hidden" id="jobOrderTitle"
-                                    value="{{(isset($details['joborderDetails']->title) ? $details['joborderDetails']->title : '')}}">
-                                <input type="hidden" id="jobOrderId"
-                                    value="{{(isset($details['joborderDetails']->id) ? $details['joborderDetails']->id : '')}}">
-                                <input type="hidden" id="candidateName"
-                                    value="{{isset($candidatesJobOrderDetails[0]['candidates']->first_name) ? $candidatesJobOrderDetails[0]['candidates']->first_name : ''}} {{isset($candidatesJobOrderDetails[0]['candidates']->last_name) ? $candidatesJobOrderDetails[0]['candidates']->last_name : ''}}">
-                                <input type="hidden" id="candidateDateTime"
-                                    value="{{ isset($candidatesJobOrderDetails[0]->date_created) ? date('d-m-Y (h:i A)', strtotime($candidatesJobOrderDetails[0]->date_created)) : '' }}">
+                                    <input type="hidden" id="jobOrderTitle"
+                                        value="{{(isset($details['joborderDetails']->title) ? $details['joborderDetails']->title : '')}}">
+                                    <input type="hidden" id="jobOrderId"
+                                        value="{{(isset($details['joborderDetails']->id) ? $details['joborderDetails']->id : '')}}">
+                                    <input type="hidden" id="candidateName"
+                                        value="{{isset($candidatesJobOrderDetails[0]['candidates']->first_name) ? $candidatesJobOrderDetails[0]['candidates']->first_name : ''}} {{isset($candidatesJobOrderDetails[0]['candidates']->last_name) ? $candidatesJobOrderDetails[0]['candidates']->last_name : ''}}">
+                                    <input type="hidden" id="candidateDateTime"
+                                        value="{{ isset($candidatesJobOrderDetails[0]->date_created) ? date('d-m-Y (h:i A)', strtotime($candidatesJobOrderDetails[0]->date_created)) : '' }}">
 
-                                <input type="hidden" id="candidateJoborderStatus" value="">
-                                <input type="hidden" id="ownerName"
-                                    value="{{isset($candidatesJobOrderDetails[0]['ownerUser']->user_name) ? $candidatesJobOrderDetails[0]['ownerUser']->user_name : ''}}">
+                                    <input type="hidden" id="candidateJoborderStatus" value="">
+                                    <input type="hidden" id="ownerName"
+                                        value="{{isset($candidatesJobOrderDetails[0]['ownerUser']->user_name) ? $candidatesJobOrderDetails[0]['ownerUser']->user_name : ''}}">
 
 
-                                <p style="margin-left: 50px;">
-                                    {{(isset($details['joborderDetails']->title) ? $details['joborderDetails']->title : '')}}
-                                </p>
-                                <div class="checkbox-mail-area">
-                                    <input class="form-check-input" type="checkbox" id="checkbox_mail_send_item"
-                                        name="checkbox_mail_send_item" style="margin-left: 30px;" value="1">
-                                    <label class="form-check-label" for="checkbox_mail_send_item">
-                                        Send E-Mail Notification to Candidate
-                                    </label>
-                                </div>
-                            </div>
-                            <br>
-                            <div class="form-group row">
-                                <div class="col-sm-2">Status:</div>
-                                <div class="col-sm-10">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="checkbox_status_change"
-                                            onchange="checkboxStatusChange(this)">
-                                        <label class="form-check-label" for="checkbox_status_change">
-                                            Change Status
+                                    <p style="margin-left: 50px;">
+                                        {{(isset($details['joborderDetails']->title) ? $details['joborderDetails']->title : '')}}
+                                    </p>
+                                    <div class="checkbox-mail-area">
+                                        <input class="form-check-input" type="checkbox" id="checkbox_mail_send_item"
+                                            name="checkbox_mail_send_item" style="margin-left: 30px;" value="1">
+                                        <label class="form-check-label" for="checkbox_mail_send_item">
+                                            Send E-Mail Notification to Candidate
                                         </label>
-                                        <br>
-                                        <select id="change_status_item" name="change_status_item" class="inputbox"
-                                            style="width: 150px;" onchange="jobStatusChange(this)">
-                                            <option selected disabled>Select a Status</option>
-                                            @foreach($changeStatus as $details)
-                                            <option value="{{$details->id}}">{{$details->description}}</option>
-                                            @endforeach
-                                        </select>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="form-group row">
+                                    <div class="col-sm-2">Status:</div>
+                                    <div class="col-sm-10">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="checkbox_status_change"
+                                                onchange="checkboxStatusChange(this)">
+                                            <label class="form-check-label" for="checkbox_status_change">
+                                                Change Status
+                                            </label>
+                                            <br>
+                                            <select id="change_status_item" name="change_status_item" class="inputbox"
+                                                style="width: 150px;" onchange="jobStatusChange(this)">
+                                                <option selected disabled>Select a Status</option>
+                                                @foreach($changeStatus as $details)
+                                                <option value="{{$details->id}}">{{$details->description}}</option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <span class="change_status_item_error errors"></span>
+                                    </div>
+                                </div>
+                                <div class="regarding-area">
+                                    <label for="">E-Mail</label>
+                                    <div style="margin-left: 80px;">
+                                        <p> Custom Message</p>
+                                        <textarea style="height:135px; width:375px; margin-top: -14px;"
+                                            name="customMessage" id="customMessage" cols="50"
+                                            class="inputbox"></textarea>
+                                    </div>
+                                </div><br>
 
+                                <div class="form-group row">
+                                    <div class="col-sm-2">Activity:</div>
+                                    <div class="col-sm-10">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="checkbox_activity"
+                                                onchange="checkboxActivity(this)">
+                                            <label class="form-check-label" for="checkbox_activity">
+                                                Log an Activity
+                                            </label>
+                                            <br>
+
+                                            <label for="select_checkbox_activity">Activity Type:</label>
+                                            <br>
+                                            <select id="select_checkbox_activity" name="select_checkbox_activity">
+                                                <option selected disabled>Select Activity Type</option>
+                                                @foreach($activityType as $details)
+                                                <option value="{{$details->id}}">{{$details->short_description}}
+                                                </option>
+                                                @endforeach
+                                            </select>
+                                        </div>
+                                        <span class="select_checkbox_activity_error errors"></span>
+                                    </div>
+                                </div>
+
+
+                                <div class="form-group row">
+                                    <div class="col-sm-10" style="margin-left: 115px;">
+                                        <label for="activity_type_description">Activity Type:</label>
+                                        <br>
+                                        <textarea name="activity_type_description" id="activity_type_description"
+                                            cols="30"></textarea>
                                     </div>
                                 </div>
                             </div>
-                            <div class="regarding-area">
-                                <label for="">E-Mail</label>
-                                <div style="margin-left: 80px;">
-                                    <p> Custom Message</p>
-                                    <textarea style="height:135px; width:375px; margin-top: -14px;" name="customMessage"
-                                        id="customMessage" cols="50" class="inputbox"></textarea>
-                                </div>
-                            </div><br>
-
                             <div class="form-group row">
-                                <div class="col-sm-2">Activity:</div>
+                                <div class="col-sm-2">Schedule:</div>
                                 <div class="col-sm-10">
                                     <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="checkbox_activity"
-                                            onchange="checkboxActivity(this)">
-                                        <label class="form-check-label" for="checkbox_activity">
-                                            Log an Activity
+                                        <input class="form-check-input" type="checkbox" id="checkbox_schedule"
+                                            onchange="checkboxScheduleEvent(this)">
+                                        <label class="form-check-label" for="checkbox_schedule">
+                                            Schedule Event
                                         </label>
                                         <br>
+                                        <!-- <label for="">Regarding:</label> -->
+                                        <div class="schedule-event-area">
+                                            <select id="schedule_event_type" name="schedule_event_type">
+                                                <option selected disabled>Select Event Type</option>
+                                                @foreach($calendarEvenType as $details)
+                                                <option value="{{$details->id}}">{{$details->short_description}}
+                                                </option>
+                                                @endforeach
+                                            </select>
+                                            <br><br>
+                                            <div class="month-area"
+                                                style="display: flex; flex-direction: row; align-items: center;">
+                                                <div class="form-group">
+                                                    <label for="monthPicker">Select Month:</label>
+                                                    <div class="input-group">
+                                                        <select id="monthDropdown" name="month">
+                                                            @for ($month = 1; $month <= 12; $month++) <option
+                                                                value="{{ $month }}">
+                                                                {{ date('M', mktime(0, 0, 0, $month, 1)) }}
+                                                                </option>
+                                                                @endfor
+                                                        </select>
 
-                                        <label for="select_checkbox_activity">Activity Type:</label>
-                                        <br>
-                                        <select id="select_checkbox_activity" name="select_checkbox_activity">
-                                            <option selected disabled>Select Activity Type</option>
-                                            @foreach($activityType as $details)
-                                            <option value="{{$details->id}}">{{$details->short_description}}
-                                            </option>
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                            </div>
+                                                        <select name="date" id="dateDropdown"
+                                                            style="width: 50px;"></select>
 
+                                                        <input type="text" name="year" id="year" style="width: 15%;"
+                                                            value="{{ substr(date('Y'), -2) }}" id="year">
 
-                            <div class="form-group row">
-                                <div class="col-sm-10" style="margin-left: 115px;">
-                                    <label for="activity_type_description">Activity Type:</label>
-                                    <br>
-                                    <textarea name="activity_type_description" id="activity_type_description"
-                                        cols="30"></textarea>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="form-group row">
-                            <div class="col-sm-2">Schedule:</div>
-                            <div class="col-sm-10">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" id="checkbox_schedule"
-                                        onchange="checkboxScheduleEvent(this)">
-                                    <label class="form-check-label" for="checkbox_schedule">
-                                        Schedule Event
-                                    </label>
-                                    <br>
-                                    <!-- <label for="">Regarding:</label> -->
-                                    <div class="schedule-event-area">
-                                        <select id="schedule_event_type" name="schedule_event_type">
-                                            <option selected disabled>Select Event Type</option>
-                                            @foreach($calendarEvenType as $details)
-                                            <option value="{{$details->id}}">{{$details->short_description}}</option>
-                                            @endforeach
-                                        </select>
-                                        <br><br>
-                                        <div class="month-area"
-                                            style="display: flex; flex-direction: row; align-items: center;">
-                                            <div class="form-group">
-                                                <label for="monthPicker">Select Month:</label>
-                                                <div class="input-group">
-                                                    <select id="monthDropdown" name="month">
-                                                        @for ($month = 1; $month <= 12; $month++) <option
-                                                            value="{{ $month }}">
-                                                            {{ date('M', mktime(0, 0, 0, $month, 1)) }}
-                                                            </option>
-                                                            @endfor
-                                                    </select>
+                                                        <input type="date" name="calendar_date" id="calendar_date"
+                                                            style="margin-left: 10px; padding: 0px; width: 5%;">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <!-- <br> -->
+                                            <div class="time-area" style="display: flex; flex-direction: row;">
+                                                <div class="form-group">
+                                                    <fieldset class="form-group">
+                                                        <div class="row">
+                                                            <div class="col-sm-10">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="radio"
+                                                                        name="hoursRadios" id="hoursRadios1"
+                                                                        value="Hours" onclick="hoursRadios1(this)"
+                                                                        checked>
+                                                                    <div class="input-group hours-area">
+                                                                        <select id="hours" name="hours">
+                                                                            @for ($hour = 1; $hour <= 12; $hour ++)
+                                                                                <option value="{{ $hour  }}">
+                                                                                {{$hour}}
+                                                                                </option>
+                                                                                @endfor
+                                                                        </select>
 
-                                                    <select name="date" id="dateDropdown" style="width: 50px;"></select>
+                                                                        <select id="minutes" name="minutes">
+                                                                            <option value="00">00</option>
+                                                                            <option value="15">15</option>
+                                                                            <option value="30">30</option>
+                                                                            <option value="45">45</option>
+                                                                        </select>
 
-                                                    <input type="text" name="year" id="year" style="width: 15%;"
-                                                        value="{{ substr(date('Y'), -2) }}" id="year">
+                                                                        <select id="day_am_pm" name="day_am_pm">
+                                                                            <option value="AM">AM</option>
+                                                                            <option value="PM">PM</option>
+                                                                        </select>
 
-                                                    <input type="date" name="calendar_date" id="calendar_date"
-                                                        style="margin-left: 10px; padding: 0px; width: 5%;">
+                                                                        <!-- <div class="length-area"> -->
+                                                                        <label for=""
+                                                                            style="margin-left: 141px;">Length:</label>
+                                                                        <select id="length_hours" name="length_hours">
+                                                                            <option value="15">15 minuts</option>
+                                                                            <option value="30">30 minuts</option>
+                                                                            <option value="45">45 minuts</option>
+                                                                            <option value="1" checked>1 hours</option>
+                                                                            <option value="1.5">1.5 hours</option>
+                                                                            <option value="2">2 hours</option>
+                                                                            <option value="3">3 hours</option>
+                                                                            <option value="4">4 hours</option>
+                                                                            <option value="more">More then 4 hours
+                                                                            </option>
+
+                                                                        </select>
+                                                                        <!-- </div> -->
+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </fieldset>
+                                                </div>
+
+                                            </div>
+
+                                            <!-- <br> -->
+                                            <div class="time-area"
+                                                style="display: flex; flex-direction: row; margin-top: -23px;">
+                                                <div class="form-group">
+                                                    <fieldset class="form-group">
+                                                        <div class="row">
+                                                            <div class="col-sm-10">
+                                                                <div class="form-check">
+                                                                    <input class="form-check-input" type="radio"
+                                                                        name="all_day_radios" id="all_day_radios"
+                                                                        onclick="allDayRadios(this)" value="All Days">
+                                                                    <div class="input-group">
+                                                                        All Day / No Specific Time
+                                                                    </div>
+                                                                </div>
+                                                                <input type="checkbox" name="public_entry"
+                                                                    id="public_entry" value="1">
+                                                                Public Entry
+                                                            </div>
+                                                        </div>
+                                                    </fieldset>
+                                                </div>
+                                                <div class="length-area"
+                                                    style="margin-left: 205px; display: grid; align-items: center; align-content: center;">
+                                                    <label for="">Description:</label>
+                                                    <textarea name="length_description" id="length_description"
+                                                        cols="30"></textarea>
                                                 </div>
                                             </div>
                                         </div>
-                                        <!-- <br> -->
-                                        <div class="time-area" style="display: flex; flex-direction: row;">
-                                            <div class="form-group">
-                                                <fieldset class="form-group">
-                                                    <div class="row">
-                                                        <div class="col-sm-10">
-                                                            <div class="form-check">
-                                                                <input class="form-check-input" type="radio"
-                                                                    name="hoursRadios" id="hoursRadios1" value="Hours"
-                                                                    onclick="hoursRadios1(this)" checked>
-                                                                <div class="input-group hours-area">
-                                                                    <select id="hours" name="hours">
-                                                                        @for ($hour = 1; $hour <= 12; $hour ++) <option
-                                                                            value="{{ $hour  }}">
-                                                                            {{$hour}}
-                                                                            </option>
-                                                                            @endfor
-                                                                    </select>
-
-                                                                    <select id="minutes" name="minutes">
-                                                                        <option value="00">00</option>
-                                                                        <option value="15">15</option>
-                                                                        <option value="30">30</option>
-                                                                        <option value="45">45</option>
-                                                                    </select>
-
-                                                                    <select id="day_am_pm" name="day_am_pm">
-                                                                        <option value="AM">AM</option>
-                                                                        <option value="PM">PM</option>
-                                                                    </select>
-
-                                                                    <!-- <div class="length-area"> -->
-                                                                    <label for=""
-                                                                        style="margin-left: 141px;">Length:</label>
-                                                                    <select id="length_hours" name="length_hours">
-                                                                        <option value="15">15 minuts</option>
-                                                                        <option value="30">30 minuts</option>
-                                                                        <option value="45">45 minuts</option>
-                                                                        <option value="1" checked>1 hours</option>
-                                                                        <option value="1.5">1.5 hours</option>
-                                                                        <option value="2">2 hours</option>
-                                                                        <option value="3">3 hours</option>
-                                                                        <option value="4">4 hours</option>
-                                                                        <option value="more">More then 4 hours
-                                                                        </option>
-
-                                                                    </select>
-                                                                    <!-- </div> -->
-
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </fieldset>
-                                            </div>
-
-                                        </div>
-
-                                        <!-- <br> -->
-                                        <div class="time-area"
-                                            style="display: flex; flex-direction: row; margin-top: -23px;">
-                                            <div class="form-group">
-                                                <fieldset class="form-group">
-                                                    <div class="row">
-                                                        <div class="col-sm-10">
-                                                            <div class="form-check">
-                                                                <input class="form-check-input" type="radio"
-                                                                    name="all_day_radios" id="all_day_radios"
-                                                                    onclick="allDayRadios(this)" value="All Days">
-                                                                <div class="input-group">
-                                                                    All Day / No Specific Time
-                                                                </div>
-                                                            </div>
-                                                            <input type="checkbox" name="public_entry" id="public_entry"
-                                                                value="1">
-                                                            Public Entry
-                                                        </div>
-                                                    </div>
-                                                </fieldset>
-                                            </div>
-                                            <div class="length-area"
-                                                style="margin-left: 205px; display: grid; align-items: center; align-content: center;">
-                                                <label for="">Description:</label>
-                                                <textarea name="length_description" id="length_description"
-                                                    cols="30"></textarea>
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                </fieldset>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-primary" id="save_activity_btn">Save changes</button>
-            </div>
+                    </fieldset>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary" id="save_activity_btn">Save changes</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>
@@ -979,10 +986,77 @@ document.getElementById('year').addEventListener('input', updateDateDropdown);
 // Initialize date dropdown on page load
 updateDateDropdown();
 
+// $(document).on('click', '#save_activity_btn', function() {
+//     var jobOrderId = $('#jobOrderId').val();
+//     // var joborder_item = $('#joborder_item').val();
+//     var candidate_joborder_status_type = dataId;
+//     var select_checkbox_activity = $('#select_checkbox_activity').val();
+//     var activity_type_description = $('#activity_type_description').val();
+//     var schedule_event_type = $('#schedule_event_type').val();
+//     var monthDropdown = $('#monthDropdown').val();
+//     var dateDropdown = $('#dateDropdown').val();
+//     var year = $('#year').val();
+//     var title = $('#title').val();
+//     var hours = $('#hours').val();
+//     var minutes = $('#minutes').val();
+//     var day_am_pm = $('#day_am_pm').val();
+//     var length_hours = $('#length_hours').val();
+//     var length_description = $('#length_description').val();
+//     var customMessage = $('#customMessage').val();
+//     var checkbox_mail_send_item = $('#checkbox_mail_send_item').is(':checked') ? 1 : 0;
+//     var public_entry = $('#public_entry').is(':checked') ? 1 : 0;
+//     // alert(checkbox_mail_send_item);
+
+//     $.ajaxSetup({
+//         headers: {
+//             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+//         },
+//     });
+
+//     $.ajax({
+//         url: '/candidates/activity/save',
+//         type: 'POST',
+//         data: {
+//             joborder_item: jobOrderId,
+//             change_status_item: change_status_item,
+//             select_checkbox_activity: select_checkbox_activity,
+//             activity_type_description: activity_type_description,
+//             schedule_event_type: schedule_event_type,
+//             monthDropdown: monthDropdown,
+//             dateDropdown: dateDropdown,
+//             year: year,
+//             title: title,
+//             hours: hours,
+//             minutes: minutes,
+//             day_am_pm: day_am_pm,
+//             length_hours: length_hours,
+//             length_description: length_description,
+//             customMessage: customMessage,
+//             checkbox_mail_send_item: checkbox_mail_send_item,
+//         },
+//         success: function(response) {
+//             const title = response.status ? "success" : "warning";
+//             Swal.fire({
+//                 title: response.message,
+//                 type: title,
+//                 icon: title,
+//             }).then(function(result) {
+//                 if (result.isConfirmed && response.status) {
+//                     $('#exampleModal').modal('hide');
+//                     window.location.href =
+//                         "{{ url('/joborders/details',$jobDetails[0]->id ) }}";
+//                 }
+//             });
+//         },
+//         error: function(xhr, status, error) {
+//             console.error('Error:', error);
+//         },
+//     });
+// });
 $(document).on('click', '#save_activity_btn', function() {
-    var jobOrderId = $('#jobOrderId').val();
-    // var joborder_item = $('#joborder_item').val();
-    var candidate_joborder_status_type = dataId;
+
+    var joborder_item = $('#joborder_item').val();
+    var change_status_item = $('#change_status_item').val();
     var select_checkbox_activity = $('#select_checkbox_activity').val();
     var activity_type_description = $('#activity_type_description').val();
     var schedule_event_type = $('#schedule_event_type').val();
@@ -995,10 +1069,47 @@ $(document).on('click', '#save_activity_btn', function() {
     var day_am_pm = $('#day_am_pm').val();
     var length_hours = $('#length_hours').val();
     var length_description = $('#length_description').val();
-    var customMessage = $('#customMessage').val();
-    var checkbox_mail_send_item = $('#checkbox_mail_send_item').is(':checked') ? 1 : 0;
-    var public_entry = $('#public_entry').is(':checked') ? 1 : 0;
-    // alert(checkbox_mail_send_item);
+    var data_item_id = '1';
+    // alert(select_checkbox_activity);
+
+    let errors = [];
+    $(".errors").html("");
+
+    if (change_status_item == null) {
+        errors.push(change_status_item);
+        $('.change_status_item_error').html(`Please change the status`);
+        return; // Stop execution if there's an error
+    }
+    if (select_checkbox_activity == null) {
+        errors.push(select_checkbox_activity);
+        $('.select_checkbox_activity_error').html(`Please select activity type`);
+        return; // Stop execution if there's an error
+    }
+
+    if (errors.length > 0) {
+        return false;
+    }
+
+
+
+    var formData = new FormData();
+    formData.append('joborder_item', joborder_item);
+    formData.append('change_status_item', change_status_item);
+    formData.append('select_checkbox_activity', select_checkbox_activity);
+    formData.append('activity_type_description', activity_type_description);
+    formData.append('schedule_event_type', schedule_event_type);
+    formData.append('monthDropdown', monthDropdown);
+    formData.append('dateDropdown', dateDropdown);
+    formData.append('title', title);
+    formData.append('year', year);
+    formData.append('hours', hours);
+    formData.append('minutes', minutes);
+    formData.append('day_am_pm', day_am_pm);
+    formData.append('length_hours', length_hours);
+    formData.append('length_description', length_description);
+    formData.append('data_item_id', data_item_id);
+
+
 
     $.ajaxSetup({
         headers: {
@@ -1009,24 +1120,10 @@ $(document).on('click', '#save_activity_btn', function() {
     $.ajax({
         url: '/candidates/activity/save',
         type: 'POST',
-        data: {
-            joborder_item: jobOrderId,
-            change_status_item: change_status_item,
-            select_checkbox_activity: select_checkbox_activity,
-            activity_type_description: activity_type_description,
-            schedule_event_type: schedule_event_type,
-            monthDropdown: monthDropdown,
-            dateDropdown: dateDropdown,
-            year: year,
-            title: title,
-            hours: hours,
-            minutes: minutes,
-            day_am_pm: day_am_pm,
-            length_hours: length_hours,
-            length_description: length_description,
-            customMessage: customMessage,
-            checkbox_mail_send_item: checkbox_mail_send_item,
-        },
+        cache: false,
+        processData: false,
+        contentType: false,
+        data: formData,
         success: function(response) {
             const title = response.status ? "success" : "warning";
             Swal.fire({
@@ -1045,6 +1142,7 @@ $(document).on('click', '#save_activity_btn', function() {
             console.error('Error:', error);
         },
     });
+
 });
 </script>
 @endpush

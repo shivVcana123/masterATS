@@ -27,7 +27,7 @@
         </div>
         <div class="pull-right">
             <a class="btn btn-primary" style="margin-right: 5px;"
-                href="{{ url('/candidates/update',$candidatesJobOrderDetails[0]['candidates']->id ) }}"> Edit</a>
+                href="{{ url('/candidates/update',$candidatesDetails[0]->id ) }}"> Edit</a>
         </div>
     </div>
 </div>
@@ -44,12 +44,11 @@
                                 <td class="vertical">Name:</td>
                                 <td class="data">
                                     <div class="btn-group">
-                                        <input type="hidden" id="candidate_id"
-                                            value="{{ $candidatesJobOrderDetails[0]['candidates']->id }}">
+                                        <input type="hidden" id="candidate_id" value="{{$candidatesDetails[0]->id }}">
                                         <button type="button" class="btn btn-secondary ">
-                                            {{ $candidatesJobOrderDetails[0]['candidates']->first_name }}
-                                            {{ $candidatesJobOrderDetails[0]['candidates']->middle_name }}
-                                            {{ $candidatesJobOrderDetails[0]['candidates']->last_name }}</button>
+                                            {{$candidatesDetails[0]->first_name }}
+                                            {{$candidatesDetails[0]->middle_name }}
+                                            {{$candidatesDetails[0]->last_name }}</button>
                                         <button type="button"
                                             class="btn btn-secondary  dropdown-toggle dropdown-toggle-split"
                                             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -69,46 +68,46 @@
                                 <td class="vertical">E-Mail:</td>
                                 <td class="data">
                                     <a href="#">
-                                        {{ $candidatesJobOrderDetails[0]['candidates']->email1 }} </a>
+                                        {{$candidatesDetails[0]->email1 }} </a>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="vertical">2nd E-Mail:</td>
                                 <td class="data">
                                     <a href="mailto:">
-                                        {{ $candidatesJobOrderDetails[0]['candidates']->email2 }}
+                                        {{$candidatesDetails[0]->email2 }}
                                     </a>
                                 </td>
                             </tr>
                             <tr>
                                 <td class="vertical">Home Phone:</td>
-                                <td class="data">{{ $candidatesJobOrderDetails[0]['candidates']->phone_home}}</td>
+                                <td class="data">{{$candidatesDetails[0]->phone_home}}</td>
                             </tr>
                             <tr>
                                 <td class="vertical">Cell Phone:</td>
-                                <td class="data">{{ $candidatesJobOrderDetails[0]['candidates']->phone_cell  }}</td>
+                                <td class="data">{{$candidatesDetails[0]->phone_cell  }}</td>
                             </tr>
                             <tr>
                                 <td class="vertical">Work Phone:</td>
-                                <td class="data">{{ $candidatesJobOrderDetails[0]['candidates']->phone_work  }}</td>
+                                <td class="data">{{$candidatesDetails[0]->phone_work  }}</td>
                             </tr>
                             <tr>
                                 <td class="vertical">Best Time To Call:</td>
-                                <td class="data">{{ $candidatesJobOrderDetails[0]['candidates']->best_time_to_call }}
+                                <td class="data">{{$candidatesDetails[0]->best_time_to_call }}
                                 </td>
                             </tr>
                             <tr>
                                 <td class="vertical">Address:</td>
-                                <td class="data">{{ $candidatesJobOrderDetails[0]['candidates']->address }}</td>
+                                <td class="data">{{$candidatesDetails[0]->address }}</td>
                             </tr>
                             <tr>
                                 <td class="vertical">Web Site:</td>
-                                <td class="data">{{ $candidatesJobOrderDetails[0]['candidates']->web_site }}
+                                <td class="data">{{$candidatesDetails[0]->web_site }}
                                 </td>
                             </tr>
                             <tr>
                                 <td class="vertical">Source:</td>
-                                <td class="data">{{ $candidatesJobOrderDetails[0]['candidates']->source }}</td>
+                                <td class="data">{{$candidatesDetails[0]->source }}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -118,28 +117,28 @@
                         <tbody>
                             <tr>
                                 <td class="vertical">Date Available:</td>
-                                <td class="data">{{ $candidatesJobOrderDetails[0]['candidates']->date_available }}</td>
+                                <td class="data">{{$candidatesDetails[0]->date_available }}</td>
                             </tr>
                             <tr>
                                 <td class="vertical">Current Employer:</td>
-                                <td class="data">{{ $candidatesJobOrderDetails[0]['candidates']->current_employer }}
+                                <td class="data">{{$candidatesDetails[0]->current_employer }}
                                 </td>
                             </tr>
                             <tr>
                                 <td class="vertical">Key Skills:</td>
-                                <td class="data">{{ $candidatesJobOrderDetails[0]['candidates']->key_skills }}</td>
+                                <td class="data">{{$candidatesDetails[0]->key_skills }}</td>
                             </tr>
                             <tr>
                                 <td class="vertical">Can Relocate:</td>
-                                <td class="data">{{ $candidatesJobOrderDetails[0]['candidates']->can_relocate }}</td>
+                                <td class="data">{{$candidatesDetails[0]->can_relocate }}</td>
                             </tr>
                             <tr>
                                 <td class="vertical">Current Pay:</td>
-                                <td class="data">{{ $candidatesJobOrderDetails[0]['candidates']->current_pay }}</td>
+                                <td class="data">{{$candidatesDetails[0]->current_pay }}</td>
                             </tr>
                             <tr>
                                 <td class="vertical">Desired Pay:</td>
-                                <td class="data">{{ $candidatesJobOrderDetails[0]['candidates']->desired_pay }}</td>
+                                <td class="data">{{$candidatesDetails[0]->desired_pay }}</td>
                             </tr>
                             <tr>
                                 <td class="vertical">Pipeline:</td>
@@ -152,12 +151,12 @@
                             <tr>
                                 <td class="vertical">Created:</td>
                                 <td class="data">
-                                    {{date("d-m-Y (h:i A)", strtotime($candidatesJobOrderDetails[0]['candidates']->date_created))}}
-                                    ({{ $candidatesJobOrderDetails[0]['ownerUser']->user_name}})</td>
+                                    {{date("d-m-Y (h:i A)", strtotime($candidatesDetails[0]->date_created))}}
+                                    ({{$candidatesDetails[0]['ownerUser']->user_name}})</td>
                             </tr>
                             <tr>
                                 <td class="vertical">Owner:</td>
-                                <td class="data">{{ $candidatesJobOrderDetails[0]['ownerUser']->user_name}}</td>
+                                <td class="data">{{$candidatesDetails[0]['ownerUser']->user_name}}</td>
                             </tr>
                         </tbody>
                     </table>
@@ -186,8 +185,7 @@
                     </table><br>
                     <form id="document_form" enctype="multipart/form-data" method="POST" style="margin-left: -101px;">
 
-                        <input type="hidden" name="candidate_id" id="candidate_id"
-                            value="{{$candidatesJobOrderDetails[0]['candidates']->id}}">
+                        <input type="hidden" name="candidate_id" id="candidate_id" value="{$candidatesDetails[0]->id}}">
 
                         <label for="document_file"> Add Attachment:</label>&nbsp;
                         <input type="file" name="document_file" id="document_file" accept=".pdf, .doc, .docx, .txt">
@@ -277,7 +275,7 @@
                         <form action="" method="post">
                             <div class="input_fields_wrap">
                             </div>
-                            <input type="hidden" id="data_item_type" name="data_item_type" value="100">
+                            <input type="hidden" id="data_item_type" name="data_item_type" value="1">
                         </form>
                     </div>
                 </div>
@@ -311,14 +309,13 @@
                         <th style="width: 65px">Action</th>
                     </tr>
                 </thead>
+
                 <tbody id="container" class="no-border-x no-border-y ui-sortable">
-                    @foreach($candidatesJobOrderDetails as $details)
+                    @if(count($candidatesDetails[0]['candidateJoborder']) > 0)
+                    @foreach($candidatesDetails[0]['candidateJoborder'] as $details)
                     <tr>
                         <td>{{$details->id}}</td>
                         <td>3232</td>
-                        <!-- <td data-id="{{$details['joborderDetails']->id}}" id="joborderDetails_id"><a
-                                href="{{route('joborders.update',$details['joborderDetails']->id)}}">{{ $details['joborderDetails']->title }}</a>
-                        </td> -->
                         <td><a
                                 href="{{route('joborders.details',$details['joborderDetails']->id)}}">{{ $details['joborderDetails']->title }}</a>
                         </td>
@@ -331,14 +328,18 @@
                         <td>
                             {{ date_format(DateTime::createFromFormat('Y-m-d H:i:s', $details->date_submitted), 'd m Y') }}
                         </td>
-                        <td></td>
-                        <td>{{$details->status}}</td>
+                        <td> {{$details['candidates']['ownerUser']->user_name}}</td>
+                        <td>{{isset($details['candidateJoborderStatus']->short_description) ? $details['candidateJoborderStatus']->short_description : ''}}
+                        </td>
                         <td>
                             <i class="fa fa-pencil" id="Activity" value="Activity"></i>
                             <i class="fa fa-trash" id="candidate_joborders_delete" data-value="{{$details->id}}"></i>
                         </td>
                     </tr>
                     @endforeach
+                    @else
+                    <td colspan="12">No Avaliable Job Order</td>
+                    @endif
                 </tbody>
             </table>
             <i class="fa fa-plus"></i><a href="javascript:;" data-toggle="modal" data-target=".bd-example-modal-lg">Add
@@ -347,29 +348,30 @@
     </div>
 
     <!-- Lising For Candidates -->
-    <div class="form-group col-md-12" style="margin-top: 7px">
+    <div class="form-group col-md-6" style="margin-top: 7px">
         <div class="form-control" style="border-color: transparent;padding-left: 0px">
             <label style="font-size: 18px">List</label>
         </div>
-        <div class="table-responsive col-md-12">
+        <div class="table-responsive col-md-6">
             <table class="table table-striped table-bordered" id="table">
                 <thead class="no-border">
                     <tr>
                         <th>ID</th>
                         <th>Title</th>
-                        <th></th>
                     </tr>
-                    @foreach($savedList as $details)
-                    <tr>
-                        <td>{{$details->id}}</td>
-                        <td><a href="{{route('joborders.update',$details->id)}}">{{ $details->description }}</a>
-                        </td>
-                        <td></td>
-                    </tr>
-                    @endforeach
                 </thead>
                 <tbody id="container" class="no-border-x no-border-y ui-sortable">
-
+                    @if(count($savedAddList) > 0)
+                    @foreach($savedAddList as $details)
+                    <tr>
+                        <td>{{$details->id}}</td>
+                        <td><a href="{{url('listts',$details->id)}}">{{ $details->description }}</a>
+                        </td>
+                    </tr>
+                    @endforeach
+                    @else
+                    <td colspan="12">No Avaliable List</td>
+                    @endif
                 </tbody>
             </table>
         </div>
@@ -419,12 +421,32 @@
                                 </tr>
                             </thead>
                             <tbody id="container" class="no-border-x no-border-y ui-sortable">
+
                                 @foreach($joborderList as $details)
+                                @php
+                                $matchFound = false;
+                                @endphp
+                                @foreach($candidatesDetails[0]['candidateJoborder'] as $value)
+                                @if(isset($details->id) && isset($value->id) && $details->id ==
+                                $value->id)
+                                @php
+                                $matchFound = true;
+                                @endphp
+                                @endif
+                                @endforeach
                                 <tr>
                                     <td>{{$details->id}}</td>
                                     <td>3232</td>
-                                    <!-- style="color: #51459d;" -->
-                                    <td id="joborder_id" data-id="{{$details->id}}">{{ $details->title }}</td>
+                                    <td>
+                                        @if($matchFound)
+                                        {{ $details->title }}
+                                        @else
+                                        <a href="javascript:;" onclick="addCandidateOnJobOrder(this)"
+                                            data-value="{{ $details->id }}">
+                                            {{ $details->title }}
+                                        </a>
+                                        @endif
+                                    </td>
                                     <td>@if($details['companies'])
                                         {{ $details['companies']->company_name }}
                                         @else
@@ -483,22 +505,26 @@
                         <fieldset class="form-group">
                             <div class="container">
                                 <div class="activity-area">
-                                    <label for="">Regarding:</label>
-                                    <select id="joborder_item" name="joborder_item" style="margin-left: 23px;">
-                                        <option selected disabled="disabled">General</option>
-                                        @foreach($candidatesJobOrderDetails as $key => $details)
-                                        <option value="{{$details['joborderDetails']->id}}"
-                                            {{ old('candidatesJobOrderDetails') == $key ? 'selected' : ''}}>
-                                            {{$details['joborderDetails']->title}}</option>
-                                        @endforeach
+                                    <div class="activities-area" style="display: flex;">
+                                        <label for="">Regarding:</label>
+                                        <select id="joborder_item" name="joborder_item"
+                                            style="margin-left: 40px; width: 177px;">
+                                            <option selected disabled="disabled">General</option>
+                                            @foreach($candidatesDetails[0]['candidateJoborder'] as $key => $details)
+                                            <option value="{{$details['joborderDetails']->id}}"
+                                                {{ old('candidatesJobOrderDetails') == $key ? 'selected' : ''}}>
+                                                {{$details['joborderDetails']->title}}</option>
+                                            @endforeach
 
-
-                                    </select>
-                                    <input class="form-check-input" type="checkbox" id="checkbox_mail_send_item"
-                                        name="checkbox_mail_send_item" style="margin-left: 30px;">
-                                    <label class="form-check-label" for="checkbox_mail_send_item">
-                                        Send E-Mail Notification to Candidate
-                                    </label>
+                                        </select>
+                                        <div class="checkbox-mail-area">
+                                            <input class="form-check-input" type="checkbox" id="checkbox_mail_send_item"
+                                                name="checkbox_mail_send_item" style="margin-left: 30px;">
+                                            <label class="form-check-label" for="checkbox_mail_send_item">
+                                                Send E-Mail Notification to Candidate
+                                            </label>
+                                        </div>
+                                    </div>
                                     <br><br>
                                     <div class="form-group row">
                                         <div class="col-sm-2">Status:</div>
@@ -512,21 +538,33 @@
                                                 <br>
                                                 <!-- <label for="">Regarding:</label> -->
                                                 <select id="change_status_item" name="change_status_item"
-                                                    class="inputbox" style="width: 150px;"  onchange="jobStatusChange(this)">
+                                                    class="inputbox" style="width: 150px;"
+                                                    onchange="jobStatusChange(this)">
                                                     <option selected disabled>Select a Status</option>
                                                     @foreach($changeStatus as $details)
                                                     <option value="{{$details->id}}">{{$details->description}}</option>
                                                     @endforeach
                                                 </select>
                                             </div>
+                                            <span class="change_status_item_error errors"></span>
                                         </div>
                                     </div>
+                                    <div class="regarding-area" style="display: flex;">
+                                        <label for="">E-Mail</label>
+                                        <div style="margin-left: 80px;">
+                                            <p> Custom Message</p>
+                                            <textarea style="height:135px; width:375px; margin-top: -14px;"
+                                                name="customMessage" id="customMessage" cols="50"
+                                                class="inputbox"></textarea>
+                                        </div>
+                                    </div><br>
 
                                     <div class="form-group row">
                                         <div class="col-sm-2">Activity:</div>
                                         <div class="col-sm-10">
                                             <div class="form-check">
-                                                <input class="form-check-input" type="checkbox" id="checkbox_activity" onchange="checkboxActivity(this)">
+                                                <input class="form-check-input" type="checkbox" id="checkbox_activity"
+                                                    onchange="checkboxActivity(this)">
                                                 <label class="form-check-label" for="checkbox_activity">
                                                     Log an Activity
                                                 </label>
@@ -541,6 +579,7 @@
                                                     @endforeach
                                                 </select>
                                             </div>
+                                            <span class="select_checkbox_activity_error errors"></span>
                                         </div>
                                     </div>
 
@@ -558,132 +597,136 @@
                                     <div class="col-sm-2">Schedule:</div>
                                     <div class="col-sm-10">
                                         <div class="form-check">
-                                            <input class="form-check-input" type="checkbox" id="checkbox_schedule"  onchange="checkboxScheduleEvent(this)">
+                                            <input class="form-check-input" type="checkbox" id="checkbox_schedule"
+                                                onchange="checkboxScheduleEvent(this)">
                                             <label class="form-check-label" for="checkbox_schedule">
                                                 Schedule Event
                                             </label>
                                             <br>
                                             <!-- <label for="">Regarding:</label> -->
-                                            <select id="schedule_event_type" name="schedule_event_type">
-                                                <option selected disabled>Select Event Type</option>
-                                                @foreach($calendarEvenType as $details)
-                                                <option value="{{$details->id}}">{{$details->short_description}}
-                                                </option>
-                                                @endforeach
-                                            </select>
-                                            <br><br>
-                                            <div class="month-area"
-                                                style="display: flex; flex-direction: row; align-items: center;">
-                                                <div class="form-group">
-                                                    <label for="monthPicker">Select Month:</label>
-                                                    <div class="input-group">
-                                                        <select id="monthDropdown" name="month">
-                                                            @for ($month = 1; $month <= 12; $month++) <option
-                                                                value="{{ $month }}">
-                                                                {{ date('M', mktime(0, 0, 0, $month, 1)) }}
-                                                                </option>
-                                                                @endfor
+                                            <div class="schedule-event-area">
+                                                <select id="schedule_event_type" name="schedule_event_type">
+                                                    <option selected disabled>Select Event Type</option>
+                                                    @foreach($calendarEvenType as $details)
+                                                    <option value="{{$details->id}}">{{$details->short_description}}
+                                                    </option>
+                                                    @endforeach
+                                                </select>
+                                                <br><br>
+                                                <div class="month-area"
+                                                    style="display: flex; flex-direction: row; align-items: center;">
+                                                    <div class="form-group">
+                                                        <label for="monthPicker">Select Month:</label>
+                                                        <div class="input-group">
+                                                            <select id="monthDropdown" name="month">
+                                                                @for ($month = 1; $month <= 12; $month++) <option
+                                                                    value="{{ $month }}">
+                                                                    {{ date('M', mktime(0, 0, 0, $month, 1)) }}
+                                                                    </option>
+                                                                    @endfor
+                                                            </select>
+
+                                                            <select name="date" id="dateDropdown"></select>
+
+                                                            <input type="text" name="year" id="year" style="width: 15%;"
+                                                                value="{{ substr(date('Y'), -2) }}" id="year">
+
+                                                            <input type="date" name="calander_date" id="calander_date"
+                                                                style="margin-left: 10px; padding: 0px; width: 6%;">
+                                                        </div>
+                                                    </div>
+                                                    <div class="title-area">
+                                                        <label for="title">Title</label>
+                                                        <input type="text" id="title" name="title">
+                                                    </div>
+                                                    <input type="hidden" id="selectedDate" name="selected_date">
+                                                </div>
+                                                <!-- <br> -->
+                                                <div class="time-area" style="display: flex; flex-direction: row;">
+                                                    <div class="form-group">
+                                                        <fieldset class="form-group">
+                                                            <div class="row">
+                                                                <div class="col-sm-10">
+                                                                    <div class="form-check">
+                                                                        <input class="form-check-input" type="radio"
+                                                                            name="hoursRadios" id="hoursRadios1"
+                                                                            value="Hours" onclick="hoursRadios1(this)"
+                                                                            checked>
+                                                                        <div class="input-group"
+                                                                            style="display: flex; flex-direction: row; flex-wrap: nowrap;">
+                                                                            <select id="hours" name="hours">
+                                                                                @for ($hour = 1; $hour <= 12; $hour ++)
+                                                                                    <option value="{{ $hour  }}">
+                                                                                    {{$hour}}
+                                                                                    </option>
+                                                                                    @endfor
+                                                                            </select>
+
+                                                                            <select id="minutes" name="minutes">
+                                                                                <option value="00">00</option>
+                                                                                <option value="15">15</option>
+                                                                                <option value="30">30</option>
+                                                                                <option value="45">45</option>
+                                                                            </select>
+
+                                                                            <select id="day_am_pm" name="day_am_pm">
+                                                                                <option value="AM">AM</option>
+                                                                                <option value="PM">PM</option>
+                                                                            </select>
+
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </fieldset>
+                                                    </div>
+                                                    <div class="length-area"
+                                                        style="margin-left: 190px; display: grid; align-items: center; align-content: center;">
+                                                        <label for="">Length:</label>
+                                                        <select id="length_hours" name="length_hours"
+                                                            style="width: 173px;  padding: 3px;">
+                                                            <option value="15">15 minuts</option>
+                                                            <option value="30">30 minuts</option>
+                                                            <option value="45">45 minuts</option>
+                                                            <option value="1">1 hours</option>
+                                                            <option value="1.5">1.5 hours</option>
+                                                            <option value="2">2 hours</option>
+                                                            <option value="3">3 hours</option>
+                                                            <option value="4">4 hours</option>
+                                                            <option value="more">More then 4 hours</option>
+
                                                         </select>
-
-                                                        <select name="date" id="dateDropdown"></select>
-
-                                                        <input type="text" name="year" id="year" style="width: 15%;"
-                                                            value="{{ substr(date('Y'), -2) }}" id="year">
-
-                                                        <input type="date" name="calander_date" id="calander_date"
-                                                            style="margin-left: 10px; padding: 0px; width: 6%;">
                                                     </div>
                                                 </div>
-                                                <div class="title-area">
-                                                    <label for="title">Title</label>
-                                                    <input type="text" id="title" name="title">
-                                                </div>
-                                                <input type="hidden" id="selectedDate" name="selected_date">
-                                            </div>
-                                            <!-- <br> -->
-                                            <div class="time-area" style="display: flex; flex-direction: row;">
-                                                <div class="form-group">
-                                                    <fieldset class="form-group">
-                                                        <div class="row">
-                                                            <div class="col-sm-10">
-                                                                <div class="form-check">
-                                                                    <input class="form-check-input" type="radio"
-                                                                        name="hoursRadios" id="hoursRadios1"
-                                                                        value="Hours" onclick="hoursRadios1(this)"
-                                                                        checked>
-                                                                    <div class="input-group"
-                                                                        style="display: flex; flex-direction: row; flex-wrap: nowrap;">
-                                                                        <select id="hours" name="hours">
-                                                                            @for ($hour = 1; $hour <= 12; $hour ++)
-                                                                                <option value="{{ $hour  }}">
-                                                                                {{$hour}}
-                                                                                </option>
-                                                                                @endfor
-                                                                        </select>
 
-                                                                        <select id="minutes" name="minutes">
-                                                                            <option value="00">00</option>
-                                                                            <option value="15">15</option>
-                                                                            <option value="30">30</option>
-                                                                            <option value="45">45</option>
-                                                                        </select>
-
-                                                                        <select id="day_am_pm" name="day_am_pm">
-                                                                            <option value="AM">AM</option>
-                                                                            <option value="PM">PM</option>
-                                                                        </select>
-
+                                                <!-- <br> -->
+                                                <div class="time-area" style="display: flex; flex-direction: row;">
+                                                    <div class="form-group">
+                                                        <fieldset class="form-group">
+                                                            <div class="row">
+                                                                <div class="col-sm-10">
+                                                                    <div class="form-check">
+                                                                        <input class="form-check-input" type="radio"
+                                                                            name="all_day_radios" id="all_day_radios"
+                                                                            onclick="allDayRadios(this)"
+                                                                            value="All Days">
+                                                                        <div class="input-group">
+                                                                            All Day / No Specific Time
+                                                                        </div>
                                                                     </div>
+                                                                    <input type="checkbox" name="public_entry"
+                                                                        id="public_entry">
+                                                                    Public Entry
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                    </fieldset>
-                                                </div>
-                                                <div class="length-area"
-                                                    style="margin-left: 190px; display: grid; align-items: center; align-content: center;">
-                                                    <label for="">Length:</label>
-                                                    <select id="length_hours" name="length_hours"
-                                                        style="width: 173px;  padding: 3px;">
-                                                        <option value="15">15 minuts</option>
-                                                        <option value="30">30 minuts</option>
-                                                        <option value="45">45 minuts</option>
-                                                        <option value="1">1 hours</option>
-                                                        <option value="1.5">1.5 hours</option>
-                                                        <option value="2">2 hours</option>
-                                                        <option value="3">3 hours</option>
-                                                        <option value="4">4 hours</option>
-                                                        <option value="more">More then 4 hours</option>
-
-                                                    </select>
-                                                </div>
-                                            </div>
-
-                                            <!-- <br> -->
-                                            <div class="time-area" style="display: flex; flex-direction: row;">
-                                                <div class="form-group">
-                                                    <fieldset class="form-group">
-                                                        <div class="row">
-                                                            <div class="col-sm-10">
-                                                                <div class="form-check">
-                                                                    <input class="form-check-input" type="radio"
-                                                                        name="all_day_radios" id="all_day_radios"
-                                                                        onclick="allDayRadios(this)" value="All Days">
-                                                                    <div class="input-group">
-                                                                        All Day / No Specific Time
-                                                                    </div>
-                                                                </div>
-                                                                <input type="checkbox" name="public_entry"
-                                                                    id="public_entry">
-                                                                Public Entry
-                                                            </div>
-                                                        </div>
-                                                    </fieldset>
-                                                </div>
-                                                <div class="length-area"
-                                                    style="margin-left: 205px; display: grid; align-items: center; align-content: center;">
-                                                    <label for="">Description:</label>
-                                                    <textarea name="length_description" id="length_description"
-                                                        cols="30"></textarea>
+                                                        </fieldset>
+                                                    </div>
+                                                    <div class="length-area"
+                                                        style="margin-left: 205px; display: grid; align-items: center; align-content: center;">
+                                                        <label for="">Description:</label>
+                                                        <textarea name="length_description" id="length_description"
+                                                            cols="30"></textarea>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -710,7 +753,7 @@
 
 
         <div class="table-responsive col-md-12">
-            @if(count($candidatesJobOrderDetails) > 0)
+
             <table class="table table-striped table-bordered" id="table">
                 <thead class="no-border">
                     <tr>
@@ -724,32 +767,14 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($candidatesJobOrderDetails as $key => $details)
-                    <tr>
-                        <td>{{$details->id}}</td>
-                        <td>
-                            {{ date_format(DateTime::createFromFormat('Y-m-d H:i:s', $details->date_created), 'd m Y (h:iA)') }}
-                        </td>
-                        <td>{{ $details['activities']['candidateJoborderStatus'][$key]->short_description ?? 'N/A' }}
-                        </td>
-                        <td>{{$details['ownerUser']->user_name}}</td>
-                        <td>{{$details['joborderDetails']->title}}
-                            ({{$details['joborderDetails']['companies']->company_name}})</td>
-                        <td>{{substr(optional($details['activities'])->notes, 0, 30)}}</td>
-                        <td>
-                            <i class="fa fa-pencil"></i>
-                            <i class="fa fa-trash" id="delete_activity" data-id="{{$details->id}}"></i>
-                        </td>
-                    </tr>
-                    @endforeach
+                    @if(count($candidatesDetails) > 0)
+                  
+                    @else
+                    <td colspan="12">No Avaliable Activities</td>
+                    @endif
                 </tbody>
-
             </table>
-            @else
-            <p>No data found</p>
-            @endif
         </div>
-
     </div>
 </div>
 @endsection
@@ -758,11 +783,11 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.10.0/js/bootstrap-datepicker.min.js">
 </script>
 <script>
-// alert('okkk');
 var candidate_id = $('#candidate_id').val();
 
-$(document).on('click', '#add_candidates_to_job_order_list tbody td#joborder_id', function() {
-    var jobID = $(this).data('id');
+function addCandidateOnJobOrder(that) {
+    var jobID = $(that).data('value');
+
     $.ajaxSetup({
         headers: {
             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
@@ -785,7 +810,7 @@ $(document).on('click', '#add_candidates_to_job_order_list tbody td#joborder_id'
             }).then(function(result) {
                 if (result.isConfirmed && response.status) {
                     window.location.href =
-                        "{{ url('/candidates/details',$candidatesJobOrderDetails[0]['candidates']->id ) }}";
+                        "{{ url('/candidates/details',$candidatesDetails[0]->id ) }}";
                 }
             });
         },
@@ -793,7 +818,41 @@ $(document).on('click', '#add_candidates_to_job_order_list tbody td#joborder_id'
             console.error('Error:', error);
         },
     });
-});
+}
+
+// $(document).on('click', '#add_candidates_to_job_order_list tbody td#joborder_id', function() {
+//     var jobID = $(this).data('id');
+//     $.ajaxSetup({
+//         headers: {
+//             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+//         },
+//     });
+
+//     // $.ajax({
+//     //     url: '/candidates/add/candidate/joborder',
+//     //     type: 'POST',
+//     //     data: {
+//     //         jobID: jobID,
+//     //         candidate_id: candidate_id,
+//     //     },
+//     //     success: function(response) {
+//     //         const title = response.status ? "success" : "warning";
+//     //         Swal.fire({
+//     //             title: response.message,
+//     //             type: title,
+//     //             icon: title,
+//     //         }).then(function(result) {
+//     //             if (result.isConfirmed && response.status) {
+//     //                 window.location.href =
+//     //                     "{{ url('/candidates/details',$candidatesDetails[0]->id ) }}";
+//     //             }
+//     //         });
+//     //     },
+//     //     error: function(xhr, status, error) {
+//     //         console.error('Error:', error);
+//     //     },
+//     // });
+// });
 
 $(document).on('click', '#submit_file', function(e) {
     e.preventDefault();
@@ -839,7 +898,7 @@ $(document).on('click', '#submit_file', function(e) {
             }).then(function(result) {
                 if (result.isConfirmed && response.status) {
                     window.location.href =
-                        "{{ url('/candidates/details',$candidatesJobOrderDetails[0]['candidates']->id ) }}";
+                        "{{ url('/candidates/details',$candidatesDetails[0]->id ) }}";
                 }
             });
         },
@@ -888,7 +947,7 @@ $(document).on('click', '#document_delete_id', function() {
                     }).then(function(result) {
                         if (result.isConfirmed && response.status) {
                             window.location.href =
-                                "{{ url('/candidates/details',$candidatesJobOrderDetails[0]['candidates']->id ) }}";
+                                "{{ url('/candidates/details',$candidatesDetails[0]->id ) }}";
                         }
                     });
                 },
@@ -932,73 +991,7 @@ $(document).ready(function() {
     }
 });
 
-
-
-
-// $(document).on('click', '#save_activity_btn', function() {
-//     var joborder_item = $('#joborder_item').val();
-//     var change_status_item = $('#change_status_item').val();
-//     var select_checkbox_activity = $('#select_checkbox_activity').val();
-//     var activity_type_description = $('#activity_type_description').val();
-//     var schedule_event_type = $('#schedule_event_type').val();
-//     var monthDropdown = $('#monthDropdown').val();
-//     var dateDropdown = $('#dateDropdown').val();
-//     var year = $('#year').val();
-//     var title = $('#title').val();
-//     var hours = $('#hours').val();
-//     var minutes = $('#minutes').val();
-//     var day_am_pm = $('#day_am_pm').val();
-//     var length_hours = $('#length_hours').val();
-//     var length_description = $('#length_description').val();
-//     var data_item_id = '1';
-
-//     $.ajaxSetup({
-//         headers: {
-//             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-//         },
-//     });
-
-//     $.ajax({
-//         url: '/candidates/activity/save',
-//         type: 'POST',
-//         contentType: false,
-//         processData: false,
-//         data: {
-//             joborder_item: joborder_item,
-//             change_status_item: change_status_item,
-//             select_checkbox_activity: select_checkbox_activity,
-//             activity_type_description: activity_type_description,
-//             schedule_event_type: schedule_event_type,
-//             monthDropdown: monthDropdown,
-//             dateDropdown: dateDropdown,
-//             year: year,
-//             title: title,
-//             hours: hours,
-//             minutes: minutes,
-//             day_am_pm: day_am_pm,
-//             length_hours: length_hours,
-//             length_description: length_description,
-//             data_item_id: data_item_id,
-//         },
-//         success: function(response) {
-//             const title = response.status ? "success" : "warning";
-//             Swal.fire({
-//                 title: response.message,
-//                 type: title,
-//                 icon: title,
-//             }).then(function(result) {
-//                 if (result.isConfirmed && response.status) {
-//                     $('#exampleModal').modal('hide');
-//                     window.location.href =
-//                         "{{ url('/candidates/details',$candidatesJobOrderDetails[0]['candidates']->id ) }}";
-//                 }
-//             });
-//         },
-//         error: function(xhr, status, error) {
-//             console.error('Error:', error);
-//         },
-//     });
-// });
+// $('#activityModal').modal('show');
 $('.checkbox-mail-area').hide();
 $('.schedule-event-area').hide();
 $('.regarding-area').hide();
@@ -1019,6 +1012,7 @@ function jobStatusChange(element) {
     $('#activity_type_description').html('');
     dataId = element.value;
     var selectedText = element.options[dataId].text;
+    // console.log(selectedText);
     var html = '';
 
     if (dataId == '1' || dataId == '8') {
@@ -1102,6 +1096,26 @@ $(document).on('click', '#save_activity_btn', function() {
     var length_hours = $('#length_hours').val();
     var length_description = $('#length_description').val();
     var data_item_id = '1';
+    // alert(select_checkbox_activity);
+
+    let errors = [];
+    $(".errors").html("");
+
+    if (change_status_item == null) {
+        errors.push(change_status_item);
+        $('.change_status_item_error').html(`Please change the status`);
+        return; // Stop execution if there's an error
+    }
+    if (select_checkbox_activity == null) {
+        errors.push(select_checkbox_activity);
+        $('.select_checkbox_activity_error').html(`Please select activity type`);
+        return; // Stop execution if there's an error
+    }
+
+    if (errors.length > 0) {
+        return false;
+    }
+
 
 
     var formData = new FormData();
@@ -1146,7 +1160,7 @@ $(document).on('click', '#save_activity_btn', function() {
                 if (result.isConfirmed && response.status) {
                     $('#exampleModal').modal('hide');
                     window.location.href =
-                        "{{ url('/candidates/details',$candidatesJobOrderDetails[0]['candidates']->id ) }}";
+                        "{{ url('/candidates/details',$candidatesDetails[0]->id ) }}";
                 }
             });
         },
@@ -1222,7 +1236,7 @@ $(document).on('click', '.remove_field', function() {
                 window.location.href = '/candidates/list/delete/' + list_id; // Adjust the URL as needed
             }
             window.location.href =
-                "{{ url('/candidates/details',$candidatesJobOrderDetails[0]['candidates']->id ) }}";
+                "{{ url('/candidates/details',$candidatesDetails[0]->id ) }}";
         });
     }
 
@@ -1278,7 +1292,7 @@ $(document).on("click", ".save-btn", function(e) {
                 if (result.isConfirmed && response.status) {
                     $('#exampleModal').modal('hide');
                     window.location.href =
-                        "{{ url('/candidates/details',$candidatesJobOrderDetails[0]['candidates']->id ) }}";
+                        "{{ url('/candidates/details',$candidatesDetails[0]->id ) }}";
                 }
             });
         },
@@ -1329,7 +1343,7 @@ $(document).ready(function() {
                     if (result.isConfirmed && response.status) {
                         $('#exampleModal').modal('hide');
                         window.location.href =
-                            "{{ url('/candidates/details',$candidatesJobOrderDetails[0]['candidates']->id ) }}";
+                            "{{ url('/candidates/details',$candidatesDetails[0]->id ) }}";
                     }
                 });
             },
@@ -1370,7 +1384,7 @@ $(document).on('click', '#delete_activity', function() {
                     }).then(function(result) {
                         if (result.isConfirmed && response.status) {
                             window.location.href =
-                                "{{ url('/candidates/details',$candidatesJobOrderDetails[0]['candidates']->id ) }}";
+                                "{{ url('/candidates/details',$candidatesDetails[0]->id ) }}";
                         }
                     });
                 },
@@ -1411,7 +1425,7 @@ $(document).on('click', '#candidate_joborders_delete', function() {
                     }).then(function(result) {
                         if (result.isConfirmed && response.status) {
                             window.location.href =
-                                "{{ url('/candidates/details',$candidatesJobOrderDetails[0]['candidates']->id ) }}";
+                                "{{ url('/candidates/details',$candidatesDetails[0]->id ) }}";
                         }
                     });
                 },
@@ -1453,7 +1467,7 @@ $(document).on('click', '#joborders_delete', function() {
                     }).then(function(result) {
                         if (result.isConfirmed && response.status) {
                             window.location.href =
-                                "{{ url('/candidates/details',$candidatesJobOrderDetails[0]['candidates']->id ) }}";
+                                "{{ url('/candidates/details',$candidatesDetails[0]->id ) }}";
                         }
                     });
                 },

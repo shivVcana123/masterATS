@@ -220,15 +220,44 @@ var editor_description = CKEDITOR.instances.description;
 CKEDITOR.replace('notes');
 var editor_notes = CKEDITOR.instances.notes;
 
+var enter_bill_rate = $('#enter_bill_rate').val();
+var pay_rate = $('#pay_rate').val();
+var payRate = '';
+// Get the bill rate input element and the max rate input element
+var billRateInput = document.getElementById("enter_bill_rate");
+    var maxRateInput = document.getElementById("pay_rate");
+
+    // Add an input event listener to the bill rate input
+    billRateInput.addEventListener("input", function () {
+        // Get the bill rate entered by the user
+        var billRate = parseFloat(billRateInput.value);
+
+        if (!isNaN(billRate)) {
+            // Calculate the pay rates based on the bill rate
+            var payRateC2C = (billRate * 0.8); // C2C rate calculation
+            var cost = billRate * 0.22;
+            var profitMargin = billRate * 0.1;
+            var payRateW2 = billRate - cost - profitMargin; // W2 rate calculation
+
+            // Update the max rate input with the calculated pay rates
+            payRate = maxRateInput.value = "C2C $" + payRateC2C.toFixed(2) + " / W2 $" + payRateW2.toFixed(2);
+        } else {
+            // Clear the max rate input if the bill rate is not a valid number
+            payRate = maxRateInput.value = "";
+        }
+    });
+
 
 $(document).on('click', '#add_jobOrder_btn', function(e) {
     e.preventDefault(); // Prevent the default form submission
     var companyId = '';
     var companyId = <?php echo json_encode($company_id); ?>;
+    // alert(payRate);
 
     var is_hot = $('#is_hot').is(':checked') ? 1 : 0
     var is_public = $('#public').is(':checked') ? 1 : 0
     var contact_id = $('#contact_id').val();
+    var duration = $('#duration').val();
 
     var description = editor_description.getData();
     var notes = editor_notes.getData();
@@ -249,6 +278,8 @@ $(document).on('click', '#add_jobOrder_btn', function(e) {
     formData.append('description', description);
     formData.append('notes', notes);
     formData.append('contact_id', contact_id);
+    formData.append('pay_rate', payRate);
+    formData.append('duration', duration);
     let errors = [];
 
     $(".errors").html("");

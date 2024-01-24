@@ -52,7 +52,8 @@
                                                     <label id="dateLabel" for="date">Public:</label>
                                                 </td>
                                                 <td class="tdData">
-                                                    <input type="checkBox" name="publicEntry" id="publicEntry">Public
+                                                    <input type="checkBox" value="1" name="publicEntry"
+                                                        id="publicEntry">Public
                                                     Entry
                                                 </td>
                                             </tr>
@@ -179,7 +180,7 @@
                                                     <label id="durationLabel" for="duration">Length:</label>
                                                 </td>
                                                 <td class="tdData">
-                                                    <select id="duration" name="duration" class="inputbox"
+                                                    <select id="length_hours" name="length_hours" class="inputbox"
                                                         style="width: 150px;" disabled="">
                                                         <option value="15">15 minutes</option>
                                                         <option value="30">30 minutes</option>
@@ -207,7 +208,8 @@
                                         </tbody>
                                     </table>
                                     <div style="text-align: center;">
-                                        <input type="button" class="button" name="submit" value="Add Event">
+                                        <input type="button" class="button" name="submit" value="Add Event"
+                                            onclick="addEvent()">
                                     </div>
                                 </form>
                             </td>
@@ -239,13 +241,15 @@ $(document).ready(function() {
     });
 });
 
+$('#length_hours').prop('disabled', false);
+
 function hoursRadios1(element) {
     if ($(element).prop('checked') === true) {
         $('#all_day_radios').prop('checked', false);
         $('#hours').prop('disabled', false);
         $('#minutes').prop('disabled', false);
         $('#day_am_pm').prop('disabled', false);
-        // $('#length_hours').prop('disabled', false);
+        $('#length_hours').prop('disabled', false);
     }
 }
 
@@ -255,9 +259,72 @@ function allDayRadios(element) {
         $('#hours').prop('disabled', true);
         $('#minutes').prop('disabled', true);
         $('#day_am_pm').prop('disabled', true);
-        // $('#length_hours').prop('disabled', true);
+        $('#length_hours').prop('disabled', true);
     }
 }
+
+function addEvent() {
+    var title = $('#title').val();
+    var eventType = $('#type').val();
+    var publicEntry = $('#publicEntry').is(':checked') ? 1 : 0;
+    var monthDropdown = $('#monthDropdown').val();
+    var dateDropdown = $('#dateDropdown').val();
+    var year = $('#year').val();
+    var hours = $('#hours').val();
+    var minutes = $('#minutes').val();
+    var day_am_pm = $('#day_am_pm').val();
+    var length_hours = $('#length_hours').val();
+    var description = $('#description').val();
+  
+
+    const formData = new FormData();
+    formData.append('title',title);
+    formData.append('eventType',eventType);
+    formData.append('publicEntry',publicEntry);
+    formData.append('monthDropdown',monthDropdown);
+    formData.append('dateDropdown',dateDropdown);
+    formData.append('year',year);
+    formData.append('hours',hours);
+    formData.append('minutes',minutes);
+    formData.append('day_am_pm',day_am_pm);
+    formData.append('length_hours',length_hours);
+    formData.append('description',description);
+
+    $.ajaxSetup({
+        headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        },
+    });
+    $.ajax({
+        url: '/add/event/', // Adjust the URL as needed
+        type: 'POST',
+        data: formData, // Use the FormData object instead of serialize()
+        processData: false,
+        contentType: false,
+        success: function(response) {
+            const title = response.status ? "success" : "warning";
+            Swal.fire({
+                title: response.message,
+                type: title,
+                icon: title,
+            }).then(function(result) {
+                if (result.isConfirmed && response.status) {
+                    if (companyId) {
+                        window.location.href = "{{ route('companies.details')}}" + '/' +
+                            companyId
+                    } else {
+                        window.location.href = "{{route('joborders.index')}}";
+                    }
+                }
+            });
+        },
+        error: function(xhr, status, error) {
+            console.error('Error:', error);
+        },
+    });
+}
+
+
 
 $(document).ready(function() {
     // Set the current date in the #monthDropdown

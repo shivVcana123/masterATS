@@ -21,6 +21,10 @@ class Activity extends Model
     }
 
     public function candidateJoborderStatus(){
-        return $this->hasMany(candidateJoborderStatus::class,'id','type');
+        return $this->hasMany(candidateJoborderStatus::class,'id','data_item_type');
+    }
+
+    public function activityType(){
+        return $this->hasMany(ActivityType::class,'id','type');
     }
 }

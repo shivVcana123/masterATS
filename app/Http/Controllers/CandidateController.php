@@ -121,21 +121,23 @@ class CandidateController extends Controller
     }
 
     public function candidatesDetails($id){
-        $candidatesDetails = Candidate::with('attachments')->where('id',$id)->get();
+        $candidatesDetails = Candidate::with('attachments','candidateJoborder','candidateJoborder.joborderDetails','ownerUser','activities','activities.activityType','activities.candidateJoborderStatus')->where('id',$id)->get();
+        // dd($candidatesDetails);
         // candidatesDetails','users','joborderDetails','joborderDetails.companies','activities','activities.activityTypes
-        $candidatesJobOrderDetails = CandidateJoborder::with('candidates','candidateJoborderStatus','joborderDetails','ownerUser','activities','activities.candidateJoborderStatus')->where('candidate_id',$id)->get();
+        // $candidatesJobOrderDetails = CandidateJoborder::with('candidates','candidateJoborderStatus','joborderDetails','ownerUser','activities','activities.activityType','activities.candidateJoborderStatus')->where('candidate_id',$id)->get();
 
 
         $joborderList = Joborder::with('companies','ownerUser','recruiterUser')->get();
         // dd($joborderList);
-        $savedList = SavedList::where('number_entries','1')->get();
+        $savedList = SavedList::get();
+        $savedAddList = SavedList::where('number_entries','1')->get();
         $activityType = ActivityType::get();
         $calendarEvenType = calendarEvenType::get();
         $changeStatus = ChangeStatus::get();
         // dd($calendarEvenType);
 
 
-        return view('candidates.show',compact('candidatesDetails','savedList','candidatesJobOrderDetails','activityType','calendarEvenType','changeStatus','joborderList'));
+        return view('candidates.show',compact('candidatesDetails','savedList','activityType','calendarEvenType','changeStatus','joborderList','savedAddList'));
     }
 
     public function candidatesUpdate($id){
@@ -242,11 +244,11 @@ public function candidatesListSave(Request $request){
             ['joborder_id' => $data['joborder_item']],
             [
                 'data_item_id' => $data['data_item_id'],
-                'data_item_type' => $data['schedule_event_type'],
+                'data_item_type' => $data['change_status_item'],
                 'site_id' => null,
                 'entered_by' => Auth::user()->id,
-                'type' =>  $data['change_status_item'],
-                'notes' => $data['length_description'],
+                'type' =>  $data['select_checkbox_activity'],
+                'notes' => $data['activity_type_description'],
             ]
         );
         

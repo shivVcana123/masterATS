@@ -98,9 +98,6 @@ class JoborderController extends Controller
             // 'joborder_id' => 'required',
             'recruiter' => 'required',
             'client_job_id' => 'required',
-            'expected_rate' => 'required',
-            'interview_type' => 'required',
-            'submission_deadline' => 'required|date',
         ]);
 
         $data = $request->all();
@@ -110,6 +107,8 @@ class JoborderController extends Controller
         $data['is_hot'] = $data['is_hot'];
         $data['public'] = $data['is_public'];
         $data['contact_id'] = $data['contact_id'];
+        $data['pay_rate'] = $data['pay_rate'];
+        $data['duration'] = $data['duration'];
        $jobCreate = JobOrder::create($data);
 
         if ($jobCreate) {
@@ -124,16 +123,7 @@ class JoborderController extends Controller
 
    public function index(Request $request, $letter = null)
 {  
-    // $query = DB::table('joborders')
-    // ->join('companies', 'joborders.id', '=', 'companies.id')
-    // ->join('users', 'joborders.owner', '=', 'users.id')
-    // ->leftJoin('users as recruiter', 'joborders.recruiter', '=', 'recruiter.id')
-    // ->select('joborders.id', 'joborders.title', 'joborders.status',
-    //     'joborders.owner', 'joborders.type', 'companies.company_name', 'users.first_name as owner_name',
-    //     'joborders.client_job_id',DB::raw('DATE_FORMAT(joborders.date_modified, "%d-%m-%Y") as date_modified'), DB::raw('DATE_FORMAT(joborders.date_created, "%d-%m-%Y") as date_created'),'recruiter.id as recruiter_id',
-    //     'recruiter.first_name as recruiter_name')
-    // ->orderBy('joborders.recruiter', 'ASC');
-
+    
     $query = Joborder::with('companies','ownerUser','recruiterUser');
 
         // Check if 'letter' parameter is present and apply the filter

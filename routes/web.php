@@ -77,6 +77,9 @@ Route::get('/contacts/details/{contact_id?}', [ContactController::class, 'contac
 
 
 Route::get('/department/delete/{id?}', [DepartmentController::class, 'departmentDelete'])->name('department.delete');
+
+
+Route::get('/listts/{id?}', [ListtController::class, 'index'])->name('listts.index');
 /*
 |--------------------------------------------------------------------------
 | Web Routes

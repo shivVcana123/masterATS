@@ -46,4 +46,7 @@ class Candidate extends Model
     {
         return $this->morphMany(Attachment::class, 'attachable');
     }
+    public function activities(){
+        return $this->belongsTo(Activity::class,'joborder_id','id');
+    }
 }
