@@ -43,7 +43,7 @@
                                                         <option value="{{$event->id}}">{{$event->short_description}}
                                                         </option>
                                                         @endforeach
-                                                    </select>&nbsp;*
+                                                    </select>
                                                 </td>
                                             </tr>
 
@@ -89,6 +89,7 @@
                                                                         <i class="date-icon fa fa-calendar"
                                                                             aria-hidden="true"></i>
                                                                     </div>
+                                                                    
                                                                 </td>
                                                                 <td class="datepicker">
                                                                 </td>
@@ -275,20 +276,20 @@ function addEvent() {
     var day_am_pm = $('#day_am_pm').val();
     var length_hours = $('#length_hours').val();
     var description = $('#description').val();
-  
+
 
     const formData = new FormData();
-    formData.append('title',title);
-    formData.append('eventType',eventType);
-    formData.append('publicEntry',publicEntry);
-    formData.append('monthDropdown',monthDropdown);
-    formData.append('dateDropdown',dateDropdown);
-    formData.append('year',year);
-    formData.append('hours',hours);
-    formData.append('minutes',minutes);
-    formData.append('day_am_pm',day_am_pm);
-    formData.append('length_hours',length_hours);
-    formData.append('description',description);
+    formData.append('title', title);
+    formData.append('eventType', eventType);
+    formData.append('publicEntry', publicEntry);
+    formData.append('monthDropdown', monthDropdown);
+    formData.append('dateDropdown', dateDropdown);
+    formData.append('year', year);
+    formData.append('hours', hours);
+    formData.append('minutes', minutes);
+    formData.append('day_am_pm', day_am_pm);
+    formData.append('length_hours', length_hours);
+    formData.append('description', description);
 
     $.ajaxSetup({
         headers: {
@@ -296,7 +297,7 @@ function addEvent() {
         },
     });
     $.ajax({
-        url: '/add/event/', // Adjust the URL as needed
+        url: '/add/schedule/event', // Adjust the URL as needed
         type: 'POST',
         data: formData, // Use the FormData object instead of serialize()
         processData: false,
@@ -309,12 +310,7 @@ function addEvent() {
                 icon: title,
             }).then(function(result) {
                 if (result.isConfirmed && response.status) {
-                    if (companyId) {
-                        window.location.href = "{{ route('companies.details')}}" + '/' +
-                            companyId
-                    } else {
-                        window.location.href = "{{route('joborders.index')}}";
-                    }
+                    // window.location.reload();
                 }
             });
         },
@@ -366,6 +362,30 @@ $('#calendar').fullCalendar({
     navLinks: true,
     editable: true,
     eventLimit: true,
+    // events: getScheduleEvent,
+    events: {
+        url: '/get/schedule/event',
+        type: 'GET',
+        success: function(response) {
+            // console.log(response.data);
+
+                var myEvents = [];
+                $.each(response.data, function(index, event) {
+                    console.log(event.calendar_event_type);
+                myEvents.push({
+                    title: event.title,
+                    start: event.date,
+                    allDay: true
+                });
+            });
+
+            // Now you can use myEvents to initialize FullCalendar
+            $('#calendar').fullCalendar('renderEvents', myEvents);
+        },
+        error: function(xhr, status, error) {
+            console.error('Error:', error);
+        }
+    },
     dayClick: function(data, jsEvent, view) {
         var year = data.year();
         var month = data.month() + 1;
@@ -376,61 +396,10 @@ $('#calendar').fullCalendar({
         var selectedDate = new Date(year, month - 1, day);
         updateDropdowns(selectedDate);
     },
-    events: [{
-            title: 'All Day Event',
-            start: '2018-11-01'
-        },
-        {
-            title: 'Long Event',
-            start: '2018-11-07',
-            end: '2018-11-10'
-        },
-        {
-            id: 999,
-            title: 'Repeating Event',
-            start: '2018-11-09T16:00:00'
-        },
-        {
-            id: 999,
-            title: 'Repeating Event',
-            start: '2018-11-16T16:00:00'
-        },
-        {
-            title: 'Conference',
-            start: '2018-11-11',
-            end: '2018-11-13'
-        },
-        {
-            title: 'Meeting',
-            start: '2018-11-12T10:30:00',
-            end: '2018-11-12T12:30:00'
-        },
-        {
-            title: 'Lunch',
-            start: '2018-11-12T12:00:00'
-        },
-        {
-            title: 'Meeting',
-            start: '2018-11-12T14:30:00'
-        },
-        {
-            title: 'Happy Hour',
-            start: '2018-11-12T17:30:00'
-        },
-        {
-            title: 'Dinner',
-            start: '2018-11-12T20:00:00'
-        },
-        {
-            title: 'Birthday Party',
-            start: '2018-11-13T07:00:00'
-        },
-        {
-            title: 'Click for Google',
-            url: 'https://google.com/',
-            start: '2018-11-28'
-        }
-    ]
 });
+
+// function getScheduleEvent(){
+
+// }
 </script>
 @endpush
