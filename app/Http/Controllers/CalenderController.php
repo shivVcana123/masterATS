@@ -7,6 +7,7 @@ use App\Facades\UtilityFacades;
 use App\Models\CalendarEvent;
 use App\Models\CalendarEvenType;
 use App\Models\Calender;
+use DateTime;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -20,7 +21,7 @@ class CalenderController extends Controller
     {  
       $calendarEvenType = CalendarEvenType::get();
       $scheduleEventDetails = CalendarEvent::with('calendarEventType','ownerUser')->get();
-      // dd($scheduleEventDetails);
+   
      return view('calenders.index',compact('calendarEvenType','scheduleEventDetails'));
     }
 
@@ -39,13 +40,16 @@ class CalenderController extends Controller
 
     public function scheduleEvent(Request $request){
 
+      // dd($request->all());
       $scheduleEvent = new CalendarEvent();
        $scheduleEvent->title =  $request->title;
        $scheduleEvent->entered_by = Auth::user()->id;
-       $scheduleEvent->type =  $request->eventType;
+       $scheduleEvent->calendar_event_type_id =  $request->eventType;
        $scheduleEvent->public =  $request->publicEntry;
-       $date = $request->year.'-'.$request->monthDropdown.'-'.$request->dateDropdown.' '.$request->hours.':'.$request->minutes.' '.$request->day_am_pm;
-       $scheduleEvent->date =  $date;
+      $date = $request->year.'-'.$request->monthDropdown.'-'.$request->dateDropdown.' '.$request->hours.':'.$request->minutes.':00 '.$request->day_am_pm;
+      $dateTime = DateTime::createFromFormat('y-n-j g:i:s A', $date);
+      // dd($dateTime);
+       $scheduleEvent->date =  $dateTime;
        $scheduleEvent->duration =  $request->length_hours;
        $scheduleEvent->description =  $request->description;
        $scheduleEvent->save();

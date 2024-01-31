@@ -1,6 +1,10 @@
 @extends('layouts.admin')
 @section('content')
-
+<style>
+.errors {
+    color: red;
+}
+</style>
 <table style="border-collapse: collapse;">
     <tbody>
         <tr style="vertical-align: top;">
@@ -25,18 +29,20 @@
                                                 <td class="tdVertical">
                                                     <label id="titleLabel" for="title">Title:</label>
                                                 </td>
+
                                                 <td class="tdData">
                                                     <input type="text" class="inputbox" name="title" id="title"
                                                         style="width: 150px">
                                                 </td>
                                             </tr>
+                                            <span class="title_error errors"></span>
 
                                             <tr>
                                                 <td class="tdVertical">
                                                     <label id="eventTypeLabel" for="type">Type:</label>
                                                 </td>
                                                 <td class="tdData">
-                                                    <select id="type" name="type" class="inputbox"
+                                                    <select id="eventType" name="eventType" class="inputbox"
                                                         style="width: 150px;">
                                                         <option disabled selected>(Select a Type)</option>
                                                         @foreach($calendarEvenType as $event)
@@ -46,7 +52,7 @@
                                                     </select>
                                                 </td>
                                             </tr>
-
+                                            <br><span class="event_type_error errors"></span>
                                             <tr>
                                                 <td class="tdVertical">
                                                     <label id="dateLabel" for="date">Public:</label>
@@ -89,7 +95,7 @@
                                                                         <i class="date-icon fa fa-calendar"
                                                                             aria-hidden="true"></i>
                                                                     </div>
-                                                                    
+
                                                                 </td>
                                                                 <td class="datepicker">
                                                                 </td>
@@ -232,9 +238,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.min.css"
     integrity="sha512-liDnOrsa/NzR+4VyWQ3fBzsDBzal338A1VfUpQvAcdt+eL88ePCOd3n9VQpdA0Yxi4yglmLy/AmH+Lrzmn0eMQ=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
-<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.min.js"
-    integrity="sha512-iusSCweltSRVrjOz+4nxOL9OXh2UA0m8KdjsX8/KUUiJz+TCNzalwE0WE6dYTfHDkXuGuHq3W9YIhDLN7UNB0w=="
-    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.min.js"></script>
 <script>
 $(document).ready(function() {
     $('.date-icon').click(function() {
@@ -266,7 +270,7 @@ function allDayRadios(element) {
 
 function addEvent() {
     var title = $('#title').val();
-    var eventType = $('#type').val();
+    var eventType = $('#eventType').val();
     var publicEntry = $('#publicEntry').is(':checked') ? 1 : 0;
     var monthDropdown = $('#monthDropdown').val();
     var dateDropdown = $('#dateDropdown').val();
@@ -276,8 +280,23 @@ function addEvent() {
     var day_am_pm = $('#day_am_pm').val();
     var length_hours = $('#length_hours').val();
     var description = $('#description').val();
+    let errors = [];
+    $(".errors").html("");
+
+    if (title === '') {
+        errors.push(title);
+        $('.title_error').html("title field can't be empty.");
+    }
+
+    if (eventType == null) {
+        errors.push(eventType);
+        $('.event_type_error').html("Please select at least 1 type.");
+    }
 
 
+    if (errors.length > 0) {
+        return false;
+    }
     const formData = new FormData();
     formData.append('title', title);
     formData.append('eventType', eventType);
@@ -351,55 +370,53 @@ function updateDropdowns(date) {
     $('#year').val(date.getFullYear().toString().substr(-2));
 }
 
-
-$('#calendar').fullCalendar({
-    header: {
-        left: 'prev,next today',
-        center: 'title',
-        right: 'month,agendaWeek,agendaDay,listWeek'
-    },
-    defaultDate: new Date(),
-    navLinks: true,
-    editable: true,
-    eventLimit: true,
-    // events: getScheduleEvent,
-    events: {
-        url: '/get/schedule/event',
-        type: 'GET',
-        success: function(response) {
-            // console.log(response.data);
-
+$(document).ready(function() {
+    $('#calendar').fullCalendar({
+        header: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'month,agendaWeek,agendaDay,listWeek'
+        },
+        defaultDate: new Date(),
+        navLinks: true,
+        eventLimit: true,
+        events: {
+            url: '/get/schedule/event',
+            type: 'GET',
+            success: function(response) {
+                console.log(response.data);
                 var myEvents = [];
                 $.each(response.data, function(index, event) {
-                    console.log(event.calendar_event_type);
-                myEvents.push({
-                    title: event.title,
-                    start: event.date,
-                    allDay: true
+    
+                    myEvents.push({
+                        title: `${event.calendar_event_type[0]?.short_description || ''} ${event.owner_user?.user_name || ''} ${event.title || ''}`,
+                        start: new Date(event.date),
+                        allDay: false,
+                        // other properties...
+                    });
+                    
                 });
-            });
 
-            // Now you can use myEvents to initialize FullCalendar
-            $('#calendar').fullCalendar('renderEvents', myEvents);
+
+                // Now you can use myEvents to initialize FullCalendar
+                $('#calendar').fullCalendar('removeEvents');
+                $('#calendar').fullCalendar('addEventSource', myEvents);
+                $('#calendar').fullCalendar('rerenderEvents');
+            },
+            error: function(xhr, status, error) {
+                console.error('Error:', error);
+            }
         },
-        error: function(xhr, status, error) {
-            console.error('Error:', error);
-        }
-    },
-    dayClick: function(data, jsEvent, view) {
-        var year = data.year();
-        var month = data.month() + 1;
-        var day = data.date();
 
-        // console.log(month,day,year);
-        // Update the dropdowns based on the selected date
-        var selectedDate = new Date(year, month - 1, day);
-        updateDropdowns(selectedDate);
-    },
+        dayClick: function(data, jsEvent, view) {
+            var year = data.year();
+            var month = data.month() + 1;
+            var day = data.date();
+            // Update the dropdowns based on the selected date
+            var selectedDate = new Date(year, month - 1, day);
+            updateDropdowns(selectedDate);
+        },
+    });
 });
-
-// function getScheduleEvent(){
-
-// }
 </script>
 @endpush
