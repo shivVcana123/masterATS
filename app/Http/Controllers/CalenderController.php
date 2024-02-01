@@ -25,10 +25,17 @@ class CalenderController extends Controller
      return view('calenders.index',compact('calendarEvenType','scheduleEventDetails'));
     }
 
-    public function getScheduleEvents()
+    public function getScheduleEvents($eventId = null)
     {  
-      $scheduleEventDetails = CalendarEvent::with('calendarEventType','ownerUser')->get();
+      if($eventId){
+        $scheduleEventDetails = CalendarEvent::with('calendarEventType','ownerUser')
+        ->where('id',$eventId)
+        ->get();
+      }else{
 
+        $scheduleEventDetails = CalendarEvent::with('calendarEventType','ownerUser')->get();
+      }
+      // dd($scheduleEventDetails);
       if($scheduleEventDetails){
 
         return response()->json(['status' => true, 'message' => 'Event scheduled successfully.','data' => $scheduleEventDetails]);

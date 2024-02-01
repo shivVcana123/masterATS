@@ -82,9 +82,9 @@ Route::get('/department/delete/{id?}', [DepartmentController::class, 'department
 Route::get('/listts/{id?}', [ListtController::class, 'index'])->name('listts.index');
 
 
-
 Route::post('/add/schedule/event',[CalenderController::class,'scheduleEvent'])->name('add.schedule.event');
-Route::get('/get/schedule/event',[CalenderController::class,'getScheduleEvents'])->name('get.schedule.event');
+Route::post('/edit/schedule/event/{eventId?}',[CalenderController::class,'editScheduleEvent'])->name('edit.schedule.event');
+Route::get('/get/schedule/event/{eventId?}',[CalenderController::class,'getScheduleEvents'])->name('get.schedule.event');
 /*
 |--------------------------------------------------------------------------
 | Web Routes

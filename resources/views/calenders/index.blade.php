@@ -4,6 +4,16 @@
 .errors {
     color: red;
 }
+
+
+#viewEventTD {
+    display: none;
+    /* Hide initially */
+}
+#editEventTD {
+    display: none;
+    /* Hide initially */
+}
 </style>
 <table style="border-collapse: collapse;">
     <tbody>
@@ -15,13 +25,247 @@
                             <td id="upcomingEventsTD" style="padding: 0px; display: none;">
                                 <div class="noteUnsizedSpan">My Upcoming Events / Calls</div>
                             </td>
-                            <td id="addEventTD" style="">
+                            <td id="addEventTD">
                                 <p class="noteUnsized">Add Event</p>
-                                <form name="addEventForm" id="addEventForm"
-                                    action="index.php?m=calendar&amp;view=MONTHVIEW&amp;month=1&amp;year=2024&amp;week=-1&amp;day=-1&amp;a=addEvent"
-                                    method="post" onsubmit="return checkAddForm(document.addEventForm);"
-                                    autocomplete="off">
+                                <form name="addEventForm" id="addEventForm" method="post" autocomplete="off">
                                     <input type="hidden" name="postback" id="postbackA" value="postback">
+                                    <table class="addTableMini" width="235">
+                                        <tbody>
+                                            <tr>
+                                                <td class="tdVertical">
+                                                    <label id="titleLabel" for="title">Title:</label>
+                                                </td>
+
+                                                <td class="tdData">
+                                                    <input type="text" class="inputbox" name="title" id="title"
+                                                        style="width: 150px">
+                                                </td>
+                                            </tr>
+                                            <span class="title_error errors"></span>
+
+                                            <tr>
+                                                <td class="tdVertical">
+                                                    <label id="eventTypeLabel" for="type">Type:</label>
+                                                </td>
+                                                <td class="tdData">
+                                                    <select id="eventType" name="eventType" class="inputbox"
+                                                        style="width: 150px;">
+                                                        <option disabled selected>(Select a Type)</option>
+                                                        @foreach($calendarEvenType as $event)
+                                                        <option value="{{$event->id}}">{{$event->short_description}}
+                                                        </option>
+                                                        @endforeach
+                                                    </select>
+                                                </td>
+                                            </tr>
+                                            <br><span class="event_type_error errors"></span>
+                                            <tr>
+                                                <td class="tdVertical">
+                                                    <label id="dateLabel" for="date">Public:</label>
+                                                </td>
+                                                <td class="tdData">
+                                                    <input type="checkBox" value="1" name="publicEntry"
+                                                        id="publicEntry">Public
+                                                    Entry
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td class="tdVertical">
+                                                    <label id="dateLabel" for="date">Date:</label>
+                                                </td>
+                                                <td nowrap="nowrap" class="tdData">
+                                                    <input type="hidden" name="dateAdd" value="01-17-24">
+                                                    <table style="padding: 0px; border-spacing: 0px; margin: 0px;">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td style="padding: 0px 3px 0px 0px; margin: 0px;">
+                                                                    <select id="monthDropdown" name="month">
+                                                                        @for ($month = 1; $month <= 12; $month++)
+                                                                            <option value="{{ $month }}">
+                                                                            {{ date('M', mktime(0, 0, 0, $month, 1)) }}
+                                                                            </option>
+                                                                            @endfor
+                                                                    </select>
+                                                                </td>
+                                                                <td style="padding: 0px 3px 0px 0px; margin: 0px;">
+                                                                    <select name="date" id="dateDropdown"></select>
+                                                                </td>
+                                                                <td style="padding: 0px 3px 0px 0px; margin: 0px;">
+                                                                    <input class="calendarDateInput" type="text"
+                                                                        id="year" size="2" title="Year">
+                                                                </td>
+                                                                <td>
+                                                                    <div class="date-container">
+                                                                        <input id="date-calendar" type="date" hidden />
+                                                                        <i class="date-icon fa fa-calendar"
+                                                                            aria-hidden="true"></i>
+                                                                    </div>
+
+                                                                </td>
+                                                                <td class="datepicker">
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td class="tdVertical">
+                                                    <label id="timeLabel" for="time">Time:</label>
+                                                </td>
+                                                <td class="tdData">
+                                                    <input type="radio" name="allDay" id="allDay0" value="0" checked=""
+                                                        onchange="hoursRadios1(this);">
+                                                    <select id="hours" name="hours">
+                                                        @for ($hour = 1; $hour <= 12; $hour ++) <option
+                                                            value="{{ $hour  }}">
+                                                            {{$hour}}
+                                                            </option>
+                                                            @endfor
+                                                    </select>
+                                                    <select id="minutes" name="minutes">
+                                                        <option value="00">00</option>
+                                                        <option value="15">15</option>
+                                                        <option value="30">30</option>
+                                                        <option value="45">45</option>
+                                                    </select>
+
+                                                    <select id="day_am_pm" name="day_am_pm">
+                                                        <option value="AM">AM</option>
+                                                        <option value="PM">PM</option>
+                                                    </select>
+                                                    <br>
+
+                                                    <input type="radio" name="allDay" id="allDay1" value="1"
+                                                        onchange="allDayRadios(this);">All Day / No Specific Time<br>
+                                                    <!-- FIXME: Remove hide style. -->
+                                                    <span style="display:none;">
+                                                        <input type="checkBox" name="reminderToggle" id="reminderToggle"
+                                                            onclick="considerCheckBox('reminderToggle', 'sendEmailTD');">Send
+                                                        e-mail reminder
+                                                    </span>
+                                                </td>
+                                            </tr>
+
+                                            <tr id="sendEmailTD" style="display:none;">
+                                                <td class="tdVertical">
+                                                    E-Mail:
+                                                </td>
+                                                <td class="tdData">
+                                                    <table style="border-collapse: collapse;">
+                                                        <tbody>
+                                                            <tr>
+                                                                <td>
+                                                                    To:
+                                                                </td>
+                                                                <td>
+                                                                    <input type="text" id="sendEmail" name="sendEmail"
+                                                                        class="inputbox" style="width:115px;"
+                                                                        value="talent@xyber-it.com">
+                                                                </td>
+                                                            </tr>
+                                                            <tr>
+                                                                <td>
+                                                                    Time:
+                                                                </td>
+                                                                <td>
+                                                                    <select id="reminderTime" name="reminderTime"
+                                                                        style="width:115px;">
+                                                                        <option value="15">15 min early</option>
+                                                                        <option value="30">30 min early</option>
+                                                                        <option value="45">45 min early</option>
+                                                                        <option value="60">1 hour early</option>
+                                                                        <option value="120">2 hours early</option>
+                                                                        <option value="1440">1 day early</option>
+                                                                    </select>
+                                                                </td>
+                                                            </tr>
+                                                        </tbody>
+                                                    </table>
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td class="tdVertical">
+                                                    <label id="durationLabel" for="duration">Length:</label>
+                                                </td>
+                                                <td class="tdData">
+                                                    <select id="length_hours" name="length_hours" class="inputbox"
+                                                        style="width: 150px;" disabled="">
+                                                        <option value="15 minutes">15 minutes</option>
+                                                        <option value="30 minutes">30 minutes</option>
+                                                        <option value="45 minutes">45 minutes</option>
+                                                        <option value="1 hour" selected="selected">1 hour</option>
+                                                        <option value="1.5 hours">1.5 hours</option>
+                                                        <option value="2 hours">2 hours</option>
+                                                        <option value="3 hours">3 hours</option>
+                                                        <option value="4 hours">4 hours</option>
+                                                        <option value="More than 4 hours">More than 4 hours</option>
+                                                    </select>
+                                                </td>
+                                            </tr>
+
+                                            <tr>
+                                                <td class="tdVertical">
+                                                    <label id="descriptionLabel" for="description">Desc:</label>
+                                                </td>
+                                                <td class="tdData">
+                                                    <textarea id="description" name="description"
+                                                        style="width:150px; height:180px;"></textarea>
+                                                </td>
+                                            </tr>
+
+                                        </tbody>
+                                    </table>
+                                    <div style="text-align: center;">
+                                        <input type="button" class="button" name="submit" value="Add Event"
+                                            onclick="addEvent()">
+                                    </div>
+                                </form>
+                            </td>
+
+                            <!-- view Event TD -->
+                            <td id="viewEventTD">
+                                <table width="235">
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                <p class="noteUnsized">View Event</p>
+                                                <span id="EventID" style="font-weight:bold" hidden></span><br>
+                                                <span id="viewEventTitle" style="font-weight:bold">new</span><br>
+                                                Entered By: <span id="viewEventOwner">Vishal Sud</span><br>
+                                                Event Type: <span id="viewEventType"><img src="images/interview.gif">
+                                                    Interview</span><br>
+                                                <span id="viewEventLink"></span><br>
+                                                <br>
+                                                Date: <span id="viewEventDate">01-01-24</span><br>
+                                                Time: <span id="viewEventTime">12:00 AM</span><br>
+                                                Duration: <span id="viewEventDuration">1 Hour</span><br>
+                                                Reminder: <span id="viewEventReminder"><i>(None Set)</i></span><br>
+                                                <br>
+                                                Description:<br>
+                                                <span id="viewEventDescription">test</span><br>
+                                                <br>
+                                                <input type="button" class="button" name="Edit" value="Edit Event"
+                                                    onclick="calendarEditEvent();">
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </td>
+
+                            <!-- edit Event TD -->
+                            <td id="editEventTD">
+                                <p class=" noteUnsized">Edit Event</p>
+                                <form name="editEventForm" id="editEventForm" method="post" autocomplete="off">
+                                    <input type="hidden" name="postback" id="postbackB" value="postback">
+                                    <input type="hidden" name="eventID" id="eventIDEdit" value="3">
+                                    <input type="hidden" name="dataItemType" id="dataItemTypeEdit" value="-1">
+                                    <input type="hidden" name="dataItemID" id="dataItemIDEdit" value="-1">
+                                    <input type="hidden" name="jobOrderID" id="jobOrderIDEdit">
 
                                     <table class="editTableMini" width="235">
                                         <tbody>
@@ -189,15 +433,15 @@
                                                 <td class="tdData">
                                                     <select id="length_hours" name="length_hours" class="inputbox"
                                                         style="width: 150px;" disabled="">
-                                                        <option value="15">15 minutes</option>
-                                                        <option value="30">30 minutes</option>
-                                                        <option value="45">45 minutes</option>
-                                                        <option value="60" selected="selected">1 hour</option>
-                                                        <option value="90">1.5 hours</option>
-                                                        <option value="120">2 hours</option>
-                                                        <option value="180">3 hours</option>
-                                                        <option value="240">4 hours</option>
-                                                        <option value="300">More than 4 hours</option>
+                                                        <option value="15 minutes">15 minutes</option>
+                                                        <option value="30 minutes">30 minutes</option>
+                                                        <option value="45 minutes">45 minutes</option>
+                                                        <option value="1 hour" selected="selected">1 hour</option>
+                                                        <option value="1.5 hours">1.5 hours</option>
+                                                        <option value="2 hours">2 hours</option>
+                                                        <option value="3 hours">3 hours</option>
+                                                        <option value="4 hours">4 hours</option>
+                                                        <option value="More than 4 hours">More than 4 hours</option>
                                                     </select>
                                                 </td>
                                             </tr>
@@ -215,8 +459,9 @@
                                         </tbody>
                                     </table>
                                     <div style="text-align: center;">
-                                        <input type="button" class="button" name="submit" value="Add Event"
-                                            onclick="addEvent()">
+                                        <input type="submit" class="button" name="submit" value="Save">
+                                        <input type="button" class="button" name="delete" value="Delete"
+                                            onclick="confirmDeleteEntry();">
                                     </div>
                                 </form>
                             </td>
@@ -370,7 +615,23 @@ function updateDropdowns(date) {
     $('#year').val(date.getFullYear().toString().substr(-2));
 }
 
+
+var editEventTD = document.getElementById("editEventTD");
+$('#editEventTD').hide();
 $(document).ready(function() {
+    var myEvents = [];
+    var eventId = '';
+
+    function getEventIdForDate(date) {
+        var matchingEvent = myEvents.find(function(event) {
+            return event.start.getDate() === date.getDate() &&
+                event.start.getMonth() === date.getMonth() &&
+                event.start.getFullYear() === date.getFullYear();
+        });
+
+        return matchingEvent ? matchingEvent.id : null;
+    }
+
     $('#calendar').fullCalendar({
         header: {
             left: 'prev,next today',
@@ -385,18 +646,16 @@ $(document).ready(function() {
             type: 'GET',
             success: function(response) {
                 console.log(response.data);
-                var myEvents = [];
+
                 $.each(response.data, function(index, event) {
-    
                     myEvents.push({
+                        id: event.id,
                         title: `${event.calendar_event_type[0]?.short_description || ''} ${event.owner_user?.user_name || ''} ${event.title || ''}`,
                         start: new Date(event.date),
                         allDay: false,
                         // other properties...
                     });
-                    
                 });
-
 
                 // Now you can use myEvents to initialize FullCalendar
                 $('#calendar').fullCalendar('removeEvents');
@@ -408,15 +667,166 @@ $(document).ready(function() {
             }
         },
 
+        eventRender: function(event, element) {
+            element.find('.fc-title').prepend('<span class="event-id">' + event.id + '</span> ');
+        },
+
         dayClick: function(data, jsEvent, view) {
             var year = data.year();
             var month = data.month() + 1;
             var day = data.date();
+
+            var eventId = getEventIdForDate(new Date(year, month - 1, day));
+
+            var addEventTD = document.getElementById("addEventTD");
+            var viewEventTD = document.getElementById("viewEventTD");
+
+            if (eventId) {
+                $.ajax({
+                    url: '/get/schedule/event/' + eventId,
+                    type: 'GET',
+                    success: function(response) {
+                        var eventData = response.data[0];
+                        if (eventData) {
+                            updateView(eventData);
+                            addEventTD.style.display = "none";
+                            viewEventTD.style.display = "table-cell";
+                        } else {
+                            console.error("Event data not found for eventId: " +
+                                eventId);
+                            handleNoEventData(addEventTD, viewEventTD);
+                        }
+                    },
+                    error: function(jqXHR, textStatus, errorThrown) {
+                        console.error("Error fetching event data: " + textStatus);
+                        handleNoEventData(addEventTD, viewEventTD);
+                    }
+                });
+            } else {
+                handleNoEventData(addEventTD, viewEventTD);
+            }
+
             // Update the dropdowns based on the selected date
             var selectedDate = new Date(year, month - 1, day);
             updateDropdowns(selectedDate);
         },
+
     });
 });
+
+function handleNoEventData(addEventTD, viewEventTD) {
+    // If eventId is not present, show addEventTD and hide viewEventTD
+    addEventTD.style.display = "table-cell";
+    viewEventTD.style.display = "none";
+}
+
+function updateView(eventData) {
+    var formattedDate = moment(eventData.date).format('DD-MM-Y');
+    var formattedTime = moment(eventData.date).format('HH:mm A');
+    $("#EventID").text(eventData.id);
+    $("#viewEventTitle").text(eventData.title);
+    $("#viewEventOwner").text(eventData.owner_user.user_name);
+    $("#viewEventType").text(eventData.calendar_event_type[0].short_description);
+    $("#viewEventDate").text(formattedDate); //formatDate('dd/mm/yy', new Date(eventData.date))
+    $("#viewEventTime").text(formattedTime); // Verify if this is correct or needs modification
+    $("#viewEventDuration").text(eventData.duration);
+    $("#viewEventReminder").text(eventData.reminder_time);
+    $("#viewEventDescription").text(eventData.description);
+
+    // Update the dropdowns based on the selected date
+    var selectedDate = new Date(eventData.date);
+    updateDropdowns(selectedDate);
+}
+
+function updateDropdowns(date) {
+    // Set month
+    $('#monthDropdown').val(date.getMonth() + 1);
+
+    // Set day
+    var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+    $('#dateDropdown').empty();
+    for (var day = 1; day <= lastDay; day++) {
+        var selected = (day === date.getDate()) ? 'selected' : '';
+        $('#dateDropdown').append('<option value="' + day + '" ' + selected + '>' + day + '</option>');
+    }
+
+    // Set year
+    $('#year').val(date.getFullYear().toString().substr(-2));
+}
+
+function calendarEditEvent(){
+
+    var eventId =  document.getElementById("EventID").innerHTML;
+    alert(eventId);
+    var title = $('#title').val();
+    var eventType = $('#eventType').val();
+    var publicEntry = $('#publicEntry').is(':checked') ? 1 : 0;
+    var monthDropdown = $('#monthDropdown').val();
+    var dateDropdown = $('#dateDropdown').val();
+    var year = $('#year').val();
+    var hours = $('#hours').val();
+    var minutes = $('#minutes').val();
+    var day_am_pm = $('#day_am_pm').val();
+    var length_hours = $('#length_hours').val();
+    var description = $('#description').val();
+    let errors = [];
+    $(".errors").html("");
+
+    if (title === '') {
+        errors.push(title);
+        $('.title_error').html("title field can't be empty.");
+    }
+
+    if (eventType == null) {
+        errors.push(eventType);
+        $('.event_type_error').html("Please select at least 1 type.");
+    }
+
+
+    if (errors.length > 0) {
+        return false;
+    }
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('eventType', eventType);
+    formData.append('publicEntry', publicEntry);
+    formData.append('monthDropdown', monthDropdown);
+    formData.append('dateDropdown', dateDropdown);
+    formData.append('year', year);
+    formData.append('hours', hours);
+    formData.append('minutes', minutes);
+    formData.append('day_am_pm', day_am_pm);
+    formData.append('length_hours', length_hours);
+    formData.append('description', description);
+
+    $.ajaxSetup({
+        headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        },
+    });
+    $.ajax({
+        url: '/edit/schedule/event', // Adjust the URL as needed
+        type: 'POST',
+        data: formData, // Use the FormData object instead of serialize()
+        processData: false,
+        contentType: false,
+        success: function(response) {
+            const title = response.status ? "success" : "warning";
+            Swal.fire({
+                title: response.message,
+                type: title,
+                icon: title,
+            }).then(function(result) {
+                if (result.isConfirmed && response.status) {
+                    // window.location.reload();
+                }
+            });
+        },
+        error: function(xhr, status, error) {
+            console.error('Error:', error);
+        },
+    });
+}
+
 </script>
 @endpush
