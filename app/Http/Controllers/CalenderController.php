@@ -46,24 +46,33 @@ class CalenderController extends Controller
     }
 
     public function scheduleEvent(Request $request){
-
-      // dd($request->all());
       $scheduleEvent = new CalendarEvent();
-       $scheduleEvent->title =  $request->title;
-       $scheduleEvent->entered_by = Auth::user()->id;
-       $scheduleEvent->calendar_event_type_id =  $request->eventType;
-       $scheduleEvent->public =  $request->publicEntry;
+  
+      if($request->editEventID != null){
+          $scheduleEvent = CalendarEvent::find($request->editEventID);
+          $operation = ($scheduleEvent->exists) ? 'updated' : 'not found';
+      } else {
+          $operation = 'added';
+      }
+  
+      $scheduleEvent->title = $request->title;
+      $scheduleEvent->entered_by = Auth::user()->id;
+      $scheduleEvent->calendar_event_type_id = $request->eventType;
+      $scheduleEvent->public = $request->publicEntry;
+  
       $date = $request->year.'-'.$request->monthDropdown.'-'.$request->dateDropdown.' '.$request->hours.':'.$request->minutes.':00 '.$request->day_am_pm;
       $dateTime = DateTime::createFromFormat('y-n-j g:i:s A', $date);
-      // dd($dateTime);
-       $scheduleEvent->date =  $dateTime;
-       $scheduleEvent->duration =  $request->length_hours;
-       $scheduleEvent->description =  $request->description;
-       $scheduleEvent->save();
-       if($scheduleEvent){
-        return response()->json(['status' => true, 'message' => 'Event scheduled successfully.','data' => $scheduleEvent]);
-       }else{
-        return response()->json(['status' => false, 'message' => 'Something went wrong.']);
-       }
-    }
+  
+      $scheduleEvent->date = $dateTime;
+      $scheduleEvent->duration = $request->length_hours;
+      $scheduleEvent->description = $request->description;
+  
+      $operation = ($scheduleEvent->save()) ? $operation : 'failed';
+  
+      return response()->json([
+          'status' => $scheduleEvent->exists,
+          'message' => "Event schedule $operation successfully.",
+          'data' => $scheduleEvent
+      ]);
+  }
 }
