@@ -85,6 +85,9 @@ Route::get('/listts/{id?}', [ListtController::class, 'index'])->name('listts.ind
 Route::post('/add/schedule/event',[CalenderController::class,'scheduleEvent'])->name('add.schedule.event');
 Route::post('/edit/schedule/event/{eventId?}',[CalenderController::class,'editScheduleEvent'])->name('edit.schedule.event');
 Route::get('/get/schedule/event/{eventId?}',[CalenderController::class,'getScheduleEvents'])->name('get.schedule.event');
+
+Route::get('/delete/schedule/event/{eventId?}',[CalenderController::class,'deleteScheduleEvents'])->name('delete.schedule.event');
+/*
 /*
 |--------------------------------------------------------------------------
 | Web Routes

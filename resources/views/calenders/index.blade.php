@@ -98,10 +98,10 @@
                                                                 </td>
                                                                 <td>
                                                                     <div class="date-container">
-                                                                        <input id="date-calendar" type="date" hidden />
-                                                                        <i class="date-icon fa fa-calendar"
-                                                                            aria-hidden="true"></i>
+                                                                        <input id="dateCalendar" type="date"
+                                                                            style="padding: 0px; width: 20px;" />
                                                                     </div>
+
 
                                                                 </td>
                                                                 <td class="datepicker">
@@ -338,9 +338,8 @@
                                                                 </td>
                                                                 <td>
                                                                     <div class="date-container">
-                                                                        <input id="date-calendar" type="date" hidden />
-                                                                        <i class="date-icon fa fa-calendar"
-                                                                            aria-hidden="true"></i>
+                                                                        <input id="editDateCalendar" type="date"
+                                                                            style="padding: 0px; width: 20px;" />
                                                                     </div>
 
                                                                 </td>
@@ -465,7 +464,7 @@
                                         <input type="button" class="button" name="submit" value="Save"
                                             onclick="editEventDetails();">
                                         <input type="button" class="button" name="delete" value="Delete"
-                                            onclick="confirmDeleteEntry();">
+                                            onclick="deleteEventDetails();">
                                     </div>
                                 </form>
                             </td>
@@ -484,16 +483,44 @@
 @endsection
 @push('scripts')
 
+
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.min.css"
     integrity="sha512-liDnOrsa/NzR+4VyWQ3fBzsDBzal338A1VfUpQvAcdt+eL88ePCOd3n9VQpdA0Yxi4yglmLy/AmH+Lrzmn0eMQ=="
     crossorigin="anonymous" referrerpolicy="no-referrer" />
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.min.js"></script>
 <script>
 $(document).ready(function() {
-    $('.date-icon').click(function() {
-        $('#date-calendar').toggle();
+    $('#dateCalendar').change(function() {
+        var dateCalendar = $('#dateCalendar').val();
+        var selectedDate = new Date(dateCalendar);
+        updateDropdowns(selectedDate);
+    });
+
+    $('#editDateCalendar').change(function() {
+        var editDateCalendar = $('#editDateCalendar').val();
+        var selectedDate = new Date(editDateCalendar);
+        editUpdateDropdowns(selectedDate);
     });
 });
+
+function editUpdateDropdowns(date) {
+
+    // Set month
+    $('#editEventmonthDropdown').val(date.getMonth() + 1);
+
+    // Set day
+    var lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+    $('#editEventdateDropdown').empty();
+    for (var day = 1; day <= lastDay; day++) {
+        var selected = (day === date.getDate()) ? 'selected' : '';
+        $('#editEventdateDropdown').append('<option value="' + day + '" ' + selected + '>' + day + '</option>');
+    }
+
+    // Set year
+    $('#editEventyear').val(date.getFullYear().toString().substr(-2));
+}
+
 
 $('#length_hours').prop('disabled', false);
 
@@ -520,6 +547,7 @@ function allDayRadios(element) {
 function addEvent() {
     var title = $('#title').val();
     var eventType = $('#eventType').val();
+    var allDays = $('#allDay1').is(':checked') ? 1 : 0;
     var publicEntry = $('#publicEntry').is(':checked') ? 1 : 0;
     var monthDropdown = $('#monthDropdown').val();
     var dateDropdown = $('#dateDropdown').val();
@@ -558,6 +586,7 @@ function addEvent() {
     formData.append('day_am_pm', day_am_pm);
     formData.append('length_hours', length_hours);
     formData.append('description', description);
+    formData.append('allDays', allDays);
 
     $.ajaxSetup({
         headers: {
@@ -604,6 +633,7 @@ $(document).on('change', '#monthDropdown', function() {
 });
 
 function updateDropdowns(date) {
+
     // Set month
     $('#monthDropdown').val(date.getMonth() + 1);
 
@@ -640,8 +670,13 @@ $(document).ready(function() {
         header: {
             left: 'prev,next today',
             center: 'title',
-            right: 'month,agendaWeek,agendaDay,listWeek'
+            right: 'month,agendaWeek,agendaDay'
         },
+        // view:{
+        //     agendaWeek:{
+        //         columnFormat: "okk",
+        //     }
+        // },
         defaultDate: new Date(),
         navLinks: true,
         eventLimit: true,
@@ -736,6 +771,7 @@ function handleNoEventData(addEventTD, viewEventTD) {
     // If eventId is not present, show addEventTD and hide viewEventTD
     addEventTD.style.display = "table-cell";
     viewEventTD.style.display = "none";
+    editEventTD.style.display = "none";
 }
 
 function updateView(eventData) {
@@ -901,6 +937,44 @@ function editEventDetails() {
         error: function(xhr, status, error) {
             console.error('Error:', error);
         },
+    });
+}
+
+function deleteEventDetails() {
+    var editEventID = $('#editEventID').val();
+    // alert(editEventID);
+    Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't to delete this record",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            $.ajax({
+                url: '/delete/schedule/event/' + editEventID,
+                type: "GET",
+                dataType: "json",
+                success: function(response) {
+                    Swal.fire({
+                        title: response.message,
+                        type: "success",
+                        icon: "success",
+                    }).then(function(result) {
+                        if (result.isConfirmed) {
+                            window.location.reload();
+
+                        }
+                    });
+                },
+                error: function(xhr, ajaxOptions, thrownError) {
+                    console.log("error",thrownError);
+                }
+            });
+
+        }
     });
 }
 </script>

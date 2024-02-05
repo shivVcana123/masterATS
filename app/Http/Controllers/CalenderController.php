@@ -45,7 +45,18 @@ class CalenderController extends Controller
        }
     }
 
+    public function deleteScheduleEvents($eventId){
+      $deleteScheduleEvents = CalendarEvent::find($eventId)->delete();
+
+      if($deleteScheduleEvents){
+        return response()->json(['status' => true, 'message' => 'Event deleted successfully.']);
+      }else{
+        return response()->json(['status' => false, 'message' => 'Something went wrong.']);
+      }
+    }
+
     public function scheduleEvent(Request $request){
+      // dd($request->all());
       $scheduleEvent = new CalendarEvent();
   
       if($request->editEventID != null){
@@ -54,15 +65,20 @@ class CalenderController extends Controller
       } else {
           $operation = 'added';
       }
+
+      if($request->allDays == '1'){
+        $date = $request->year.'-'.$request->monthDropdown.'-'.$request->dateDropdown.' '.$request->hours.':'.$request->minutes.':00 '.$request->day_am_pm;
+        $date_data = DateTime::createFromFormat('y-n-j g:i:s A', $date);
+        $dateTime = $date_data->format('Y-m-d');
+      } else {
+        $date = $request->year.'-'.$request->monthDropdown.'-'.$request->dateDropdown.' '.$request->hours.':'.$request->minutes.':00 '.$request->day_am_pm;
+        $dateTime = DateTime::createFromFormat('y-n-j g:i:s A', $date);
+      }
   
       $scheduleEvent->title = $request->title;
       $scheduleEvent->entered_by = Auth::user()->id;
       $scheduleEvent->calendar_event_type_id = $request->eventType;
       $scheduleEvent->public = $request->publicEntry;
-  
-      $date = $request->year.'-'.$request->monthDropdown.'-'.$request->dateDropdown.' '.$request->hours.':'.$request->minutes.':00 '.$request->day_am_pm;
-      $dateTime = DateTime::createFromFormat('y-n-j g:i:s A', $date);
-  
       $scheduleEvent->date = $dateTime;
       $scheduleEvent->duration = $request->length_hours;
       $scheduleEvent->description = $request->description;
