@@ -3,10 +3,13 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\DataTables\FacilitiesDataTable;
+use App\Events\EventRemindEmail;
 use App\Facades\UtilityFacades;
+use App\Mail\EventRemindEmail as MailEventRemindEmail;
 use App\Models\CalendarEvent;
 use App\Models\CalendarEvenType;
 use App\Models\Calender;
+use DateInterval;
 use DateTime;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\DB;
@@ -14,6 +17,8 @@ use Illuminate\Support\Facades\Hash;
 use File;
 use Illuminate\Support\Facades\Auth;
 use Laracasts\Flash\Flash;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\EventReminder;
 
 class CalenderController extends Controller
 {
@@ -55,16 +60,61 @@ class CalenderController extends Controller
       }
     }
 
-    public function scheduleEvent(Request $request){
-      // dd($request->all());
-      $scheduleEvent = new CalendarEvent();
+    // public function scheduleEvent(Request $request){
+    //   // dd($request->all());
+    //   $scheduleEvent = new CalendarEvent();
   
-      if($request->editEventID != null){
-          $scheduleEvent = CalendarEvent::find($request->editEventID);
-          $operation = ($scheduleEvent->exists) ? 'updated' : 'not found';
-      } else {
-          $operation = 'added';
-      }
+    //   if($request->editEventID != null){
+    //       $scheduleEvent = CalendarEvent::find($request->editEventID);
+    //       $operation = ($scheduleEvent->exists) ? 'updated' : 'not found';
+    //   } else {
+    //       $operation = 'added';
+    //   }
+
+    //   if($request->allDays == '1'){
+    //     $date = $request->year.'-'.$request->monthDropdown.'-'.$request->dateDropdown.' '.$request->hours.':'.$request->minutes.':00 '.$request->day_am_pm;
+    //     $date_data = DateTime::createFromFormat('y-n-j g:i:s A', $date);
+    //     $dateTime = $date_data->format('Y-m-d');
+    //   } else {
+    //     $date = $request->year.'-'.$request->monthDropdown.'-'.$request->dateDropdown.' '.$request->hours.':'.$request->minutes.':00 '.$request->day_am_pm;
+    //     $dateTime = DateTime::createFromFormat('y-n-j g:i:s A', $date);
+    //   }
+
+    //   if ($request->sendMail == '1' || $request->allDays == '0') {
+    //     $reminder_time = "15 minutes";
+    //   }else{
+    //     $reminder_time = null;
+    //   }
+    
+    //   $scheduleEvent->title = $request->title;
+    //   $scheduleEvent->entered_by = Auth::user()->id;
+    //   $scheduleEvent->calendar_event_type_id = $request->eventType;
+    //   $scheduleEvent->public = $request->publicEntry;
+    //   $scheduleEvent->date = $dateTime;
+    //   $scheduleEvent->reminder_time = $reminder_time;
+    //   $scheduleEvent->duration = $request->length_hours;
+    //   $scheduleEvent->description = $request->description;
+   
+    //   $operation = ($scheduleEvent->save()) ? $operation : 'failed';
+  
+    //   return response()->json([
+    //       'status' => $scheduleEvent->exists,
+    //       'message' => "Event schedule $operation successfully.",
+    //       'data' => $scheduleEvent
+    //   ]);
+    // }
+
+
+public function scheduleEvent(Request $request)
+{
+    $scheduleEvent = new CalendarEvent();
+  
+    if ($request->editEventID != null) {
+        $scheduleEvent = CalendarEvent::find($request->editEventID);
+        $operation = ($scheduleEvent->exists) ? 'updated' : 'not found';
+    } else {
+        $operation = 'added';
+    }
 
       if($request->allDays == '1'){
         $date = $request->year.'-'.$request->monthDropdown.'-'.$request->dateDropdown.' '.$request->hours.':'.$request->minutes.':00 '.$request->day_am_pm;
@@ -74,21 +124,30 @@ class CalenderController extends Controller
         $date = $request->year.'-'.$request->monthDropdown.'-'.$request->dateDropdown.' '.$request->hours.':'.$request->minutes.':00 '.$request->day_am_pm;
         $dateTime = DateTime::createFromFormat('y-n-j g:i:s A', $date);
       }
+
+    if ($request->sendMail == '1') {
+        $reminder_time = "15 minutes";
+    } else {
+        $reminder_time = null;
+    }
+    
+    // Set other properties for $scheduleEvent
+    $scheduleEvent->title = $request->title;
+    $scheduleEvent->entered_by = Auth::user()->id;
+    $scheduleEvent->calendar_event_type_id = $request->eventType;
+    $scheduleEvent->public = $request->publicEntry;
+    $scheduleEvent->date = $dateTime;
+    $scheduleEvent->reminder_time = $reminder_time;
+    $scheduleEvent->duration = $request->length_hours;
+    $scheduleEvent->description = $request->description;
+
+    $operation = ($scheduleEvent->save()) ? $operation : 'failed';
   
-      $scheduleEvent->title = $request->title;
-      $scheduleEvent->entered_by = Auth::user()->id;
-      $scheduleEvent->calendar_event_type_id = $request->eventType;
-      $scheduleEvent->public = $request->publicEntry;
-      $scheduleEvent->date = $dateTime;
-      $scheduleEvent->duration = $request->length_hours;
-      $scheduleEvent->description = $request->description;
-  
-      $operation = ($scheduleEvent->save()) ? $operation : 'failed';
-  
-      return response()->json([
-          'status' => $scheduleEvent->exists,
-          'message' => "Event schedule $operation successfully.",
-          'data' => $scheduleEvent
-      ]);
-  }
+    return response()->json([
+        'status' => $scheduleEvent->exists,
+        'message' => "Event schedule $operation successfully.",
+        'data' => $scheduleEvent
+    ]);
+}
+
 }

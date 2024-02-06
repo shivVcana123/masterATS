@@ -67,7 +67,9 @@
                                                 <td class="tdData">
                                                     <input type="checkBox" value="1" name="publicEntry"
                                                         id="publicEntry">Public
-                                                    Entry
+                                              <span class="send-mail-area"><input type="checkBox" value="1" name="send_mail" style="margin-left: 25px;"
+                                                        id="sendMail">Send Mail</span>
+                                                   
                                                 </td>
                                             </tr>
 
@@ -300,7 +302,8 @@
                                                 <td class="tdData">
                                                     <input type="checkBox" value="1" name="publicEntry"
                                                         id="editEventpublicEntry">Public
-                                                    Entry
+                                                        <!-- <span class="send-mail-area"><input type="checkBox" value="1" name="send_mail" style="margin-left: 25px;"
+                                                        id="sendMail">Send Mail</span> -->
                                                 </td>
                                             </tr>
 
@@ -491,6 +494,8 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.9.0/fullcalendar.min.js"></script>
 <script>
 $(document).ready(function() {
+    $('.send-mail-area').hide();
+    
     $('#dateCalendar').change(function() {
         var dateCalendar = $('#dateCalendar').val();
         var selectedDate = new Date(dateCalendar);
@@ -501,6 +506,10 @@ $(document).ready(function() {
         var editDateCalendar = $('#editDateCalendar').val();
         var selectedDate = new Date(editDateCalendar);
         editUpdateDropdowns(selectedDate);
+    });
+
+    $('#eventType').change(function(){
+        $('.send-mail-area').show();
     });
 });
 
@@ -549,6 +558,7 @@ function addEvent() {
     var eventType = $('#eventType').val();
     var allDays = $('#allDay1').is(':checked') ? 1 : 0;
     var publicEntry = $('#publicEntry').is(':checked') ? 1 : 0;
+    var sendMail = $('#sendMail').is(':checked') ? 1 : 0;
     var monthDropdown = $('#monthDropdown').val();
     var dateDropdown = $('#dateDropdown').val();
     var year = $('#year').val();
@@ -578,6 +588,7 @@ function addEvent() {
     formData.append('title', title);
     formData.append('eventType', eventType);
     formData.append('publicEntry', publicEntry);
+    formData.append('sendMail', sendMail);
     formData.append('monthDropdown', monthDropdown);
     formData.append('dateDropdown', dateDropdown);
     formData.append('year', year);
@@ -970,7 +981,7 @@ function deleteEventDetails() {
                     });
                 },
                 error: function(xhr, ajaxOptions, thrownError) {
-                    console.log("error",thrownError);
+                    console.log("error", thrownError);
                 }
             });
 

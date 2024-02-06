@@ -137,14 +137,14 @@ $settings = Utility::settings();
                         </a>
                     </li>
                 @endcan
-                @can('manage-module')
+                <!-- @can('manage-module')
                     <li class="dash-item dash-hasmenu {{ request()->is('modules*') ? 'active' : '' }}">
                         <a class="dash-link" href="{{ route('modules.index') }}">
                             <span class="dash-micon"><i class="ti ti-subtask"></i></span>
                             <span class="dash-mtext custom-weight">{{ __('Modules') }}</span>
                         </a>
                     </li>
-                @endcan
+                @endcan -->
                 @role('admin')
                     <li class="dash-item dash-hasmenu {{ request()->is('settings*') ? 'active' : '' }}">
                         <a class="dash-link" href="{{ route('settings.index') }}">
@@ -153,22 +153,22 @@ $settings = Utility::settings();
                         </a>
                     </li>
                 @endrole
-                @can('manage-langauge')
+                <!-- @can('manage-langauge')
                     <li class="dash-item dash-hasmenu {{ request()->is('index') ? 'active' : '' }}">
                         <a class="dash-link" href="{{ route('index') }}">
                             <span class="dash-micon"><i class="ti ti-world"></i></span>
                             <span class="dash-mtext custom-weight">{{ __('Language') }}</span>
                         </a>
                     </li>
-                @endcan
-                @role('admin')
+                @endcan -->
+                <!-- @role('admin')
                     <li class="dash-item dash-hasmenu {{ request()->is('home*') ? 'active' : '' }}">
                         <a class="dash-link" href="{{ route('io_generator_builder') }}">
                             <span class="dash-micon"><i class="ti ti-3d-cube-sphere"></i></span>
                             <span class="dash-mtext custom-weight">{{ __('Crud') }}</span>
                         </a>
                     </li>
-                @endrole
+                @endrole -->
                 @include('layouts.menu')
             </ul>
 

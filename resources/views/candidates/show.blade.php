@@ -768,7 +768,7 @@
                 </thead>
                 <tbody>
                     @if(count($candidatesDetails) > 0)
-                  
+
                     @else
                     <td colspan="12">No Avaliable Activities</td>
                     @endif
@@ -785,43 +785,11 @@
 <script>
 var candidate_id = $('#candidate_id').val();
 
-function addCandidateOnJobOrder(that) {
-    var jobID = $(that).data('value');
+// function addCandidateOnJobOrder(that) {
+//     // Hide the modal
+//     $('.modal.fade.bd-example-modal-lg').modal('hide');
+//     var jobID = $(that).data('value');
 
-    $.ajaxSetup({
-        headers: {
-            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-        },
-    });
-
-    $.ajax({
-        url: '/candidates/add/candidate/joborder',
-        type: 'POST',
-        data: {
-            jobID: jobID,
-            candidate_id: candidate_id,
-        },
-        success: function(response) {
-            const title = response.status ? "success" : "warning";
-            Swal.fire({
-                title: response.message,
-                type: title,
-                icon: title,
-            }).then(function(result) {
-                if (result.isConfirmed && response.status) {
-                    window.location.href =
-                        "{{ url('/candidates/details',$candidatesDetails[0]->id ) }}";
-                }
-            });
-        },
-        error: function(xhr, status, error) {
-            console.error('Error:', error);
-        },
-    });
-}
-
-// $(document).on('click', '#add_candidates_to_job_order_list tbody td#joborder_id', function() {
-//     var jobID = $(this).data('id');
 //     $.ajaxSetup({
 //         headers: {
 //             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
@@ -836,6 +804,7 @@ function addCandidateOnJobOrder(that) {
 //     //         candidate_id: candidate_id,
 //     //     },
 //     //     success: function(response) {
+//     //         $('.modal.fade.bd-example-modal-lg').modal('hide');
 //     //         const title = response.status ? "success" : "warning";
 //     //         Swal.fire({
 //     //             title: response.message,
@@ -843,6 +812,7 @@ function addCandidateOnJobOrder(that) {
 //     //             icon: title,
 //     //         }).then(function(result) {
 //     //             if (result.isConfirmed && response.status) {
+//     //                 $('.modal.fade.bd-example-modal-lg').modal('hide');
 //     //                 window.location.href =
 //     //                     "{{ url('/candidates/details',$candidatesDetails[0]->id ) }}";
 //     //             }
@@ -852,7 +822,46 @@ function addCandidateOnJobOrder(that) {
 //     //         console.error('Error:', error);
 //     //     },
 //     // });
-// });
+// }
+
+function addCandidateOnJobOrder(that) {
+    // Hide the modal on success
+    $('.modal.fade.bd-example-modal-lg').modal('hide');
+    var jobID = $(that).data('value');
+    $.ajaxSetup({
+        headers: {
+            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+        },
+    });
+
+    $.ajax({
+        url: '/candidates/add/candidate/joborder',
+        type: 'POST',
+        data: {
+            jobID: jobID,
+            candidate_id: candidate_id, // Make sure 'candidate_id' is defined before using it
+        },
+        success: function(response) {
+            const title = response.status ? "success" : "warning";
+            Swal.fire({
+                title: response.message,
+                type: title,
+                icon: title,
+            }).then(function(result) {
+                if (result.isConfirmed && response.status) {
+                    // Redirect to a new URL
+                    window.location.href =
+                        "{{ url('/candidates/details', $candidatesDetails[0]->id) }}";
+                }
+            });
+        },
+        error: function(xhr, status, error) {
+            console.error('Error:', error);
+            // Handle error as needed
+        },
+    });
+}
+
 
 $(document).on('click', '#submit_file', function(e) {
     e.preventDefault();
@@ -990,8 +999,6 @@ $(document).ready(function() {
         $('#year').val(date.getFullYear().toString().substr(-2));
     }
 });
-
-// $('#activityModal').modal('show');
 $('.checkbox-mail-area').hide();
 $('.schedule-event-area').hide();
 $('.regarding-area').hide();
@@ -1097,6 +1104,7 @@ $(document).on('click', '#save_activity_btn', function() {
     var length_description = $('#length_description').val();
     var data_item_id = '1';
     // alert(select_checkbox_activity);
+    $('#activityModal').modal('hide');
 
     let errors = [];
     $(".errors").html("");
@@ -1158,7 +1166,7 @@ $(document).on('click', '#save_activity_btn', function() {
                 icon: title,
             }).then(function(result) {
                 if (result.isConfirmed && response.status) {
-                    $('#exampleModal').modal('hide');
+                    $('#activityModal').modal('hide');
                     window.location.href =
                         "{{ url('/candidates/details',$candidatesDetails[0]->id ) }}";
                 }
@@ -1192,6 +1200,7 @@ $(add_button).click(function(e) {
 $(document).ready(function() {
     // Event handler for the "Edit" button
     $('.edit-btn').on('click', function() {
+        $('#exampleModal').modal('hide');
         // Find the closest parent with class 'list-item'
         var listItem = $(this).closest('.list-item');
 
@@ -1247,6 +1256,7 @@ $(document).on('click', '.remove_field', function() {
 $(document).on("click", ".save-btn", function(e) {
     // User click on save button
     e.preventDefault();
+    $('#exampleModal').modal('hide');
     // Get the description value
     var descriptionValue = $(this).closest('.list-item').find('input#description').val();
 
@@ -1305,12 +1315,14 @@ $(document).on("click", ".save-btn", function(e) {
 $(document).ready(function() {
     // Event handler for the "Add To List" button
     $('.add_to_list').on('click', function() {
+        $('#exampleModal').modal('hide');
+
         // Check if at least one checkbox is checked
         if ($('input[name="checkbox_value"]:checked').length === 0) {
             alert("Please select at least one item.");
             return;
         }
-
+        $('#odal fade bd-example-modal-lg').modal('hide');
         // Initialize an array to store selected list_ids
         var selectedListIds = [];
 

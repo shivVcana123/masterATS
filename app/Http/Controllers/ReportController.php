@@ -5,7 +5,10 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\DataTables\FacilitiesDataTable;
 use App\Facades\UtilityFacades;
-
+use App\Models\Candidate;
+use App\Models\Company;
+use App\Models\Contact;
+use App\Models\Joborder;
 use App\Models\Report;
 use Spatie\Permission\Models\Role;
 use Illuminate\Support\Facades\DB;
@@ -18,7 +21,11 @@ class ReportController extends Controller
 {
     public function index(request $request)
     {  
-    //   $datas = Facilitie::get();
-     return view('reports.index');
+        $jobOrderCount = Joborder::get()->count();
+        $candidateCount = Candidate::get()->count();
+        $companyCount = Company::get()->count();
+        $contactCount = Contact::get()->count();
+    
+     return view('reports.index',compact('jobOrderCount','candidateCount','companyCount','contactCount'));
     }
 }

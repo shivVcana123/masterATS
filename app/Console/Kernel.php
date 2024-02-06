@@ -2,8 +2,10 @@
 
 namespace App\Console;
 
+use App\Mail\EventScheduledReminderEmail;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use Illuminate\Support\Facades\Mail;
 
 class Kernel extends ConsoleKernel
 {
@@ -25,6 +27,10 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
+        // $schedule->call(function () {
+        //     // Your email sending logic here
+        //     Mail::to('recipient@yopmail.com')->send(new EventScheduledReminderEmail());
+        // })->dailyAt('15:00'); // Send email daily at 15:00
     }
 
     /**

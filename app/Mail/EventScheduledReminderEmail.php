@@ -7,7 +7,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
 
-class TestMail extends Mailable
+class EventScheduledReminderEmail extends Mailable
 {
     use Queueable, SerializesModels;
 
@@ -28,6 +28,8 @@ class TestMail extends Mailable
      */
     public function build()
     {
-        return $this->markdown('settings.mailtest')->subject('Mail send for testing purpose.');
+        // return $this->view('view.name');
+        return $this->view('email-template.event_reminder')
+        ->subject('Scheduled Email');
     }
 }
