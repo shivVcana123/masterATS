@@ -27,10 +27,7 @@ class Kernel extends ConsoleKernel
     protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')->hourly();
-        // $schedule->call(function () {
-        //     // Your email sending logic here
-        //     Mail::to('recipient@yopmail.com')->send(new EventScheduledReminderEmail());
-        // })->dailyAt('15:00'); // Send email daily at 15:00
+        $schedule->command('reminders:send')->daily();
     }
 
     /**
