@@ -79,7 +79,7 @@
 
                 <div class="form-group">
                     <label for="zip">Postal Code</label>
-                    <input type="text" name="zip" id="zip" class="form-control">
+                    <input type="text" name="zip" id="zip" class="form-control" onkeypress="return (event.charCode !=8 && event.charCode ==0 || ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57)))">
                     <span class="zip_error errors"></span>
                 </div>
                 <div class="form-group">

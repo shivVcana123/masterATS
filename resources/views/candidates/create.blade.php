@@ -48,7 +48,7 @@
                             =>
                             'email1']) !!}
                             <span class="email1_error errors"></span>
-                            <span class="email_notvalid_address_error errors"></span>
+                            <span class="email1_not_valid_address_error errors"></span>
                         </div>
                         <div class="form-group col-md-6" style="float:left" ;>
                             {{ Form::label('email2', __('2Email'),['class' => 'col-form-label']) }}
@@ -56,7 +56,7 @@
                             'form-control','id' =>
                             'email2']) !!}
                             <span class="email2_error errors"></span>
-                            <span class="email2_notvalid_address_error errors"></span>
+                            <span class="email2_not_valid_address_error errors"></span>
                         </div>
                         <div class="form-group col-md-6" style="float:right" ;>
                             {{ Form::label('web_site', __('Website'),['class' => 'col-form-label']) }}
@@ -65,23 +65,27 @@
                             => 'web_site']) !!}
                             <span class="web_site_error errors"></span>
                         </div>
-                        <div class="form-group col-md-6" style="float:left" ;>
-                            {{ Form::label('phone_home', __('Home Phone'),['class' => 'col-form-label']) }}
+                        <div class="form-group col-md-6" style="float:left;">
+                            {{ Form::label('phone_home', __('Home Phone'), ['class' => 'col-form-label']) }}
                             {!! Form::text('phone_home', null, ['placeholder' => __('Home Phone'), 'class' =>
-                            'form-control','id' => 'phone_home']) !!}
-                            <span class="phone_home_error errors"></span>
+                            'form-control', 'id' => 'phone_home', 'onkeypress' => 'return (event.charCode != 8 &&
+                            event.charCode == 0 || (event.charCode == 46 || (event.charCode >= 48 && event.charCode <=
+                                57)))']) !!} <span class="phone_home_error errors"></span>
                         </div>
+
                         <div class="form-group col-md-6" style="float:right" ;>
                             {{ Form::label('phone_cell', __('Cell Phone'),['class' => 'col-form-label']) }}
                             {!! Form::text('phone_cell', null, ['placeholder' => __('Cell Phone'), 'class' =>
-                            'form-control','id' => 'phone_cell']) !!}
-                            <span class="phone_cell_error errors"></span>
+                            'form-control','id' => 'phone_cell','onkeypress' => 'return (event.charCode != 8 &&
+                            event.charCode == 0 || (event.charCode == 46 || (event.charCode >= 48 && event.charCode <=
+                                57)))']) !!} <span class="phone_cell_error errors"></span>
                         </div>
                         <div class="form-group col-md-6" style="float:left" ;>
                             {{ Form::label('phone_work', __('Work Phone'),['class' => 'col-form-label']) }}
                             {!! Form::text('phone_work', null, ['placeholder' => __('Work Phone'), 'class' =>
-                            'form-control','id' => 'phone_work']) !!}
-                            <span class="phone_work_error errors"></span>
+                            'form-control','id' => 'phone_work','onkeypress' => 'return (event.charCode != 8 &&
+                            event.charCode == 0 || (event.charCode == 46 || (event.charCode >= 48 && event.charCode <=
+                                57)))']) !!} <span class="phone_work_error errors"></span>
                         </div>
                         <div class="form-group col-md-6" style="float:right" ;>
                             {{ Form::label('address', __('Address'),['class' => 'col-form-label']) }}
@@ -107,8 +111,9 @@
                             {{ Form::label('zip', __('Postel Code'),['class' => 'col-form-label']) }}
                             {!! Form::text('zip', null, ['placeholder' => __('Postel Code'), 'class' =>
                             'form-control','id'
-                            => 'zip']) !!}
-                            <span class="zip_error errors"></span>
+                            => 'zip','onkeypress' => 'return (event.charCode != 8 &&
+                            event.charCode == 0 || (event.charCode == 46 || (event.charCode >= 48 && event.charCode <=
+                                57)))']) !!} <span class="zip_error errors"></span>
                         </div>
                         <div class="form-group col-md-6" style="float:right" ;>
                             {{ Form::label('best_time_to_call', __('Best Time to call'),['class' => 'col-form-label']) }}
@@ -143,22 +148,17 @@
                         <div class="form-group">
                             {{ Form::label('current_pay', __('Current Pay'),['class' => 'col-form-label']) }}
                             {!! Form::text('current_pay', null, ['placeholder' => __('Current Pay'), 'class' =>
-                            'form-control','id' => 'current_pay']) !!}
-                            <span class="current_pay_error errors"></span>
+                            'form-control','id' => 'current_pay','onkeypress' => 'return (event.charCode != 8 &&
+                            event.charCode == 0 || (event.charCode == 46 || (event.charCode >= 48 && event.charCode <=
+                                57)))']) !!} <span class="current_pay_error errors"></span>
                         </div>
                         <div class="form-group">
                             {{ Form::label('desired_pay', __('Desire Pay'),['class' => 'col-form-label']) }}
                             {!! Form::text('desired_pay', null, ['placeholder' => __('Desire Pay'), 'class' =>
-                            'form-control','id' => 'desired_pay']) !!}
-                            <span class="desired_pay_error errors"></span>
+                            'form-control','id' => 'desired_pay','onkeypress' => 'return (event.charCode != 8 &&
+                            event.charCode == 0 || (event.charCode == 46 || (event.charCode >= 48 && event.charCode <=
+                                57)))']) !!} <span class="desired_pay_error errors"></span>
                         </div>
-                        <!-- <div class="form-group">
-                            {{ Form::label('source', __('Source'),['class' => 'col-form-label']) }}
-                            {!! Form::text('source', null, ['placeholder' => __('source'), 'class' =>
-                            'form-control','id' =>
-                            'source']) !!}
-                            <span class="source_error errors"></span>
-                        </div> -->
                         <div class="form-group">
                             <label for="source">Source</label>
                             <!-- <input type="text" name="source" id="source" class="form-control"> -->
@@ -223,7 +223,7 @@ document.addEventListener('DOMContentLoaded', function() {
 $(document).on('click', '#addCandidate', function() {
     var jobOrder_id = $('#job_id').val();
     var source = $('#source').val();
-    var can_relocate = $('#can_relocate').is(':checked') ? 1:0;
+    var can_relocate = $('#can_relocate').is(':checked') ? 1 : 0;
     // alert(can_relocate);
     // alert(jobOrder_id);
     const formData = new FormData();
@@ -247,13 +247,20 @@ $(document).on('click', '#addCandidate', function() {
             $(`.${field}_error`).html(`${field.replace('_', ' ')} field can't be empty.`);
         }
 
-        if (field.startsWith('email') && value !== "") {
+        if (field.startsWith('email1') && value !== "") {
             if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value)) {
                 errors.push(`${field}_notvalid_address_error`);
-                $(`.${field}_notvalid_address_error`).html("Please provide a valid email address.");
+                $(`.${field}_not_valid_address_error`).html("Please provide a valid email address.");
             }
         }
-        
+
+        if (field.startsWith('email2') && value !== "") {
+            if (!/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(value)) {
+                errors.push(`${field}_notvalid_address_error`);
+                $(`.${field}_not_valid_address_error`).html("Please provide a valid email address.");
+            }
+        }
+
         formData.append(field, value);
     });
 

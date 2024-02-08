@@ -48,7 +48,19 @@ class ContactController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request->all());
+
+        $existingEmail1 = Contact::where('email1', $request['email1'])->first();
+        $existingEmail2 = Contact::where('email2', $request['email2'])->first();
+        
+        if ($existingEmail1 !== null && $existingEmail2 !== null) {
+            return response()->json(['status' => false, 'message' => 'Both email addresses already exist: ' . $request['email1'] . ' and ' . $request['email2']]);
+        } elseif ($existingEmail1 !== null) {
+            return response()->json(['status' => false, 'message' => 'This email already exists: ' . $request['email1']]);
+        } elseif ($existingEmail2 !== null) {
+            return response()->json(['status' => false, 'message' => 'This email already exists: ' . $request['email2']]);
+        }
+
+
         $data = array_merge($request->all(),[
             'entered_by' => Auth::user()->id,
             'owner' => Auth::user()->id,

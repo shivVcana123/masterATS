@@ -29,53 +29,23 @@
                 <div class="form-group">
                     <label for="primary_phone">Primary Phone</label>
                     <input type="text" name="primary_phone" id="primary_phone" class="form-control"
-                        value="{{$companyDetails[0]->primary_phone}}">
+                        value="{{$companyDetails[0]->primary_phone}}" onkeypress="return (event.charCode !=8 && event.charCode ==0 || ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57)))">
                     <span class="primary_phone_error errors"></span>
                 </div>
 
                 <div class="form-group">
                     <label for="secondary_phone">Secondary Phone</label>
                     <input type="text" name="secondary_phone" id="secondary_phone" class="form-control"
-                        value="{{ $companyDetails[0]->secondary_phone }}">
+                        value="{{ $companyDetails[0]->secondary_phone }}" onkeypress="return (event.charCode !=8 && event.charCode ==0 || ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57)))">
                     <span class="secondary_phone_error errors"></span>
                 </div>
 
                 <div class="form-group">
                     <label for="fax_number">Fax Number</label>
                     <input type="text" name="fax_number" id="fax_number" class="form-control"
-                        value="{{ $companyDetails[0]->fax_number }}">
+                        value="{{ $companyDetails[0]->fax_number }}" onkeypress="return (event.charCode !=8 && event.charCode ==0 || ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57)))">
                     <span class="fax_number_error errors"></span>
                 </div>
-
-                <!-- <input type="text" name="department_name" id="department_name" class="form-control"
-                    value="{{ $companyDetails[0]->department_name }}"> -->
-                <!-- <div class="form-group">
-                    <label for="department_name">Departments</label>
-                    <select name="department_name" id="department_name" class="form-control">
-                        @foreach($companyDetails[0]['companyDepartment'] as $department)
-                        <option value="{{$department->id}}">{{$department->name}}</option>
-                        @endforeach -->
-                </select>
-                <!-- <select name="department_name" id="department_name"
-                        class="form-control">
-                        @foreach($companyDetails[0]['companyDepartment'] as $department)
-                        <option value="{{$department->id}}">{{$department->name}}</option>
-                        @endforeach
-                    </select> -->
-                <!-- <span class="department_name_error errors"></span>
-                </div> -->
-
-                <!-- <div class="form-group">
-                    <label for="fax_number">Owner</label>
-                    <select name="user_name" id="user_name" class="form-control">
-                        @foreach($users as $user)
-                        <option value="{{$user->id}}" {{$companyDetails[0]->owner == $user->id ? 'selected' : ''}}>
-                            {{$user->user_name}}</option>
-                        @endforeach
-                    </select>
-                    <span class="fax_number_error errors"></span>
-                </div> -->
-
 
                 <div class="form-group">
                     <label for="notes">Misc. Notes</label>
@@ -103,7 +73,6 @@
                     <span class="email_notvalid_address_error errors"></span>
                 </div>
 
-
                 <div class="form-group">
                     <label for="city">City</label>
                     <input type="text" name="city" id="city" class="form-control"
@@ -120,7 +89,7 @@
 
                 <div class="form-group">
                     <label for="zip">Postal Code</label>
-                    <input type="text" name="zip" id="zip" class="form-control" value="{{ $companyDetails[0]->zip }}">
+                    <input type="text" name="zip" id="zip" class="form-control" value="{{ $companyDetails[0]->zip }}" onkeypress="return (event.charCode !=8 && event.charCode ==0 || ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57)))">
                     <span class="zip_error errors"></span>
                 </div>
                 <div class="form-group">

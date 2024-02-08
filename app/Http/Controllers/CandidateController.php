@@ -72,51 +72,75 @@ class CandidateController extends Controller
             'state' => 'required',
         ]);
 
-      
-        // $role_r = Role::findByName($request->roles);
-        $result = DB::table('candidates')->insertGetId(
-            [
-                'first_name' => $request['first_name'],
-                'middle_name' => $request['middle_name'],
-                'last_name' => $request['last_name'],
-                'email1' => $request['email1'],
-                'email2' => $request['email2'],
-                'web_site' => $request['web_site'],
-                'phone_home' => $request['phone_home'],
-                'phone_cell' => $request['phone_cell'],
-                'phone_work' => $request['phone_work'],
-                'address' => $request['address'],
-                'city' => $request['city'],
-                'state' => $request['state'],
-                'zip' => $request['zip'],
-                'best_time_to_call' => $request['best_time_to_call'],
-                'can_relocate' => $request['can_relocate'],
-                'date_available' => $request['date_available'],
-                'current_employer' => $request['current_employer'],
-                // 'entered_by ' => ,
-                'owner' => Auth::user()->id,
-                'current_pay' => $request['current_pay'],
-                'desired_pay' => $request['desired_pay'],
-                'source' => $request['source'],
-                'key_skills' => $request['key_skills'],
-                'notes' => $request['notes'],
-           ]
-        );
-        if($request['jobOrder_id'] != null){
 
-            $result = CandidateJoborder::create([
-                'candidate_id' =>  $result,
-                'joborder_id' => intval($request['jobOrder_id']),
-                'status' =>  1,
-                'date_submitted ' => $request['date_available'],
-                'added_by' =>  Auth::user()->id,
-            ]);
+        $existingEmail1 = Candidate::where('email1', $request['email1'])->first();
+        $existingEmail2 = Candidate::where('email2', $request['email2'])->first();
+        
+        if ($existingEmail1 !== null && $existingEmail2 !== null) {
+            return response()->json(['status' => false, 'message' => 'Both email addresses already exist: ' . $request['email1'] . ' and ' . $request['email2']]);
+        } elseif ($existingEmail1 !== null) {
+            return response()->json(['status' => false, 'message' => 'This email already exists: ' . $request['email1']]);
+        } elseif ($existingEmail2 !== null) {
+            return response()->json(['status' => false, 'message' => 'This email already exists: ' . $request['email2']]);
         }
-        if( $result){
-            return response()->json(['status' => true, 'message' => 'Data create successfully.', 'data' => $result]);
+        
+        
+        $checkFormSubmissions = Joborder::where('id',$request['jobOrder_id'])->first();
+        if($checkFormSubmissions && $checkFormSubmissions->max_submission <= 3){
+            $existingSubmissionsCount = CandidateJoborder::where('jobOrder_id',$request['jobOrder_id'])->count();
+
+            if($existingSubmissionsCount < 3){
+                $result = DB::table('candidates')->insertGetId(
+                    [
+                        'first_name' => $request['first_name'],
+                        'middle_name' => $request['middle_name'],
+                        'last_name' => $request['last_name'],
+                        'email1' => $request['email1'],
+                        'email2' => $request['email2'],
+                        'web_site' => $request['web_site'],
+                        'phone_home' => $request['phone_home'],
+                        'phone_cell' => $request['phone_cell'],
+                        'phone_work' => $request['phone_work'],
+                        'address' => $request['address'],
+                        'city' => $request['city'],
+                        'state' => $request['state'],
+                        'zip' => $request['zip'],
+                        'best_time_to_call' => $request['best_time_to_call'],
+                        'can_relocate' => $request['can_relocate'],
+                        'date_available' => $request['date_available'],
+                        'current_employer' => $request['current_employer'],
+                        // 'entered_by ' => ,
+                        'owner' => Auth::user()->id,
+                        'current_pay' => $request['current_pay'],
+                        'desired_pay' => $request['desired_pay'],
+                        'source' => $request['source'],
+                        'key_skills' => $request['key_skills'],
+                        'notes' => $request['notes'],
+                   ]
+                );
+
+                if($request['jobOrder_id'] != null){
+                    $result = CandidateJoborder::create([
+                        'candidate_id' =>  $result,
+                        'joborder_id' => intval($request['jobOrder_id']),
+                        'status' =>  1,
+                        'date_submitted ' => $request['date_available'],
+                        'added_by' =>  Auth::user()->id,
+                    ]);
+                }
+
+                if( $result){
+                    return response()->json(['status' => true, 'message' => 'Data create successfully.', 'data' => $result]);
+                }else{
+                    return response()->json(['status' =>false, 'massage' => 'Something went wrong.']);
+                }
+            }else{
+                return response()->json(['status' => false, 'message' => 'You are not allowed to add more than 3 candidates for this job order.']);
+            }
         }else{
-            return response()->json(['status' =>false, 'massage' => 'Something went wrong.']);
+            return response()->json(['status' => false, 'message' => 'Invalid job order or maximum submission limit exceeded.']);
         }
+
       
     }
 

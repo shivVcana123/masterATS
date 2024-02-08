@@ -50,20 +50,23 @@
                 <div class="form-group">
                     <label for="phone_work">Work Phone:</label>
                     <input type="text" name="phone_work" id="phone_work" class="form-control"
-                        value="{{$contactEditDetails->phone_work}}">
+                        value="{{$contactEditDetails->phone_work}}"
+                        onkeypress="return (event.charCode !=8 && event.charCode ==0 || ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57)))">
                     <span class="phone_work_error errors"></span>
                 </div>
 
                 <div class="form-group">
                     <label for="phone_cell">Cell Phone:</label>
                     <input type="text" name="phone_cell" id="phone_cell" class="form-control"
-                        value="{{$contactEditDetails->phone_cell}}">
+                        value="{{$contactEditDetails->phone_cell}}"
+                        onkeypress="return (event.charCode !=8 && event.charCode ==0 || ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57)))">
                     <span class="phone_cell_error errors"></span>
                 </div>
                 <div class="form-group">
                     <label for="phone_other">Other Phone:</label>
                     <input type="text" name="phone_other" id="phone_other" class="form-control"
-                        value="{{$contactEditDetails->phone_other}}">
+                        value="{{$contactEditDetails->phone_other}}"
+                        onkeypress="return (event.charCode !=8 && event.charCode ==0 || ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57)))">
                     <span class="phone_other_error errors"></span>
                 </div>
 
@@ -125,7 +128,8 @@
 
                 <div class="form-group">
                     <label for="zip">Postal Code</label>
-                    <input type="text" name="zip" id="zip" class="form-control" value="{{$contactEditDetails->zip}}">
+                    <input type="text" name="zip" id="zip" class="form-control" value="{{$contactEditDetails->zip}}"
+                        onkeypress="return (event.charCode !=8 && event.charCode ==0 || ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57)))">
                     <span class="zip_error errors"></span>
                 </div>
             </div>
@@ -144,8 +148,8 @@
 <script>
 $("#update_btn").click(function() {
 
- var company_id = '';
- var company_id = <?php echo json_encode($contactEditDetails->company_id); ?>
+    var company_id = '';
+    var company_id = <?php echo json_encode($contactEditDetails->company_id); ?>
 
     const formData = new FormData();
     const fields = [
@@ -201,12 +205,13 @@ $("#update_btn").click(function() {
                 icon: title,
             }).then(function(result) {
                 if (result.isConfirmed && response.status) {
-                    if(company_id){
-                        window.location.href = "{{route('companies.details')}}"+'/'+company_id;
-                    }else{
+                    if (company_id) {
+                        window.location.href = "{{route('companies.details')}}" + '/' +
+                            company_id;
+                    } else {
                         window.location.href = "{{route('contacts.index')}}";
                     }
-                    
+
                 }
             });
         },

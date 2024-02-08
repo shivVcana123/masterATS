@@ -34,10 +34,6 @@
                                 </option>
                                 @endforeach
                             </select>
-
-
-                            <!-- <label for="company_id">Company Name</label>
-                            <input type="text" name="company_id" id="company_id" class="form-control"> -->
                             <span class="company_id_error errors"></span>
                         </div>
                         @if($company_id == null)
@@ -49,26 +45,29 @@
                     </div>
                 </div>
 
-                <!-- <div class="form-group">
-                    <label for="company_department_id">Departments</label>
-                    <input type="text" name="company_department_id" id="company_department_id" class="form-control">
-                    <span class="company_department_id_error errors"></span>
-                </div> -->
+                <div class="form-group">
+                    <label for="reports_to">Reports to</label>
+                    <select name="reports_to" id="reports_to" class="form-control">
+                    </select>
+                </div>
 
                 <div class="form-group">
                     <label for="phone_work">Work Phone:</label>
-                    <input type="text" name="phone_work" id="phone_work" class="form-control">
+                    <input type="text" name="phone_work" id="phone_work" class="form-control"
+                        onkeypress="return (event.charCode !=8 && event.charCode ==0 || ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57)))">
                     <span class="phone_work_error errors"></span>
                 </div>
 
                 <div class="form-group">
                     <label for="phone_cell">Cell Phone:</label>
-                    <input type="text" name="phone_cell" id="phone_cell" class="form-control">
+                    <input type="text" name="phone_cell" id="phone_cell" class="form-control"
+                        onkeypress="return (event.charCode !=8 && event.charCode ==0 || ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57)))">
                     <span class="phone_cell_error errors"></span>
                 </div>
                 <div class="form-group">
                     <label for="phone_other">Other Phone:</label>
-                    <input type="text" name="phone_other" id="phone_other" class="form-control">
+                    <input type="text" name="phone_other" id="phone_other" class="form-control"
+                        onkeypress="return (event.charCode !=8 && event.charCode ==0 || ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57)))">
                     <span class="phone_other_error errors"></span>
                 </div>
 
@@ -93,19 +92,13 @@
                     <span class="email2_error errors"></span>
                     <span class="email2_notvalid_address_error errors"></span>
                 </div>
-                <div class="form-group">
-                    <label for="reports_to">Reports to</label>
-                    <!-- <input type="text" name="reports_to" id="reports_to" class="form-control"> -->
-                    <select name="reports_to" id="reports_to" class="form-control">
-                        <!-- <option value="" class="report_none">(None)</option> -->
-                    </select>
-                    <!-- <span class="reports_to_error errors"></span> -->
-                </div>
+              
                 <div class="form-group">
                     <label for="title">Title</label>
                     <input type="text" name="title" id="title" class="form-control">
                     <span class="title_error errors"></span>
                 </div>
+                
                 <div class="form-group">
                     <label for="address">address</label>
                     <input type="text" name="address" id="address" class="form-control">
@@ -127,7 +120,8 @@
 
                 <div class="form-group">
                     <label for="zip">Postal Code</label>
-                    <input type="text" name="zip" id="zip" class="form-control">
+                    <input type="text" name="zip" id="zip" class="form-control"
+                        onkeypress="return (event.charCode !=8 && event.charCode ==0 || ( event.charCode == 46 || (event.charCode >= 48 && event.charCode <= 57)))">
                     <span class="zip_error errors"></span>
                 </div>
             </div>
@@ -153,7 +147,7 @@ $(document).ready(function() {
 
 $(document).on('change', '#checkbox_company_value', function() {
     var companySelect = $('#company_id');
-    
+
     if ($(this).prop('checked')) {
         // Checkbox is checked, show "Internal Contact" option in the dropdown
         companySelect.append('<option value="0">Internal Contact</option>');
@@ -242,7 +236,7 @@ $(document).ready(function() {
 
 
 
-$(document).on('click','#addNewContact',function() {
+$(document).on('click', '#addNewContact', function() {
     var companyId = '';
     var companyId = <?php echo json_encode($company_id); ?>;
 
@@ -250,7 +244,7 @@ $(document).on('click','#addNewContact',function() {
     const fields = [
         'company_id', 'last_name', 'first_name', 'title', 'email1', 'email2', 'phone_work',
         'phone_cell', 'phone_other', 'address', 'city', 'state', 'zip', 'is_hot', 'notes',
-        
+
     ];
 
     let errors = [];
@@ -293,20 +287,31 @@ $(document).on('click','#addNewContact',function() {
         contentType: false,
         processData: false,
         success: function(response) {
-            const title = response.status ? "success" : "warning";
-            Swal.fire({
-                title: response.message,
-                type: title,
-                icon: title,
-            }).then(function(result) {
-                if (result.isConfirmed && response.status) {
-                    if(companyId){
-                        window.location.href ="{{ route('companies.details')}}"+'/'+companyId
-                    }else{
-                        window.location.href = "{{route('contacts.index')}}";
+            if (response.status == true) {
+                Swal.fire({
+                    title: response.message,
+                    type: "success",
+                    icon: "success",
+                }).then(function(result) {
+                    if (result.isConfirmed && response.status) {
+                        if (companyId) {
+                            window.location.href = "{{ route('companies.details')}}" + '/' +
+                                companyId
+                        } else {
+                            window.location.href = "{{route('contacts.index')}}";
+                        }
                     }
-                }
-            });
+                });
+            } else {
+                Swal.fire({
+                    title: response.message,
+                    icon: "warning",
+                }).then(function(result) {
+                    if (result.isConfirmed) {
+
+                    }
+                });
+            }
         },
         error: function(xhr, status, error) {
             console.error('Error:', error);

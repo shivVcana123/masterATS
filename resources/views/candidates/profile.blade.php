@@ -269,6 +269,7 @@ $('#updateForm').submit(function(e) {
                 $(`.${field}_notvalid_address_error`).html("Please provide a valid email address.");
             }
         }
+        
 
         formData.append(field, value);
     });

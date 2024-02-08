@@ -121,14 +121,18 @@
 
                 <div class="form-group">
                     <label for="actual_rate">Actual Rate</label>
-                    <input type="text" name="actual_rate" id="actual_rate" class="form-control">
+                    <input type="text" name="actual_rate" id="actual_rate" class="form-control" onkeypress ="return (event.charCode != 8 &&
+                            event.charCode == 0 || (event.charCode == 46 || (event.charCode >= 48 && event.charCode <=
+                                57)))">
                     <span class="actual_rate_error errors"></span>
                 </div>
 
 
                 <div class="form-group">
                     <label for="expected_candidate">Expected Candidate</label>
-                    <input type="text" name="expected_candidate" id="expected_candidate" class="form-control">
+                    <input type="text" name="expected_candidate" id="expected_candidate" class="form-control" onkeypress ="return (event.charCode != 8 &&
+                            event.charCode == 0 || (event.charCode == 46 || (event.charCode >= 48 && event.charCode <=
+                                57)))">
                     <span class="expected_candidate_error errors"></span>
                 </div>
 
@@ -147,7 +151,9 @@
 
                 <div class="form-group">
                     <label for="salary">salary</label>
-                    <input type="text" name="salary" id="salary" class="form-control">
+                    <input type="text" name="salary" id="salary" class="form-control" onkeypress ="return (event.charCode != 8 &&
+                            event.charCode == 0 || (event.charCode == 46 || (event.charCode >= 48 && event.charCode <=
+                                57)))">
                     <span class="salary_error errors"></span>
                 </div>
 
