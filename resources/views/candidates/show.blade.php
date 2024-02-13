@@ -387,6 +387,9 @@
                 <div class="form-group col-md-12" style="margin-top: -15px; margin-left: -5px; padding: 2%;">
                     <div class="form-control" style="border-color: transparent;padding-left: 0px">
                         <label style="font-size: 18px">Add Candidates to Job Order</label>
+                        <button style="margin-left: 75%;" type="button" class="close-modal" data-dismiss="modal" aria-label="Close">
+                                    <span aria-hidden="true">&times;</span>
+                                </button>
                     </div>
                     <div class="buttn-area">
                         <form class="example" action="{{ route('joborders.index') }}">
@@ -496,7 +499,7 @@
             <div class="modal-content" style="width: 149%; margin-left: -90px;">
                 <div class="modal-header">
                     <h5 class="modal-title" id="activityModalLabel">Candidates: Log Activity</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <button type="button" class="close-modal" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
                 </div>
@@ -736,7 +739,7 @@
                         </fieldset>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                        <!-- <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button> -->
                         <button type="button" class="btn btn-primary" id="save_activity_btn">Save changes</button>
                     </div>
                 </form>
@@ -785,44 +788,12 @@
 <script>
 var candidate_id = $('#candidate_id').val();
 
-// function addCandidateOnJobOrder(that) {
-//     // Hide the modal
-//     $('.modal.fade.bd-example-modal-lg').modal('hide');
-//     var jobID = $(that).data('value');
-
-//     $.ajaxSetup({
-//         headers: {
-//             "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-//         },
-//     });
-
-//     // $.ajax({
-//     //     url: '/candidates/add/candidate/joborder',
-//     //     type: 'POST',
-//     //     data: {
-//     //         jobID: jobID,
-//     //         candidate_id: candidate_id,
-//     //     },
-//     //     success: function(response) {
-//     //         $('.modal.fade.bd-example-modal-lg').modal('hide');
-//     //         const title = response.status ? "success" : "warning";
-//     //         Swal.fire({
-//     //             title: response.message,
-//     //             type: title,
-//     //             icon: title,
-//     //         }).then(function(result) {
-//     //             if (result.isConfirmed && response.status) {
-//     //                 $('.modal.fade.bd-example-modal-lg').modal('hide');
-//     //                 window.location.href =
-//     //                     "{{ url('/candidates/details',$candidatesDetails[0]->id ) }}";
-//     //             }
-//     //         });
-//     //     },
-//     //     error: function(xhr, status, error) {
-//     //         console.error('Error:', error);
-//     //     },
-//     // });
-// }
+$(document).ready(function() {
+    $('.close-modal').click(function() {
+        $('.bd-example-modal-lg').modal('hide');
+        $('#activityModal').modal('hide');
+    });
+});
 
 function addCandidateOnJobOrder(that) {
     // Hide the modal on success
@@ -1104,7 +1075,7 @@ $(document).on('click', '#save_activity_btn', function() {
     var length_description = $('#length_description').val();
     var data_item_id = '1';
     // alert(select_checkbox_activity);
-    $('#activityModal').modal('hide');
+   
 
     let errors = [];
     $(".errors").html("");
@@ -1124,7 +1095,7 @@ $(document).on('click', '#save_activity_btn', function() {
         return false;
     }
 
-
+    $('#activityModal').modal('hide');
 
     var formData = new FormData();
     formData.append('joborder_item', joborder_item);

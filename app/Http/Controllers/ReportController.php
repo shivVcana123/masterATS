@@ -23,6 +23,10 @@ class ReportController extends Controller
 {
     public function index(request $request)
     {  
+
+        $submissionsCountData = Joborder::with('candidateJoborder')->get();
+       
+    //    dd($submissionsCountData);
         $periods = [
             'Today' => Carbon::today(),
             'Yesterday' => Carbon::yesterday(),
@@ -46,14 +50,14 @@ class ReportController extends Controller
             if(is_array($period)){
                 $jobOrderCount[$label] = Joborder::whereBetween('created_at', $period)->count();
                 $submissionsCount[$label] = Joborder::whereBetween('submission_deadline', $period)->count();
-                $submissionsCountData[$label] = Joborder::whereBetween('submission_deadline', $period)->get();
+                $submissionsCountData[$label] = Joborder::with('candidateJoborder')->whereBetween('submission_deadline', $period)->get();
                 $candidateCount[$label] = Candidate::whereBetween('date_created', $period)->count();
                 $companyCount[$label] = Company::whereBetween('created_at', $period)->count();
                 $contactCount[$label] = Contact::whereBetween('date_created', $period)->count();
             }else{
                 $jobOrderCount[$label] = Joborder::whereDate('created_at', $period)->count();
                 $submissionsCount[$label] = Joborder::whereDate('submission_deadline', $period)->count();
-                $submissionsCountData[$label] = Joborder::whereDate('submission_deadline', $period)->get();
+                $submissionsCountData[$label] = Joborder::with('candidateJoborder')->whereDate('submission_deadline', $period)->get();
                 $candidateCount[$label] = Candidate::whereDate('date_created', $period)->count();
                 $companyCount[$label] = Company::whereDate('created_at', $period)->count();
                 $contactCount[$label] = Contact::whereDate('date_created', $period)->count();
