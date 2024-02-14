@@ -24,7 +24,7 @@ class ReportController extends Controller
     public function index(request $request)
     {  
 
-        $submissionsCountData = Joborder::with('candidateJoborder')->get();
+    //     $submissionsCountData = Joborder::with('candidateJoborder','candidateJoborder.candidates','candidateJoborder.ownerUser')->get();
        
     //    dd($submissionsCountData);
         $periods = [
@@ -50,20 +50,25 @@ class ReportController extends Controller
             if(is_array($period)){
                 $jobOrderCount[$label] = Joborder::whereBetween('created_at', $period)->count();
                 $submissionsCount[$label] = Joborder::whereBetween('submission_deadline', $period)->count();
-                $submissionsCountData[$label] = Joborder::with('candidateJoborder')->whereBetween('submission_deadline', $period)->get();
+                // $submissionsCountData[$label] = Joborder::with('candidateJoborder')->whereBetween('submission_deadline', $period)->get();
+                $submissionsCountData[$label] = Joborder::with('companies','ownerUser','recruiterUser','candidateJoborder.candidates')->whereBetween('submission_deadline', $period)->get();
                 $candidateCount[$label] = Candidate::whereBetween('date_created', $period)->count();
                 $companyCount[$label] = Company::whereBetween('created_at', $period)->count();
                 $contactCount[$label] = Contact::whereBetween('date_created', $period)->count();
             }else{
                 $jobOrderCount[$label] = Joborder::whereDate('created_at', $period)->count();
                 $submissionsCount[$label] = Joborder::whereDate('submission_deadline', $period)->count();
-                $submissionsCountData[$label] = Joborder::with('candidateJoborder')->whereDate('submission_deadline', $period)->get();
+                // $submissionsCountData[$label] = Joborder::with('candidateJoborder')->whereDate('submission_deadline', $period)->get();
+                $submissionsCountData[$label] = Joborder::with('companies','ownerUser','recruiterUser','candidateJoborder.candidates')->whereDate('submission_deadline', $period)->get();
                 $candidateCount[$label] = Candidate::whereDate('date_created', $period)->count();
                 $companyCount[$label] = Company::whereDate('created_at', $period)->count();
                 $contactCount[$label] = Contact::whereDate('date_created', $period)->count();
             }
         }
+        // dd($submissionsCountData);
     
      return view('reports.index',with(['jobOrderCount' => $jobOrderCount,'candidateCount' => $candidateCount,'companyCount' => $companyCount,'contactCount' => $contactCount,'submissionsCount' => $submissionsCount,'submissionsCountData' => $submissionsCountData]));
     }
+
+    
 }

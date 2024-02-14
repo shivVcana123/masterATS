@@ -64,8 +64,8 @@ tr:hover {
                                     <td>{{$value->title}}</td>
                                     <td>{{$value->phone_work}}</td>
                                     <td>{{$value['ownerUser']->user_name}}</td>
-                                    <td>{{$value->date_created}}</td>
-                                    <td>{{$value->date_modified}}</td>
+                                    <td>{{date("Y-m-d", strtotime($value->date_created))}}</td>
+                                <td>{{date("Y-m-d", strtotime($value->date_modified))}}</td>
                                     <td>
                                         <a href="{{route('contacts.show',$value->id)}}"><i class="fa fa-eye"></i></a>
                                         <a href="{{route('contacts.edit',$value->id)}}"><i class="fa fa-pencil"></i></a>

@@ -40,25 +40,29 @@ $submissionsCountDataJson = json_encode($submissionsCountData);
                         </div>
                         <div class="modal-body">
                             <table class="table table-striped table-bordered" id="submissions_list">
-                                <thead class="no-border">
-                                    <tr>
-                                        <th style="width: 67px">ID</th>
-                                        <th style="width: 67px">First Name </th>
-                                        <th style="width: 67px">Last Name</th>
-                                        <th style="width: 67px">Candidate Owner</th>
-                                        <th style="width: 67px">Date Submitted</th>
-
-                                    </tr>
-                                </thead>
-                                <tbody id="container" class="no-border-x no-border-y ui-sortable">
-                                    <tr>
-                                        <td>1</td>
-                                        <td>first</td>
-                                        <td>last</td>
-                                        <td>Owner</td>
-                                        <td>date </td>
-                                    </tr>
-                                </tbody>
+                                @foreach($submissionsCountData['Today'] as $details)
+                                    <h5>{{$details->title}} at {{$details['companies']->company_name}}
+                                        ({{$details['ownerUser']->user_name}})
+                                    </h5>
+                                    @foreach($details['candidateJoborder'] as $data)
+                                        <tr>
+                                            <thead class="no-border">
+                                                <tr>
+                                                    <th style="width: 67px">First Name </th>
+                                                    <th style="width: 67px">Last Name</th>
+                                                    <th style="width: 67px">Candidate Owner</th>
+                                                    <th style="width: 67px">Date Submitted</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody id="container" class="no-border-x no-border-y ui-sortable">
+                                                <td>{{$data['candidates']->first_name}}</td>
+                                                <td>{{$data['candidates']->last_name}}</td>
+                                                <td>{{$details['recruiterUser']->user_name}} </td>
+                                                <td>{{date("Y-m-d", strtotime($data->date_submitted))}}</td>
+                                        </tr>
+                                        </tbody>
+                                    @endforeach
+                                @endforeach
                             </table>
                         </div>
                     </div>
@@ -80,26 +84,31 @@ function submissionsCountData() {
     $('.bd-example-modal-lg').modal('show');
 
 
+
+
     var submissionsDetails = <?php echo $submissionsCountDataJson; ?>;
     console.log('submissionsDetails', submissionsDetails);
 
-    var dataValue = $('#Yesterday').data('value');
-    var yesterdayArray = submissionsDetails['Yesterday'];
-    yesterdayArray.forEach(function(element, index) {
-        // Get the <td> element corresponding to the "Date Submitted" column in the current row
-        var tdId = $('#submissions_list tbody tr:eq(' + index + ') td:eq(0)');
-        var tdFirstName = $('#submissions_list tbody tr:eq(' + index + ') td:eq(1)');
-        var tdLastName = $('#submissions_list tbody tr:eq(' + index + ') td:eq(2)');
-        var tdCandidateOwner = $('#submissions_list tbody tr:eq(' + index + ') td:eq(3)');
-        var tdElement = $('#submissions_list tbody tr:eq(' + index + ') td:eq(4)');
+    // var dataValue = $('#Yesterday').data('value');
+    // var yesterdayArray = submissionsDetails['Yesterday'];
+    // yesterdayArray.forEach(function(element, index) {
 
-        // Update the text content of the <td> element with the submission_deadline value
-        tdId.text(element.id);
-        tdFirstName.text(element.candidateJoborder.first_name);
-        tdLastName.text(element.candidateJoborder.last_name);
-        tdCandidateOwner.text(element.submission_deadline);
-        tdElement.text(element.submission_deadline);
-    });
+
+    //     // Get the <td> element corresponding to the "Date Submitted" column in the current row
+    //     var tdId = $('#submissions_list tbody tr:eq(' + index + ') td:eq(0)');
+    //     var tdFirstName = $('#submissions_list tbody tr:eq(' + index + ') td:eq(1)');
+    //     var tdLastName = $('#submissions_list tbody tr:eq(' + index + ') td:eq(2)');
+    //     var tdCandidateOwner = $('#submissions_list tbody tr:eq(' + index + ') td:eq(3)');
+    //     var tdElement = $('#submissions_list tbody tr:eq(' + index + ') td:eq(4)');
+    //     console.log('saa', tdId);
+    //     // Update the text content of the <td> element with the submission_deadline value
+    //     tdId.text(element.id);
+    //     tdFirstName.text(element.candidateJoborder.first_name);
+    //     tdLastName.text(element.candidateJoborder.last_name);
+    //     tdCandidateOwner.text(element.submission_deadline);
+    //     tdElement.text(element.submission_deadline);
+
+    // });
 }
 </script>
 @endpush

@@ -138,10 +138,10 @@ form.example button {
                                         @endswitch
                                     </td>
                                     <td>{{ $data->status }}</td>
-                                    <td>{{ $data->date_created }}</td>
+                                    <td>{{date("Y-m-d", strtotime($data->date_created))}}</td>
                                     <td> {{ $data->client_job_id }}</td>
-                                    <td> {{ $data->date_modified }}</td>
-                                    <td> {{ $data->submission_deadline }}</td>
+                                    <td>{{date("Y-m-d", strtotime($data->date_modified))}}</td>
+                                    <td>{{date("Y-m-d", strtotime($data->submission_deadline))}}</td>
                                     <td>{{ $data['recruiterUser']->user_name }}</td>
                                     <td>{{ $data['ownerUser']->user_name }}</td>
                                     <td>

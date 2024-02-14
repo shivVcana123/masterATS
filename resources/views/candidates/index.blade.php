@@ -71,8 +71,8 @@ button {
                                 <td>{{ $data->state }}</td>
                                 <td>{{ $data->key_skills }}</td>
                                 <td>{{ $data->user_name }}</td>
-                                <td>{{ $data->date_created }}</td>
-                                <td>{{ $data->date_modified }}</td>
+                                <td>{{date("Y-m-d", strtotime($data->date_created))}}</td>
+                                <td>{{date("Y-m-d", strtotime($data->date_modified))}}</td>
                                 <td>
                                     <a href="{{route('candidates.details',$data->id )}}"><i class="fa fa-eye"></i></a>
                                     <a href="{{ url('/candidates/update',$data->id )}}"><i class="fa fa-pencil"></i></a>
