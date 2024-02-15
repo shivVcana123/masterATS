@@ -24,9 +24,8 @@ class ReportController extends Controller
     public function index(request $request)
     {  
 
-    //     $submissionsCountData = Joborder::with('candidateJoborder','candidateJoborder.candidates','candidateJoborder.ownerUser')->get();
-       
-    //    dd($submissionsCountData);
+        $toDateStart = Carbon::create(2000, 1, 1); // Choose a date that precedes all your data
+        $toDateEnd = Carbon::today();
         $periods = [
             'Today' => Carbon::today(),
             'Yesterday' => Carbon::yesterday(),
@@ -36,7 +35,7 @@ class ReportController extends Controller
             'Last Month' =>[Carbon::now()->subMonth()->startOfMonth(), Carbon::now()->subMonth()->endOfMonth()],
             'This Year' =>  [Carbon::now()->startOfYear(), Carbon::now()->endOfYear()],
             'Last Year' => [Carbon::now()->subYear()->startOfYear(), Carbon::now()->subYear()->endOfYear()],
-            'To Date' => Carbon::today(),
+            'To Date' => [$toDateStart, $toDateEnd], // Modify this line
         ];
 
         $jobOrderCount = [];
@@ -45,6 +44,7 @@ class ReportController extends Controller
         $contactCount = [];
         $submissionsCount = [];
         $submissionsCountData = [];
+        $totalCountData = [];
            
         foreach($periods as $label => $period){
             if(is_array($period)){
@@ -65,9 +65,17 @@ class ReportController extends Controller
                 $contactCount[$label] = Contact::whereDate('date_created', $period)->count();
             }
         }
-        // dd($submissionsCountData);
+
+        $totalCountData = [
+            'Joborder' => Joborder::all(),
+            'Candidate' => Candidate::all(),
+            'Company' => Company::all(),
+            'Contact' => Contact::all(),
+            'submissionsCount' => Joborder::with('companies','ownerUser','recruiterUser','candidateJoborder.candidates')->whereNotNull('submission_deadline')->get(),
+          
+        ];
     
-     return view('reports.index',with(['jobOrderCount' => $jobOrderCount,'candidateCount' => $candidateCount,'companyCount' => $companyCount,'contactCount' => $contactCount,'submissionsCount' => $submissionsCount,'submissionsCountData' => $submissionsCountData]));
+     return view('reports.index',with(['jobOrderCount' => $jobOrderCount,'candidateCount' => $candidateCount,'companyCount' => $companyCount,'contactCount' => $contactCount,'submissionsCount' => $submissionsCount,'submissionsCountData' => $submissionsCountData,'totalCountData' => $totalCountData]));
     }
 
     
