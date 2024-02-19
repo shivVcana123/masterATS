@@ -205,6 +205,7 @@ function submissionsCountData(period) {
         $('#submissions_list').append('<h4 style="margin-left: 35%;">No Data Available</h4>');
         console.log('No data available for the selected period');
     }
+    
 }
 </script>
 @endpush

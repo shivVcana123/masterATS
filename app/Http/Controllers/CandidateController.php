@@ -86,7 +86,7 @@ class CandidateController extends Controller
         
         
         $checkFormSubmissions = Joborder::where('id',$request['jobOrder_id'])->first();
-        if($checkFormSubmissions && $checkFormSubmissions->max_submission <= 3){
+        // if($checkFormSubmissions == null && $checkFormSubmissions->max_submission <= 3){
             $existingSubmissionsCount = CandidateJoborder::where('jobOrder_id',$request['jobOrder_id'])->count();
 
             if($existingSubmissionsCount < 3){
@@ -137,9 +137,9 @@ class CandidateController extends Controller
             }else{
                 return response()->json(['status' => false, 'message' => 'You are not allowed to add more than 3 candidates for this job order.']);
             }
-        }else{
-            return response()->json(['status' => false, 'message' => 'Invalid job order or maximum submission limit exceeded.']);
-        }
+        // }else{
+        //     return response()->json(['status' => false, 'message' => 'Invalid job order or maximum submission limit exceeded.']);
+        // }
 
       
     }

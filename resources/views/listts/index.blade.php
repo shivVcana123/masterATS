@@ -49,22 +49,23 @@
                                 <th>Created</th>
                                 <th>Modified</th>
                             </tr>
+                            @if(count($datas) > 0)
                             @foreach ($datas as $data)
                             <tr>
                                 <td>{{ $data->number_entries }}</td>
                                 <td><a href="{{url('/companies/details',$data->id)}}">{{ $data->description }}</a></td>
                                 <td>@switch($data->data_item_type)
-                                    @case('100')
+                                    @case('1')
                                     <p>Candidate</p>
                                     @break
-                                    @case('200')
+                                    @case('2')
                                     <p>Company</p>
                                     @break
-                                    @case('300')
+                                    @case('3')
                                     <p>joborders</p>
                                     @break
                                     @default
-                                    <p>okk</p>
+                                    <p> </p>
                                     @break
                                     @endswitch
                                 </td>
@@ -74,6 +75,9 @@
                                 <td>{{date_format($data->date_modified,'d m Y') }}</td>
                             </tr>
                             @endforeach
+                            @else
+                            <td colspan="12"> Not found data </td>
+                            @endif
                         </table>
 
 

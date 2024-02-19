@@ -309,6 +309,9 @@
             <div class="form-group col-md-12" style="margin-top: -15px; margin-left: -5px; padding: 2%;">
                 <div class="form-control" style="border-color: transparent;padding-left: 0px">
                     <label style="font-size: 18px">Add Candidate to This Job Order</label>
+                    <button style="margin-left: 70%;" type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
                 </div>
                 <div class="buttn-area">
                     <form class="example" action="{{ route('joborders.index') }}">
@@ -785,9 +788,9 @@ function addCandidateOnJobOrder(that) {
 }
 
 function addNewCandidate(that) {
+    $('#addJobOrderModal').modal('hide');
     window.location.href = "{{ url('/candidates/create', ['job_id' => $jobDetails[0]['id']]) }}";
 
-    $('#addJobOrderModal').modal('hide');
 }
 $(document).on('click', '#submit_file', function(e) {
     e.preventDefault();

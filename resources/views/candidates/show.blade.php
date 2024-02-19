@@ -380,7 +380,7 @@
 
     <!-- Add Candidates Job Orders For listing -->
     <!-- Modal -->
-    <div class="modal fade bd-example-modal-lg" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
+    <div class="modal fade bd-example-modal-lg" id="add_candidates_to_job_order" tabindex="-1" role="dialog" aria-labelledby="myLargeModalLabel"
         aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content" style="width: 150%; margin-left: -22%;">
@@ -794,10 +794,10 @@ $(document).ready(function() {
         $('#activityModal').modal('hide');
     });
 });
-
+// $('#add_candidates_to_job_order').modal('hide');
 function addCandidateOnJobOrder(that) {
-    // Hide the modal on success
-    $('.modal.fade.bd-example-modal-lg').modal('hide');
+    $('#add_candidates_to_job_order').modal('hide');
+    // alert('okkk');
     var jobID = $(that).data('value');
     $.ajaxSetup({
         headers: {
@@ -805,32 +805,32 @@ function addCandidateOnJobOrder(that) {
         },
     });
 
-    $.ajax({
-        url: '/candidates/add/candidate/joborder',
-        type: 'POST',
-        data: {
-            jobID: jobID,
-            candidate_id: candidate_id, // Make sure 'candidate_id' is defined before using it
-        },
-        success: function(response) {
-            const title = response.status ? "success" : "warning";
-            Swal.fire({
-                title: response.message,
-                type: title,
-                icon: title,
-            }).then(function(result) {
-                if (result.isConfirmed && response.status) {
-                    // Redirect to a new URL
-                    window.location.href =
-                        "{{ url('/candidates/details', $candidatesDetails[0]->id) }}";
-                }
-            });
-        },
-        error: function(xhr, status, error) {
-            console.error('Error:', error);
-            // Handle error as needed
-        },
-    });
+    // $.ajax({
+    //     url: '/candidates/add/candidate/joborder',
+    //     type: 'POST',
+    //     data: {
+    //         jobID: jobID,
+    //         candidate_id: candidate_id, // Make sure 'candidate_id' is defined before using it
+    //     },
+    //     success: function(response) {
+    //         const title = response.status ? "success" : "warning";
+    //         Swal.fire({
+    //             title: response.message,
+    //             type: title,
+    //             icon: title,
+    //         }).then(function(result) {
+    //             if (result.isConfirmed && response.status) {
+    //                 // Redirect to a new URL
+    //                 window.location.href =
+    //                     "{{ url('/candidates/details', $candidatesDetails[0]->id) }}";
+    //             }
+    //         });
+    //     },
+    //     error: function(xhr, status, error) {
+    //         console.error('Error:', error);
+    //         // Handle error as needed
+    //     },
+    // });
 }
 
 

@@ -57,9 +57,6 @@ Route::post('/candidates/list/save/entry', [CandidateController::class, 'candida
 
 
 Route::post('/candidates/add/candidate/joborder', [CandidateController::class, 'candidatesAddCandidateJoborder'])->name('candidates.add.candidate.joborder');
-
-
-
 Route::get('/candidates/activity/delete/{id?}', [CandidateController::class, 'candidatesActivityDelete'])->name('candidates.activity.delete');
 Route::post('/candidates/activity/save', [CandidateController::class, 'candidatesActivitySave'])->name('candidates.activity.save');
 Route::get('/candidate/joborder/delete/{id?}', [CandidateController::class, 'candidatesJoborderDelete'])->name('candidate.joborder.delete');
