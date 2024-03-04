@@ -20,6 +20,7 @@ use App\Http\Controllers\ReportController;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\HomeController;
 use App\Http\Controllers\LoginSecurityController;
+use App\Http\Controllers\ResumeParserController;
 use Illuminate\Support\Facades\Route;
 
 // Route::get('/joborders/{letter?}', [JobOrderController::class, 'index'])->name('joborders.index');
@@ -119,6 +120,7 @@ Route::group(['middleware' => ['auth', 'XSS']], function () {
      Route::resource('reports', ReportController::class);
     Route::resource('permission', PermissionController::class);
     Route::resource('modules', ModualController::class);
+    Route::resource('resumes', DocumentController::class);
 });
 // Route::post('addjoborder', [JoborderController::class, 'create'])->name('joborders.create')->middleware(['auth', 'XSS']);
 

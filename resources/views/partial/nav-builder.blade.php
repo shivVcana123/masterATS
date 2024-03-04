@@ -114,6 +114,14 @@ $settings = Utility::settings();
                     </li>
                 @endcan  @can('manage-user')
                     <li class="dash-item dash-hasmenu {{ request()->is('reports*') ? 'active' : '' }}">
+                        <a class="dash-link" href="{{ route('resumes.index') }}">
+                            <span class="dash-micon"><i class="ti ti-user"></i></span>
+                            <span class="dash-mtext custom-weight">{{ __('Resume Parser') }}</span>
+                        </a>
+                    </li>
+                @endcan
+                 @can('manage-user')
+                    <li class="dash-item dash-hasmenu {{ request()->is('reports*') ? 'active' : '' }}">
                         <a class="dash-link" href="{{ route('reports.index') }}">
                             <span class="dash-micon"><i class="ti ti-user"></i></span>
                             <span class="dash-mtext custom-weight">{{ __('Reports') }}</span>
