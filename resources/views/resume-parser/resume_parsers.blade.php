@@ -33,11 +33,14 @@ tr:hover {
                     <div class="container-fluid">
                         <!--     Table start   -->
                         <h2>Resume Parser</h2>
+                        <input id="address" type="text" onkeypress="handle(event)" placeholder="searching...">
+                        <input id="search" type="button" value="search" onClick="search_func()">
                         <div class="buttn-area" style="margin-left: 84%;">
                             <!-- <a href="{{route('contacts.create')}}"> -->
                             <button class="btn btn-primary" data-toggle="modal" data-target="#exampleModalLong">
                                 Resume</button>
                             <!-- </a> -->
+
                         </div>
 
                         <table style="width:100%">
@@ -76,8 +79,8 @@ tr:hover {
                 <form method='post' enctype="multipart/form-data">
                     <input hidden type='text' name='company_id' id='company_id' value="1" class='form-control'>
                     <div class="modal-body">
-                        Select file : <input type='file' name='document_file' id='document_file'
-                            class='form-control' multiple><br>
+                        Select file : <input type='file' name='document_file' id='document_file' class='form-control'
+                            multiple><br>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -90,6 +93,64 @@ tr:hover {
     @endsection
     @push('scripts')
     <script>
+    function search_func() {
+        address = document.getElementById("address").value;
+        // alert(address);
+        //write your specific code from here	
+        $.ajax({
+            url: '/resumes/'+address, // Adjust the URL as needed
+            type: 'GET',
+            // data: {address:address},
+            contentType: false,
+            processData: false,
+            success: function(response) {
+                const title = response.status ? "success" : "warning";
+                Swal.fire({
+                    title: response.message,
+                    type: title,
+                    icon: title,
+                }).then(function(result) {
+                    if (result.isConfirmed && response.status) {
+                        window.location.href = "{{url('/resumes')}}";
+                    }
+                });
+            },
+            error: function(xhr, status, error) {
+                console.error('Error:', error);
+            },
+        });
+    }
+
+    function handle(e) {
+        address = document.getElementById("address").value;
+        if (e.keyCode === 13) {
+            //write your specific code from here
+            $.ajax({
+                url: '/resumes/'+address,
+            type: 'GET',
+            // data: {address:address},
+            contentType: false,
+            processData: false,
+            success: function(response) {
+                const title = response.status ? "success" : "warning";
+                Swal.fire({
+                    title: response.message,
+                    type: title,
+                    icon: title,
+                }).then(function(result) {
+                    if (result.isConfirmed && response.status) {
+                        window.location.href = "{{url('/resumes')}}";
+                    }
+                });
+            },
+            error: function(xhr, status, error) {
+                console.error('Error:', error);
+            },
+        });
+        }
+        return false;
+    }
+
     // $(document).on('click', '#submit_file', function(e) {
     //     e.preventDefault();
     //     var company_id = $('#company_id').val();
@@ -143,58 +204,57 @@ tr:hover {
     //     });
     // });
     $(document).on('click', '#submit_file', function(e) {
-    e.preventDefault();
-    var company_id = $('#company_id').val();
+        e.preventDefault();
+        var company_id = $('#company_id').val();
 
-    const formData = new FormData();
-    const fileInput = $('#document_file')[0];
+        const formData = new FormData();
+        const fileInput = $('#document_file')[0];
 
-    let errors = [];
-    $(".errors").html("");
+        let errors = [];
+        $(".errors").html("");
 
-    if (fileInput.files.length > 0) {
-        for (let i = 0; i < fileInput.files.length; i++) {
-            const file = fileInput.files[i];
-            formData.append('company_id', company_id);
-            formData.append('document_file[]', file); // Use append() with '[]' to handle multiple files
+        if (fileInput.files.length > 0) {
+            for (let i = 0; i < fileInput.files.length; i++) {
+                const file = fileInput.files[i];
+                formData.append('company_id', company_id);
+                formData.append('document_file[]', file); // Use append() with '[]' to handle multiple files
+            }
+        } else {
+            errors.push('document_file');
+            $(".document_file_error").html('Please select at least one document file');
         }
-    } else {
-        errors.push('document_file');
-        $(".document_file_error").html('Please select at least one document file');
-    }
 
-    if (errors.length > 0) {
-        return false;
-    }
+        if (errors.length > 0) {
+            return false;
+        }
 
-    $.ajaxSetup({
-        headers: {
-            "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
-        },
+        $.ajaxSetup({
+            headers: {
+                "X-CSRF-TOKEN": $('meta[name="csrf-token"]').attr("content"),
+            },
+        });
+        $.ajax({
+            url: '/document/upload', // Adjust the URL as needed
+            type: 'POST',
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function(response) {
+                const title = response.status ? "success" : "warning";
+                Swal.fire({
+                    title: response.message,
+                    type: title,
+                    icon: title,
+                }).then(function(result) {
+                    if (result.isConfirmed && response.status) {
+                        window.location.href = "{{url('/resumes')}}";
+                    }
+                });
+            },
+            error: function(xhr, status, error) {
+                console.error('Error:', error);
+            },
+        });
     });
-    $.ajax({
-        url: '/document/upload', // Adjust the URL as needed
-        type: 'POST',
-        data: formData,
-        contentType: false,
-        processData: false,
-        success: function(response) {
-            const title = response.status ? "success" : "warning";
-            Swal.fire({
-                title: response.message,
-                type: title,
-                icon: title,
-            }).then(function(result) {
-                if (result.isConfirmed && response.status) {
-                    window.location.href = "{{url('/resumes')}}";
-                }
-            });
-        },
-        error: function(xhr, status, error) {
-            console.error('Error:', error);
-        },
-    });
-});
-
     </script>
     @endpush

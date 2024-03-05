@@ -106,6 +106,7 @@ Route::post('/chart', [HomeController::class, 'chart'])->name('get.chart.data')-
 
 Route::get('notification', [HomeController::class, 'notification']);
 
+Route::get('resumes/{search}', [DocumentController::class, 'index']);
 
 Route::group(['middleware' => ['auth', 'XSS']], function () {
     Route::resource('roles', RoleController::class);
