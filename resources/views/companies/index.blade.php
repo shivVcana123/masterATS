@@ -160,7 +160,9 @@ $('#companiesDelete').click(function() {
     }).then((result) => {
         if (result.isConfirmed) {
             // If the user confirms, trigger the deletion
-            window.location.href = '/delete/' + recordId; // Adjust the URL as needed
+            // window.location.href = '/delete/' + recordId; // Adjust the URL as needed
+            window.location.href = "{{route('companies.delete')}}" + '/' +
+            recordId;
         }
     });
 });

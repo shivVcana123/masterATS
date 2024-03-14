@@ -116,7 +116,7 @@ $(document).on('click', '#candidateDelete', function() {
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
-                url: '/candidates/list/delete/' + candidateDelete_id,
+                url:"{{ route('candidates.list.delete') }}" + '/' + candidateDelete_id,
                 type: 'GET',
                 success: function(response) {
                     const title = response.status ? "success" : "warning";
@@ -126,8 +126,7 @@ $(document).on('click', '#candidateDelete', function() {
                         icon: title,
                     }).then(function(result) {
                         if (result.isConfirmed && response.status) {
-                            window.location.href =
-                                "{{ url('/candidates/index'";
+                            window.location.reload();
                         }
                     });
                 },

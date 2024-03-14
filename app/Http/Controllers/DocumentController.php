@@ -15,6 +15,11 @@ use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\URL;
 use Smalot\PdfParser\Parser;
 use PhpOffice\PhpWord\IOFactory as PhpWordIOFactory;
+use App\Services\ParseWord;
+use App\Services\WordParser;
+use Dompdf\Dompdf;
+use Dompdf\Options;
+use PhpOffice\PhpWord\PhpWord;
 
 class DocumentController extends Controller
 {
@@ -23,36 +28,50 @@ class DocumentController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function index($search = null)
-    {
-        if($search != null){
-            $files = Attachment::get();
-            $matchingResumes = [];
-            foreach ($files as $file) {
-                // Check if the resume content contains the skill "node.js"
-                if (stripos($file->resume_content, $search) !== false) {
-                    // If found, add the resume to the matching resumes array
-                    $matchingResumes[] = $file->resume_content;
+
+public function index($search = null)
+{
+    $extractedData = []; // Array to store all extracted data
+    $files = Attachment::get();
+
+    foreach ($files as $file) {
+        $resumeContent = $file->resume_content;
+        if (stripos($resumeContent, $search) !== false ||
+            stripos($file->name, $search) !== false ||
+            stripos($file->email, $search) !== false ||
+            stripos($file->phone, $search) !== false) {
+            $emails = [];
+            preg_match_all('/([a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{0,3})/', $resumeContent, $emails);
+            foreach ($emails[0] as $email) {
+                if (preg_match('/^\w+[\w.-]*@\w+[\w.-]+\.[a-z]{1,}$/i', $email)) {
+                    preg_match('/\b[A-Za-z]+(?:\s+[A-Za-z]+)?/', $email, $matches);
+                    $nameFromEmail = ucwords(strtolower($matches[0] ?? ''));
+                    // dd( $resumeContent);
+                    $namePosition = stripos($resumeContent, $nameFromEmail);
+                    if ($namePosition !== false) {
+                        $surroundingText = substr($resumeContent, $namePosition - 10, 20);
+
+                        $phones = [];
+                        preg_match_all('/(?:\+?(\d{1,3}))?[-. (]*(\d{3})[-. )]*(\d{3})[-. ]*(\d{4})(?: *x(\d+))?\b/', $resumeContent, $phones);
+                        $phone = implode('', $phones[0]); 
+
+                        // dd($email);
+                        $extractedData[] = [
+                            'id' =>  $file->id,
+                            'name' => $nameFromEmail,
+                            'email' => $email,
+                            'phone' => $phone,
+                            'surrounding_text' => $surroundingText
+                        ];
+                    }
                 }
             }
-            dd( $matchingResumes);
-            // foreach ($files as $file) {
-            //     // Extract names using regular expressions
-            //     $resumeContent = $file->resume_content;
-            //     $names = [];
-            //     preg_match_all('/\b[A-Z][a-z]*\s[A-Z][a-z]*\b/', $resumeContent, $names);
-            //     // $names now contains potential names extracted from resume content
-            //     dd($names);
-            // }
-            // foreach ($files as $file) {
-            //     // Assuming the name is enclosed within curly braces {} in the resume_content
-            //     preg_match('/\{([^}]*)\}/', $file->resume_content, $matches);
-            //     $name = $matches[1] ?? "Name not found";
-            //     dd($name);
-            // }
         }
-        return view('resume-parser.resume_parsers');
     }
+    // dd($extractedData);
+    return view('resume-parser.resume_parsers', ['extractedData' => $extractedData]);
+}
+
     
     public function parseText($contents)
     {
@@ -69,78 +88,6 @@ class DocumentController extends Controller
 
         return $parsedData;
     }
-
-
-
-    // public function index()
-    // {
-    //     $files = Attachment::get();
-    //     foreach ($files as $file) {
-    //         $parsedData = [];
-    //         $contents = File::get($file->text);
-    //         if (pathinfo($file->text, PATHINFO_EXTENSION) === 'pdf') {
-    //             $parsedData = $this->parsePdf($contents);
-    //         } elseif (pathinfo($file->text, PATHINFO_EXTENSION) === 'docx') {
-    //             $parsedData = $this->parseWord($contents);
-    //         }elseif (pathinfo($file->text, PATHINFO_EXTENSION) === 'txt') {
-    //             $parsedData = $this->parseText ($contents);
-    //         } elseif (pathinfo($file->text, PATHINFO_EXTENSION) === 'doc') {
-    //             $parsedData = $this->parseWord($contents);
-    //         } else {
-    //             echo "Unsupported file format: " . basename($contents) . "<br>";
-    //             continue;
-    //         }
-
-    //         $candidate = [
-    //             'name' => null,
-    //             'skills' => [],
-    //             'hobbies' => [],
-    //             'qualifications' => []
-    //         ];
-    //         dd($parsedData);
-    //         foreach ($parsedData as $data) {
-    //             // Extracting name
-    //             dd($data); die;
-    //             if ($candidate['name'] === null && preg_match('/^([A-Z]+(?:\s+[A-Z]+)*)$|^([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)$/', $data, $matches)) {
-    //                 $candidate['name'] = $data;
-    //                 continue;
-    //             }
-
-    //             // Extracting skills
-    //             // Modify the regular expression pattern according to the format of skills in your documents
-    //             // if (/* condition to match skills */) {
-    //             //     $candidate['skills'][] = $data;
-    //             //     continue;
-    //             // }
-
-    //             // // Extracting hobbies
-    //             // // Modify the regular expression pattern according to the format of hobbies in your documents
-    //             // if (/* condition to match hobbies */) {
-    //             //     $candidate['hobbies'][] = $data;
-    //             //     continue;
-    //             // }
-
-    //             // // Extracting qualifications
-    //             // // Modify the regular expression pattern according to the format of qualifications in your documents
-    //             // if (/* condition to match qualifications */) {
-    //             //     $candidate['qualifications'][] = $data;
-    //             //     continue;
-    //             // }
-    //         }
-
-    //         // Output or store candidate data
-    //         if ($candidate['name'] !== null) {
-    //             echo "Candidate Name: " . $candidate['name'] . "<br>";
-    //             echo "Skills: " . implode(', ', $candidate['skills']) . "<br>";
-    //             echo "Hobbies: " . implode(', ', $candidate['hobbies']) . "<br>";
-    //             echo "Qualifications: " . implode(', ', $candidate['qualifications']) . "<br>";
-    //         } else {
-    //             echo "Candidate data not found in file: " . basename($file->text) . "<br>";
-    //         }
-    //     }
-    //     return view('resume-parser.resume_parsers');
-    // }
-
     
 
     /**
@@ -229,30 +176,6 @@ class DocumentController extends Controller
                 if (!in_array($extension, $allowedFileTypes)) {
                     return response()->json(['status' => false, 'message' => 'Invalid file. Please select a file with format pdf, doc, docx, or txt.']);
                 }
-    
-                // // Ensure the destination directory exists
-                // $destinationPath = public_path('documents');
-                // if (!is_dir($destinationPath)) {
-                //     mkdir($destinationPath, 0755, true);
-                // }
-                
-                // // Move and store the file in the 'documents' directory
-                // $originalFileName = $file->getClientOriginalName();
-                // $file->move($destinationPath, $originalFileName);
-                
-                // // Extract text content from the document and save it as a text file
-                // $textContent = $this->extractTextFromDocument($destinationPath . '/' . $originalFileName);
-                // $textFileName = pathinfo($originalFileName, PATHINFO_FILENAME) . '.txt';
-                // file_put_contents($destinationPath . '/' . $textFileName, $textContent);
-                
-                // // Create a new Attachment model
-                // $document = new Attachment([
-                //     'title' => $originalFileName,
-                //     'original_filename' => $originalFileName,
-                //     'content_type' => $file->getClientMimeType(),
-                //     'owner_id' => Auth::user()->id,
-                //     'text' => str_replace(public_path(), '', $destinationPath . '/' . $textFileName), // Store the relative path to the text file
-                // ]);
 
                 $destinationPath = public_path('documents');
                 if (!is_dir($destinationPath)) {
@@ -261,12 +184,13 @@ class DocumentController extends Controller
     
                 // Move and store the file in the 'documents' directory
                 $originalFileName = $file->getClientOriginalName();
+                
                 $file->move($destinationPath, $originalFileName);
                 $textContent = $this->extractTextFromDocument($destinationPath . '\\' . $originalFileName);
                 $textFileName = pathinfo($originalFileName, PATHINFO_FILENAME) . '.txt';
                 file_put_contents($destinationPath . '\\' . $textFileName, $textContent);
                 
-                // dd(nl2br($textContent));
+                // dd($textContent);
            
                 // Create a new Attachment model
                 $document = new Attachment([
@@ -313,11 +237,12 @@ class DocumentController extends Controller
         }
     }
     
+    
     private function extractTextFromDocument($filePath)
     {
         $extension = pathinfo($filePath, PATHINFO_EXTENSION);
         $textContent = '';
-
+    
         if ($extension === 'pdf') {
             $parser = new Parser();
             $pdf = $parser->parseFile($filePath);
@@ -326,18 +251,33 @@ class DocumentController extends Controller
             $phpWord = PhpWordIOFactory::load($filePath);
             foreach ($phpWord->getSections() as $section) {
                 foreach ($section->getElements() as $element) {
-                    if (method_exists($element, 'getText')) {
+                    // Handle different types of elements
+                    if ($element instanceof \PhpOffice\PhpWord\Element\TextRun) {
+                        foreach ($element->getElements() as $text) {
+                            $textContent .= $text->getText();
+                        }
+                    } elseif ($element instanceof \PhpOffice\PhpWord\Element\Text) {
                         $textContent .= $element->getText();
+                    } elseif ($element instanceof \PhpOffice\PhpWord\Element\Table) {
+                        foreach ($element->getRows() as $row) {
+                            foreach ($row->getCells() as $cell) {
+                                $textContent .= $cell->getText();
+                            }
+                        }
+                    } elseif ($element instanceof \PhpOffice\PhpWord\Element\TextBreak) {
+                        // Do nothing for text breaks
+                    } else {
+                        // Handle other types of elements if needed
                     }
                 }
             }
         } elseif ($extension === 'txt') {
             $textContent = file_get_contents($filePath);
         }
-
+    
         return $textContent;
     }
-
+    
 
 
     public function documentDelete($id){
@@ -371,5 +311,55 @@ class DocumentController extends Controller
         ];
 
         return response()->download($file_path, $documentDownload->original_filename, $headers);
+    }
+
+   
+    public function convertDocxToPdf(Request $request)
+{
+    try {
+        $docxPath = $request->input('docxUrl');
+// dd($docxPath = public_path('documents/CV_Tarun.docx'));
+        // Check if the file exists
+        if (!$docxPath = 'http://127.0.0.1:8000/documents/CV_Tarun.docx') {
+            return response()->json(['status' => 'error', 'message' => 'Cannot find the DOCX file'], 404);
+        }
+
+        // Read DOCX file contents
+        $docxContents = Storage::disk('public')->get($docxPath);
+
+        // Load the DOCX contents into PhpWord
+        $phpWord = new PhpWord();
+        $phpWord->loadHTML($docxContents);
+
+        // Rest of your conversion logic...
+
+        // Example: Saving HTML and converting to PDF
+        $tempHtmlFile = tempnam(sys_get_temp_dir(), 'docx_');
+        $phpWord->saveHTML($tempHtmlFile);
+        $pdfBuffer = $this->convertHtmlToPdf($tempHtmlFile);
+
+        // Return PDF response
+        return response($pdfBuffer)
+            ->header('Content-Type', 'application/pdf')
+            ->header('Content-Disposition', 'attachment; filename="converted.pdf"');
+    } catch (\Exception $e) {
+        dd($e);
+        \Log::error('Error converting DOCX to PDF: ' . $e->getMessage());
+        return response()->json(['status' => 'error', 'message' => 'Failed to convert DOCX to PDF'], 500);
+    }
+}
+    
+    private function convertHtmlToPdf($htmlFile)
+    {
+        $html = file_get_contents($htmlFile);
+
+        $options = new Options();
+        $options->set('isHtml5ParserEnabled', true);
+
+        $dompdf = new Dompdf($options);
+        $dompdf->loadHtml($html);
+        $dompdf->render();
+
+        return $dompdf->output();
     }
 }

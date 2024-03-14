@@ -194,7 +194,7 @@ $(document).on('click', '#joborder_delete_id', function() {
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
-                url: '/candidates/list/delete/' + joborder_delete_id_id,
+                url: "{{route('candidates.list.delete')}}" + '/' + joborder_delete_id_id,
                 type: 'GET',
                 success: function(response) {
                     const title = response.status ? "success" : "warning";
@@ -204,8 +204,9 @@ $(document).on('click', '#joborder_delete_id', function() {
                         icon: title,
                     }).then(function(result) {
                         if (result.isConfirmed && response.status) {
-                            window.location.href =
-                                "{{ url('/candidates/index'";
+                            var candidatesRoute = "{{ route('candidates.index') }}";
+                            window.location.href = candidatesRoute;
+
                         }
                     });
                 },

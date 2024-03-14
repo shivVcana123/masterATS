@@ -142,7 +142,7 @@ $(document).ready(function() {
         if (confirm('Are you sure you want to delete this department?')) {
 
             $.ajax({
-                url: "/department/delete/" + departmentId,
+                url: "{{route('department.delete')}}"+'/'+departmentId,
                 type: 'GET',
                 success: function(response) {
                     console.log(response);

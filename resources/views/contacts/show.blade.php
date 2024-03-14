@@ -11,7 +11,7 @@
         </div>
         <div class="pull-right">
             <a class="btn btn-primary" style="margin-right: 5px;"
-                href="{{ url('/contacts/edit',$contactDetails->id) }}"> Edit</a>
+                href="{{route('contacts.edit',$contactDetails->id)}}"> Edit</a>
         </div>
     </div>
 </div>
@@ -34,10 +34,10 @@
                         <tr>
                             <td class="vertical">Company:</td>
                             <td class="data">
-                                <a href="index.php?m=companies&amp;a=show&amp;companyID=14">
+                                
                                     <span class="jobTitleCold">
                                         {{$contactDetails['companies']->company_name}} </span>
-                                </a>
+                         
                             </td>
                         </tr>
                         <tr>
@@ -106,7 +106,7 @@
         </tr>
     </tbody>
 </table>
-<table class="detailsInside">
+<!-- <table class="detailsInside">
     <tbody>
         <tr>
             <td valign="top" class="vertical">Attachments:</td>
@@ -116,8 +116,6 @@
                         <tr>
                             <td>
                                 <a href="javascript:;">
-                                    <!-- <img src="images/attachment.gif" alt="" width="16" height="16" border="0">
-                                    &nbsp; -->
                                     gitignore
                                 </a>
                             </td>
@@ -132,8 +130,6 @@
                     </tbody>
                 </table>
                 <a href="#">
-                    <!-- <img src="images/paperclip_add.gif" width="16" height="16" border="0" alt="add attachment"
-                        class="absmiddle"> -->
                     &nbsp;Add Attachment
                 </a>
             </td>
@@ -144,7 +140,7 @@
                 Toby.Padegenis@jud.ct.gov </td>
         </tr>
     </tbody>
-</table>
+</table> -->
 
 
 

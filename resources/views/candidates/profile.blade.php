@@ -284,7 +284,7 @@ $('#updateForm').submit(function(e) {
         },
     });
     $.ajax({
-        url: '/candidates/update/save', // Adjust the URL as needed
+        url: "{{route('candidates.update.save')}}",
         type: 'POST',
         data: $(this).serialize(), // Serialize the form data
         success: function(response) {

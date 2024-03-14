@@ -288,7 +288,7 @@ $(document).on('click', '#update_jobOrder_btn', function(e) {
         },
     });
     $.ajax({
-        url: '/joborder/update/save', // Adjust the URL as needed
+        url: "{{route('joborders.update.save')}}",
         type: 'POST',
         data: formData, // Use the FormData object instead of serialize()
         processData: false,
@@ -328,7 +328,7 @@ $(document).ready(function() {
         if (companyId) {
             // Ajax request to fetch data based on the selected company_id
             $.ajax({
-                url: "/contacts/details/" + companyId,
+                url: "{{route('contacts.details')}}"+'/'+companyId,
                 method: 'GET',
                 success: function(response) {
                     if (response.status) {

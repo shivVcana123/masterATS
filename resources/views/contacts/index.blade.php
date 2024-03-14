@@ -105,7 +105,7 @@ $('#contactDelete').click(function() {
         if (result.isConfirmed) {
             $.ajax({
                 type: "GET",
-                url: "/contacts/delete/" + deleteID,
+                url: "{{route('contacts.delete')}}"+'/'+deleteID,
                 dataType: "json",
                 contentType: false,
                 processData: false,

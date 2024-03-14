@@ -321,7 +321,10 @@
                     </td>
                     <td>{{isset($details['ownerUser']->user_name) ? $details['ownerUser']->user_name : ''}} </td>
                     <td>
-                        <a href="{{url('/contacts/'.$detailss->id.'/edit')}}"><i class="fa fa-pencil"></i></a>
+                    <a href="{{ route('contacts.edit', ['contact' => $detailss->id]) }}">
+    <i class="fa fa-pencil"></i>
+</a>
+
                     </td>
                 </tr>
                 @endforeach
@@ -330,7 +333,7 @@
                 @endif
             </tbody>
         </table>
-        <i class="fa fa-plus"></i><a href="{{ url('/contacts/create', ['company_id' => $companyDetails[0]->id]) }}">Add
+        <i class="fa fa-plus"></i><a href="{{ route('contacts.create', ['company_id' => $companyDetails[0]->id]) }}">
             Add Contact</a>
 
     </div>
@@ -340,11 +343,11 @@
 @push('scripts')
 <script>
 const fileInput = $('#document_file')[0];
-console.log(fileInput);
+
+var company_id = $('#company_id').val();
 $(document).on('click', '#submit_file', function(e) {
     e.preventDefault();
     // var joborder_id = $('#joborder_id').val();
-    var company_id = $('#company_id').val();
 
     const formData = new FormData();
     const fileInput = $('#document_file')[0];
@@ -373,7 +376,7 @@ $(document).on('click', '#submit_file', function(e) {
         },
     });
     $.ajax({
-        url: '/document/upload', // Adjust the URL as needed
+        url: "{{route('document.upload')}}",
         type: 'POST',
         data: formData,
         contentType: false,
@@ -386,8 +389,10 @@ $(document).on('click', '#submit_file', function(e) {
                 icon: title,
             }).then(function(result) {
                 if (result.isConfirmed && response.status) {
-                    window.location.href =
-                        "{{ url('/companies/details',$companyDetails[0]->id ) }}";
+                    // window.location.href =
+                    //     "{{ url('/companies/details',$companyDetails[0]->id ) }}";
+                        window.location.href = "{{route('companies.details')}}" + '/' +
+                        company_id;
                 }
             });
         },
@@ -415,7 +420,7 @@ $(document).on('click', '#document_delete_id', function() {
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
-                url: '/document/delete/' + documentId,
+                url: "{{route('document.delete')}}"+'/'+documentId,
                 type: 'GET',
                 success: function(response) {
                     console.log(response);
@@ -426,8 +431,10 @@ $(document).on('click', '#document_delete_id', function() {
                         icon: title,
                     }).then(function(result) {
                         if (result.isConfirmed && response.status) {
-                            window.location.href =
-                                "{{ url('/companies/details',$companyDetails[0]->id ) }}";
+                            // window.location.href =
+                            //     "{{ url('/companies/details',$companyDetails[0]->id ) }}";
+                            window.location.href = "{{route('companies.details')}}" + '/' +
+                        company_id;
                         }
                     });
                 },
@@ -443,7 +450,7 @@ $(document).on('click', '#document_delete_id', function() {
 $(document).on('click', '#documentDownload', function() {
     var documentDownload = $(this).data('id');
 
-    var url = '/document/download/' + documentDownload;
+    var url = "{{route('document.download')}}"+'/'+documentDownload;
     window.open(url, '_blank'); // Open the download link in a new tab
 });
 

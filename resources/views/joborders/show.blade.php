@@ -228,17 +228,32 @@
             </thead>
             <tbody id="container" class="no-border-x no-border-y ui-sortable">
                 @if(count($candidatesJobOrderDetails) > 0)
-                @foreach($candidatesJobOrderDetails as $details)
-
+                @foreach($candidatesJobOrderDetails as $key => $details)
                 <tr>
-                    <td>{{$details['candidates']->id}}</td>
-                    <td><a
-                            href="{{url('/candidates/details',$details['candidates']->id)}}">{{$details['candidates']->first_name}}</a>
+                    <td>{{$key+1}}</td>
+                    <td>
+                        @if($details['candidates'])
+                        <a href="{{route('candidates.details', $details['candidates']->id)}}">
+                            {{$details['candidates']->first_name}}
+                        </a>
+                        @else
+                        Candidate not found
+                        @endif
                     </td>
-                    <td><a
-                            href="{{url('/candidates/details',$details['candidates']->id)}}">{{$details['candidates']->last_name}}</a>
+                    <td>
+                        @if($details['candidates'])
+                        <a href="{{route('candidates.details', $details['candidates']->id)}}">
+                            {{$details['candidates']->last_name}}
+                        </a>
+                        @else
+                        Candidate not found
+                        @endif
                     </td>
-                    <td>{{$details['candidates']->state}}</td>
+                    <td>@if($details['candidates'])
+                {{$details['candidates']->state}}
+            @else
+                N/A
+            @endif</td>
                     <td>
                         {{ date_format(DateTime::createFromFormat('Y-m-d H:i:s', $details->date_created), 'd-m-Y') }}
                     </td>
@@ -250,8 +265,6 @@
                     <td>{{ date_format(DateTime::createFromFormat('Y-m-d H:i:s', $details->date_created), 'd-m-Y') }}
                         ({{$details['ownerUser']->user_name}})</td>
                     <td>
-                        <!-- <a href="{{url('/candidates/update',$details['candidates']->id)}}"><i
-                                class="fa fa-pencil"></i></a> -->
                         <a href="javascript:;"><i class="fa fa-pencil" data-toggle="modal"
                                 data-target="#activityModal"></i></a>
                         <a href="javascript:;"> <i class="fa fa-trash" id="candidate_joborders_delete"
@@ -309,9 +322,10 @@
             <div class="form-group col-md-12" style="margin-top: -15px; margin-left: -5px; padding: 2%;">
                 <div class="form-control" style="border-color: transparent;padding-left: 0px">
                     <label style="font-size: 18px">Add Candidate to This Job Order</label>
-                    <button style="margin-left: 70%;" type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
+                    <button style="margin-left: 70%;" type="button" class="close" data-dismiss="modal"
+                        aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
                 </div>
                 <div class="buttn-area">
                     <form class="example" action="{{ route('joborders.index') }}">
@@ -751,9 +765,10 @@ function checkboxScheduleEvent(element) {
 }
 
 
+var job_id = $('#job_id').val();
+
 function addCandidateOnJobOrder(that) {
     $('#addJobOrderModal').modal('hide');
-    var job_id = $('#job_id').val();
     var candidate_id = $(that).data('value');
     $.ajaxSetup({
         headers: {
@@ -762,7 +777,7 @@ function addCandidateOnJobOrder(that) {
     });
 
     $.ajax({
-        url: '/candidates/add/candidate/joborder',
+        url: "{{route('candidates.add.candidate.joborder')}}",
         type: 'POST',
         data: {
             jobID: job_id,
@@ -776,8 +791,10 @@ function addCandidateOnJobOrder(that) {
                 icon: title,
             }).then(function(result) {
                 if (result.isConfirmed && response.status) {
-                    window.location.href =
-                        "{{ url('/joborders/details',$jobDetails[0]->id ) }}";
+                    // window.location.href =
+                    //     "{{ url('/joborders/details',$jobDetails[0]->id ) }}";
+                    window.location.href = "{{route('joborders.details')}}" + '/' +
+                        job_id;
                 }
             });
         },
@@ -789,7 +806,9 @@ function addCandidateOnJobOrder(that) {
 
 function addNewCandidate(that) {
     $('#addJobOrderModal').modal('hide');
-    window.location.href = "{{ url('/candidates/create', ['job_id' => $jobDetails[0]['id']]) }}";
+    // window.location.href = "{{ url('/candidates/create', ['job_id' => $jobDetails[0]['id']]) }}";
+    window.location.href = "{{route('candidates.create')}}" + '/' +
+        job_id;
 
 }
 $(document).on('click', '#submit_file', function(e) {
@@ -822,7 +841,7 @@ $(document).on('click', '#submit_file', function(e) {
         },
     });
     $.ajax({
-        url: '/document/upload', // Adjust the URL as needed
+        url: "{{route('document.upload')}}", // Adjust the URL as needed
         type: 'POST',
         data: formData,
         contentType: false,
@@ -835,8 +854,10 @@ $(document).on('click', '#submit_file', function(e) {
                 icon: title,
             }).then(function(result) {
                 if (result.isConfirmed && response.status) {
-                    window.location.href =
-                        "{{ url('/joborders/details',$jobDetails[0]->id ) }}";
+                    // window.location.href =
+                    //     "{{ url('/joborders/details',$jobDetails[0]->id ) }}";
+                    window.location.href = "{{route('joborders.details')}}" + '/' +
+                        job_id;
                 }
             });
         },
@@ -864,7 +885,7 @@ $(document).on('click', '#document_delete_id', function() {
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
-                url: '/document/delete/' + documentId,
+                url: "{{route('document.delete')}}" + '/' + documentId,
                 type: 'GET',
                 success: function(response) {
                     console.log(response);
@@ -875,8 +896,11 @@ $(document).on('click', '#document_delete_id', function() {
                         icon: title,
                     }).then(function(result) {
                         if (result.isConfirmed && response.status) {
+                            // window.location.href =
+                            //     "{{ url('/joborders/details',$jobDetails[0]->id ) }}";
                             window.location.href =
-                                "{{ url('/joborders/details',$jobDetails[0]->id ) }}";
+                                "{{route('joborders.details')}}" + '/' +
+                                job_id;
                         }
                     });
                 },
@@ -892,7 +916,7 @@ $(document).on('click', '#document_delete_id', function() {
 $(document).on('click', '#documentDownload', function() {
     var documentDownload = $(this).data('id');
 
-    var url = '/document/download/' + documentDownload;
+    var url = "{{route('document.download')}}" + '/' + documentDownload;
     window.open(url, '_blank'); // Open the download link in a new tab
 });
 
@@ -913,7 +937,7 @@ $(document).on('click', '#candidate_joborders_delete', function() {
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
-                url: '/candidate/joborder/delete/' + candidate_joborder_id,
+                url: "{{route('candidate.joborder.delete')}}" + '/' + candidate_joborder_id,
                 type: 'GET',
                 success: function(response) {
                     console.log(response);
@@ -924,8 +948,11 @@ $(document).on('click', '#candidate_joborders_delete', function() {
                         icon: title,
                     }).then(function(result) {
                         if (result.isConfirmed && response.status) {
+                            // window.location.href =
+                            //     "{{ url('/joborders/details',$jobDetails[0]->id ) }}";
                             window.location.href =
-                                "{{ url('/joborders/details',$jobDetails[0]->id ) }}";
+                                "{{route('joborders.details')}}" + '/' +
+                                job_id;
                         }
                     });
                 },
@@ -1121,7 +1148,7 @@ $(document).on('click', '#save_activity_btn', function() {
     });
 
     $.ajax({
-        url: '/candidates/activity/save',
+        url: "{{route('candidates.activity.save')}}",
         type: 'POST',
         cache: false,
         processData: false,
@@ -1136,8 +1163,10 @@ $(document).on('click', '#save_activity_btn', function() {
             }).then(function(result) {
                 if (result.isConfirmed && response.status) {
                     $('#exampleModal').modal('hide');
-                    window.location.href =
-                        "{{ url('/joborders/details',$jobDetails[0]->id ) }}";
+                    // window.location.href =
+                    //     "{{ url('/joborders/details',$jobDetails[0]->id ) }}";
+                    window.location.href = "{{route('joborders.details')}}" + '/' +
+                        job_id;
                 }
             });
         },

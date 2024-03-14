@@ -166,7 +166,7 @@ $(document).on('change', '#checkbox_company_value', function() {
 function fetchCompanyData() {
     // Example: assuming an AJAX call to fetch company data
     $.ajax({
-        url: '/fetch/company/data', // Replace with your actual route
+        url: '/fetch/company/data',
         method: 'GET',
         success: function(response) {
             if (response.status) {
@@ -201,7 +201,7 @@ $(document).ready(function() {
         if (companyId) {
             // Ajax request to fetch data based on the selected company_id
             $.ajax({
-                url: "/contacts/details/" + companyId,
+                url: "{{route('contacts.details')}}"+'/'+companyId,
                 method: 'GET',
                 success: function(response) {
                     if (response.status) {

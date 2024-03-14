@@ -605,7 +605,7 @@ function addEvent() {
         },
     });
     $.ajax({
-        url: '/add/schedule/event', // Adjust the URL as needed
+        url: "{{route('add.schedule.event')}}", // Adjust the URL as needed
         type: 'POST',
         data: formData, // Use the FormData object instead of serialize()
         processData: false,
@@ -692,7 +692,7 @@ $(document).ready(function() {
         navLinks: true,
         eventLimit: true,
         events: {
-            url: '/get/schedule/event',
+            url: "{{route('get.schedule.event')}}", 
             type: 'GET',
             success: function(response) {
                 console.log(response.data);
@@ -741,7 +741,7 @@ $(document).ready(function() {
 
                 if (eventId) {
                     $.ajax({
-                        url: '/get/schedule/event/' + eventId,
+                        url:"{{ route('get.schedule.event') }}" + '/' + eventId,
                         type: 'GET',
                         success: function(response) {
                             var eventData = response.data[0];
@@ -823,7 +823,7 @@ function calendarEditEvent() {
     var eventId = document.getElementById("EventID").innerHTML;
     // alert(eventId);
     $.ajax({
-        url: '/get/schedule/event/' + eventId,
+        url:"{{ route('get.schedule.event') }}" + '/' + eventId,
         type: 'GET',
         success: function(response) {
             var editEventData = response.data[0];
@@ -926,7 +926,7 @@ function editEventDetails() {
         },
     });
     $.ajax({
-        url: '/add/schedule/event', // Adjust the URL as needed
+        url: "{{route('add.schedule.event')}}",
         type: 'POST',
         data: formData, // Use the FormData object instead of serialize()
         processData: false,
@@ -965,7 +965,7 @@ function deleteEventDetails() {
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
-                url: '/delete/schedule/event/' + editEventID,
+                url:"{{ route('delete.schedule.event') }}" + '/' + editEventID,
                 type: "GET",
                 dataType: "json",
                 success: function(response) {

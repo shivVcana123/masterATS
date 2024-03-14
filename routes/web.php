@@ -69,7 +69,7 @@ Route::get('/document/delete/{id?}', [DocumentController::class, 'documentDelete
 Route::get('/document/download/{id?}', [DocumentController::class, 'documentDownload'])->name('document.download');
 
 Route::get('/contacts/create/{company_id?}', [ContactController::class, 'create'])->name('contacts.create');
-Route::post('/contacts/update', [ContactController::class, 'contactsUpdateData'])->name('contacts.update');
+Route::post('/contacts/update/{id}', [ContactController::class, 'contactsUpdateData'])->name('contacts.update');
 Route::get('/contacts/delete/{id?}', [ContactController::class, 'contactDelete'])->name('contacts.delete');
 Route::get('/contacts/details/{contact_id?}', [ContactController::class, 'contactDetails'])->name('contacts.details');
 
@@ -106,7 +106,9 @@ Route::post('/chart', [HomeController::class, 'chart'])->name('get.chart.data')-
 
 Route::get('notification', [HomeController::class, 'notification']);
 
-Route::get('resumes/{search}', [DocumentController::class, 'index']);
+Route::get('resumes/{search?}', [DocumentController::class, 'index'])->name('resumes');
+Route::get('view/document/{id?}', [DocumentController::class, 'viewDocument'])->name('view.document');
+Route::post('/convert/docx-to-pdf', [DocumentController::class, 'convertDocxToPdf']);
 
 Route::group(['middleware' => ['auth', 'XSS']], function () {
     Route::resource('roles', RoleController::class);

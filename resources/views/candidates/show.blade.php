@@ -805,7 +805,7 @@ function addCandidateOnJobOrder(that) {
     });
 
     $.ajax({
-        url: '/candidates/add/candidate/joborder',
+        url: "{{route('candidates.add.candidate.joborder')}}", 
         type: 'POST',
         data: {
             jobID: jobID,
@@ -835,10 +835,10 @@ function addCandidateOnJobOrder(that) {
     });
 }
 
-
+var candidate_id = $('#candidate_id').val();
 $(document).on('click', '#submit_file', function(e) {
     e.preventDefault();
-    var candidate_id = $('#candidate_id').val();
+    // var candidate_id = $('#candidate_id').val();
 
     const formData = new FormData();
     const fileInput = $('#document_file')[0];
@@ -866,7 +866,7 @@ $(document).on('click', '#submit_file', function(e) {
         },
     });
     $.ajax({
-        url: '/document/upload', // Adjust the URL as needed
+        url: "{{route('document.upload')}}", 
         type: 'POST',
         data: formData,
         contentType: false,
@@ -879,8 +879,10 @@ $(document).on('click', '#submit_file', function(e) {
                 icon: title,
             }).then(function(result) {
                 if (result.isConfirmed && response.status) {
-                    window.location.href =
-                        "{{ url('/candidates/details',$candidatesDetails[0]->id ) }}";
+                    // window.location.href =
+                    //     "{{ url('/candidates/details',$candidatesDetails[0]->id ) }}";
+                        window.location.href = "{{route('candidates.details')}}" + '/' +
+                        candidate_id;
                 }
             });
         },
@@ -895,7 +897,7 @@ $(document).on('click', '#submit_file', function(e) {
 $(document).on('click', '#documentDownload', function() {
     var documentDownload = $(this).data('id');
 
-    var url = '/document/download/' + documentDownload;
+    var url = "{{ route('document.download') }}" + '/' + documentDownload;
     window.open(url, '_blank'); // Open the download link in a new tab
 });
 
@@ -917,7 +919,7 @@ $(document).on('click', '#document_delete_id', function() {
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
-                url: '/document/delete/' + documentId,
+                url:"{{ route('document.delete') }}" + '/' + documentId,
                 type: 'GET',
                 success: function(response) {
                     console.log(response);
@@ -928,8 +930,10 @@ $(document).on('click', '#document_delete_id', function() {
                         icon: title,
                     }).then(function(result) {
                         if (result.isConfirmed && response.status) {
-                            window.location.href =
-                                "{{ url('/candidates/details',$candidatesDetails[0]->id ) }}";
+                            // window.location.href =
+                            //     "{{ url('/candidates/details',$candidatesDetails[0]->id ) }}";
+                            window.location.href = "{{route('candidates.details')}}" + '/' +
+                        candidate_id;
                         }
                     });
                 },
@@ -1125,7 +1129,7 @@ $(document).on('click', '#save_activity_btn', function() {
     });
 
     $.ajax({
-        url: '/candidates/activity/save',
+        url: "{{route('candidates.activity.save')}}", 
         type: 'POST',
         cache: false,
         processData: false,
@@ -1140,8 +1144,10 @@ $(document).on('click', '#save_activity_btn', function() {
             }).then(function(result) {
                 if (result.isConfirmed && response.status) {
                     $('#activityModal').modal('hide');
-                    window.location.href =
-                        "{{ url('/candidates/details',$candidatesDetails[0]->id ) }}";
+                    // window.location.href =
+                    //     "{{ url('/candidates/details',$candidatesDetails[0]->id ) }}";
+                    window.location.href = "{{route('candidates.details')}}" + '/' +
+                        candidate_id;
                 }
             });
         },
@@ -1215,10 +1221,10 @@ $(document).on('click', '.remove_field', function() {
         }).then((result) => {
             if (result.isConfirmed) {
                 // If the user confirms, trigger the deletion
-                window.location.href = '/candidates/list/delete/' + list_id; // Adjust the URL as needed
+                window.location.href = "{{route('candidates.list.delete')}}" + '/' + list_id; // Adjust the URL as needed
             }
-            window.location.href =
-                "{{ url('/candidates/details',$candidatesDetails[0]->id ) }}";
+            window.location.href = "{{route('candidates.details')}}" + '/' +
+                        candidate_id;
         });
     }
 
@@ -1258,7 +1264,7 @@ $(document).on("click", ".save-btn", function(e) {
     });
 
     $.ajax({
-        url: '/candidates/list/save',
+        url: "{{route('candidates.list.save')}}",
         type: 'POST',
         data: {
             list_id: list_id,
@@ -1274,8 +1280,8 @@ $(document).on("click", ".save-btn", function(e) {
             }).then(function(result) {
                 if (result.isConfirmed && response.status) {
                     $('#exampleModal').modal('hide');
-                    window.location.href =
-                        "{{ url('/candidates/details',$candidatesDetails[0]->id ) }}";
+                    window.location.href = "{{route('candidates.details')}}" + '/' +
+                        candidate_id;
                 }
             });
         },
@@ -1327,8 +1333,8 @@ $(document).ready(function() {
                 }).then(function(result) {
                     if (result.isConfirmed && response.status) {
                         $('#exampleModal').modal('hide');
-                        window.location.href =
-                            "{{ url('/candidates/details',$candidatesDetails[0]->id ) }}";
+                        window.location.href = "{{route('candidates.details')}}" + '/' +
+                        candidate_id;
                     }
                 });
             },
@@ -1358,7 +1364,7 @@ $(document).on('click', '#delete_activity', function() {
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
-                url: '/candidates/activity/delete/' + activity_id,
+                url: "{{route('candidates.activity.delete')}}"+'/'+activity_id,
                 type: 'GET',
                 success: function(response) {
                     const title = response.status ? "success" : "warning";
@@ -1368,8 +1374,8 @@ $(document).on('click', '#delete_activity', function() {
                         icon: title,
                     }).then(function(result) {
                         if (result.isConfirmed && response.status) {
-                            window.location.href =
-                                "{{ url('/candidates/details',$candidatesDetails[0]->id ) }}";
+                            window.location.href = "{{route('candidates.details')}}" + '/' +
+                        candidate_id;
                         }
                     });
                 },
@@ -1399,7 +1405,7 @@ $(document).on('click', '#candidate_joborders_delete', function() {
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
-                url: '/candidates/candidate/joborder/delete/' + candidate_joborder_id,
+                url: "{{route('candidates.joborder.delete')}}"+'/'+candidate_joborder_id,
                 type: 'GET',
                 success: function(response) {
                     const title = response.status ? "success" : "warning";
@@ -1409,8 +1415,8 @@ $(document).on('click', '#candidate_joborders_delete', function() {
                         icon: title,
                     }).then(function(result) {
                         if (result.isConfirmed && response.status) {
-                            window.location.href =
-                                "{{ url('/candidates/details',$candidatesDetails[0]->id ) }}";
+                            window.location.href = "{{route('candidates.details')}}" + '/' +
+                        candidate_id;
                         }
                     });
                 },
@@ -1441,7 +1447,7 @@ $(document).on('click', '#joborders_delete', function() {
     }).then((result) => {
         if (result.isConfirmed) {
             $.ajax({
-                url: '/candidates/joborder/delete/' + joborder_id,
+                url: "{{route('candidates.joborder.delete')}}"+'/'+joborder_id,
                 type: 'GET',
                 success: function(response) {
                     const title = response.status ? "success" : "warning";
@@ -1451,8 +1457,8 @@ $(document).on('click', '#joborders_delete', function() {
                         icon: title,
                     }).then(function(result) {
                         if (result.isConfirmed && response.status) {
-                            window.location.href =
-                                "{{ url('/candidates/details',$candidatesDetails[0]->id ) }}";
+                            window.location.href = "{{route('candidates.details')}}" + '/' +
+                        candidate_id;
                         }
                     });
                 },
